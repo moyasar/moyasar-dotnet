@@ -9,6 +9,7 @@ namespace moyasar
   public  class MoyasarBase
   {
       protected string MakePaymentUrl = "https://api.moyasar.com/v1/payments";
+      protected string MakeInvoiceUrl = "https://api.moyasar.com/v1/invoices";
 
   }
 }

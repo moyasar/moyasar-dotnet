@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace moyasar
 {
-  public  class Payment
+  public  class Payment:MoyasarBase
     {
+
     }
 }
