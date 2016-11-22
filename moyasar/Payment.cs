@@ -42,8 +42,7 @@ namespace moyasar
             }
             if (string.IsNullOrEmpty(this.Currency) || this.Currency == string.Empty)
             {
-                var ex = new MoyasarValidationException(EnMessages.CurrencyEmpty);
-                ex.ErrorCode = "#1000";
+                var ex = new MoyasarValidationException(EnMessages.CurrencyEmpty) {ErrorCode = "#1000"};
                 throw ex;
             }
         }
