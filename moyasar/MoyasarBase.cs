@@ -16,14 +16,15 @@ namespace moyasar
       protected WebClient WebClient = new WebClient();
         public string ApiKey { get; set; }
 
-      public bool Auth()
+      internal bool Auth()
       {
           try
           {
                 WebClient.BaseAddress = MakePaymentUrl;
-                // WebClient.DefaultRequestHeaders.Add("basic", "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR");
+                 
                 WebClient.UseDefaultCredentials = true;
-                WebClient.Credentials = new NetworkCredential("sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR", "");
+               WebClient. Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+                WebClient.Credentials = new NetworkCredential(this.ApiKey, "");
                 var respone = WebClient.DownloadString(MakePaymentUrl);//.UploadString(MakePaymentUrl,"POST","")
                 return true;
             }

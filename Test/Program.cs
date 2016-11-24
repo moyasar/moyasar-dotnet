@@ -12,8 +12,12 @@ namespace Test
         static void Main(string[] args)
         {
             Payment p = new Payment();
-            p.Auth();
-           p.SourceType=SourceType.CreditCard;
+            p.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+            p.SourceType = SourceType.CreditCard;
+            p.Currency = "SAR";
+            p.Amount = 100;
+            p.CreditCardType = new CreditCard() {name = "Visa",number = "122344444",Company = "Visa", Year = 16,Month = 01,message = "",type = "Visa"};
+            
             p.CreatePayment();
         }
     }

@@ -23,10 +23,14 @@ namespace moyasar
         /// </summary>
         public string number { get; set; }
 
+       public int Month { get; set; }
+       public int Year { get; set; }
+
         /// <summary>
         /// payment gateway message
         /// </summary>
         public string message { get; set; }
 
+       public string cvc { get; set; }
     }
 }
