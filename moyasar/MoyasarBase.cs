@@ -11,28 +11,27 @@ namespace moyasar
     }
   public  class MoyasarBase
   {
-      protected string MakePaymentUrl = "https://api.moyasar.com/v1/payments";
+      public string MakePaymentUrl = "https://api.moyasar.com/v1/payments";
       protected string MakeInvoiceUrl = "https://api.moyasar.com/v1/invoices";
-      protected WebClient WebClient = new WebClient();
+      protected WebRequest Request;
         public string ApiKey { get; set; }
 
       internal bool Auth()
       {
-          try
-          {
-                WebClient.BaseAddress = MakePaymentUrl;
-                 
-                WebClient.UseDefaultCredentials = true;
-               WebClient. Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-                WebClient.Credentials = new NetworkCredential(this.ApiKey, "");
-                var respone = WebClient.DownloadString(MakePaymentUrl);//.UploadString(MakePaymentUrl,"POST","")
-                return true;
-            }
-          catch (Exception e)
-          {
 
+            // Create a request using a URL that can receive a post. 
+              Request = WebRequest.Create(MakePaymentUrl);
+            // Set the Method property of the request to POST.
+           // request.Method = "POST";
+            Request.Credentials = new NetworkCredential(ApiKey, ApiKey);
+            // Get the response.
+            WebResponse response = Request.GetResponse();
+            // Display the status.
+            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+          if (((HttpWebResponse) response).StatusCode == HttpStatusCode.OK)
+              return true;
+          else
               return false;
-          }
       }
   }
 }

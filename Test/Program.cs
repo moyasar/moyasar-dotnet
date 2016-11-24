@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using moyasar;
+using moyasar.InvoiceArea;
 
 namespace Test
 {
@@ -11,14 +14,27 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            Payment p = new Payment();
-            p.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
-            p.SourceType = SourceType.CreditCard;
-            p.Currency = "SAR";
-            p.Amount = 100;
-            p.CreditCardType = new CreditCard() {name = "Visa",number = "122344444",Company = "Visa", Year = 16,Month = 01,message = "",type = "Visa"};
-            
-            p.CreatePayment();
+            //Payment p = new Payment
+            //{
+            //    ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR",
+            //    SourceType = SourceType.Sadad,
+            //    Currency = "SAR",
+            //    Amount = 100,
+            //    SadadType = new SadadType() {fail_url = "##", success_url = "#", type = "sadad", username = "u3042346X"},
+            //    Description = "samer"
+
+
+            //};
+            //p.CreatePayment();
+            Invoice inv = new Invoice();
+            inv.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+            inv.AMOUNT  = "100";
+            inv.CURRENCY  = "SAR";
+            inv.DESCRIPTION  = "Test invoice";
+           var q = inv.CreateInvoice();
+
+            Console.WriteLine(q.Id+""+q.Status);
+            Console.Read();
         }
     }
 }

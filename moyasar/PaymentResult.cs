@@ -46,7 +46,7 @@ namespace moyasar
        public string Created_at { get; set; }
        public string Updated_at { get; set; }
        public CreditCard CreditCardSource { get; set; }
-       public Sadad SadadSource { get; set; }
+       public SadadResult SadadSource { get; set; }
 
     }
 }

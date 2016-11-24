@@ -2,7 +2,7 @@
 
 namespace moyasar
 {
-  public  class Sadad
+  public  class SadadResult
     {
         /// <summary>
         /// type of payment creditcard or sadad

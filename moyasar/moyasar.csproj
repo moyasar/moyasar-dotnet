@@ -48,7 +48,8 @@
     <Compile Include="Connector.cs" />
     <Compile Include="CreditCard.cs" />
     <Compile Include="ExceptionsMap\ValidationException.cs" />
-    <Compile Include="Invoice.cs" />
+    <Compile Include="InvoiceArea\Invoice.cs" />
+    <Compile Include="InvoiceArea\InvoiceResult.cs" />
     <Compile Include="MessagesMap\EnMessages.cs" />
     <Compile Include="MoyasarBase.cs" />
     <Compile Include="Payment.cs" />
@@ -59,7 +60,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Sadad.cs" />
+    <Compile Include="SadadResult.cs" />
+    <Compile Include="SadadType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
