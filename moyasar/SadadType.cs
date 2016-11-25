@@ -6,9 +6,9 @@ namespace moyasar
 {
   public  class SadadType
     {
-      public string type { get; set; }
-      public string username { get; set; }
-      public string success_url { get; set; }
-      public string fail_url { get; set; }
+      public string Type { get; set; }
+      public string Username { get; set; }
+      public string SuccessUrl { get; set; }
+      public string FailUrl { get; set; }
     }
 }
