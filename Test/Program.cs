@@ -32,7 +32,9 @@ namespace Test
             inv.CURRENCY  = "SAR";
             inv.DESCRIPTION  = "Test invoice";
            var q = inv.CreateInvoice();
-
+            //List of invoices 
+            var invs = inv.GetInvoicesList();
+            var res = inv.GetInvoiceById("4a760a95-fca3-4d09-b430-43f1742fb8df");
             Console.WriteLine(q.Id+""+q.Status);
             Console.Read();
         }
