@@ -69,7 +69,9 @@ namespace moyasar
           if (Auth())
           {
               var s = IniParameters();
-                // Create a request using a URL that can receive a post. 
+                JavaScriptSerializer js = new JavaScriptSerializer();
+
+                  // Create a request using a URL that can receive a post. 
                   Request = WebRequest.Create(MakePaymentUrl);
                 Request.Credentials = new NetworkCredential(ApiKey, ApiKey);
                 // Set the Method property of the request to POST.

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using moyasar;
 using moyasar.InvoiceArea;
+using moyasar.PaymentArea;
 
 namespace Test
 {
@@ -14,23 +15,35 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            //Payment p = new Payment
-            //{
-            //    ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR",
-            //    SourceType = SourceType.Sadad,
-            //    Currency = "SAR",
-            //    Amount = 100,
-            //    SadadType = new SadadType() {fail_url = "##", success_url = "#", type = "sadad", username = "u3042346X"},
-            //    Description = "samer"
+            Payment p = new Payment()
+            {
+                ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR",
+                SourceType = SourceType.CreditCard,
+                Currency = "SAR",
+                Amount = 1000,
+               // SourceReault = new SadadType() { Type = "sadad", Username ="u3042346X" },
+                Description = "samer",
+               SourceReault = new CreditCard()
+                {
+                    Year = 2019,
+                    Month = 10,
+                    Company = "visa",
+                    Cvc = "111",
+                    Name = "any any",
+                    Type =   "creditcard",
+                    Number = "4111111111111111"
+                }
 
-
-            //};
+            };
+            
+            var qx = p.IniParameters();
+            p.CreatePay();
             //p.CreatePayment();
             Invoice inv = new Invoice();
             inv.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
-            inv.AMOUNT  = "100";
-            inv.CURRENCY  = "SAR";
-            inv.DESCRIPTION  = "Test invoice";
+            inv.Amount  = "100";
+            inv.Currency  = "SAR";
+            inv.Desciption  = "Test invoice";
            var q = inv.CreateInvoice();
             //List of invoices 
             var invs = inv.GetInvoicesList();

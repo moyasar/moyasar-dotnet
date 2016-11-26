@@ -1,12 +1,9 @@
 ﻿
 namespace moyasar
 {
-   public class CreditCard
+   public class CreditCard:SourceReaultBase
     {
-        /// <summary>
-        /// type of payment creditcard or sadad
-        /// </summary>
-        public string Type { get; set; }
+        
 
         /// <summary>
         /// credit card’s company
@@ -26,10 +23,7 @@ namespace moyasar
        public int Month { get; set; }
        public int Year { get; set; }
 
-        /// <summary>
-        /// payment gateway message
-        /// </summary>
-        public string Message { get; set; }
+        
 
        public string Cvc { get; set; }
     }
