@@ -20,7 +20,7 @@ namespace moyasar.InvoiceArea
                 Currency = Desciption
             };
 
-            var finalUrl = MakeInvoiceUrl + "?Amount=" + Amount + "&Currency=" + Currency + "&Desciption=" +
+            var finalUrl = MakeInvoiceUrl + "?amount=" + Amount + "&currency=" + Currency + "&desciption=" +
                            Desciption;
             return finalUrl;
         }
@@ -38,20 +38,22 @@ namespace moyasar.InvoiceArea
             {
                 var result = streamReader.ReadToEnd();
                 var rs = JObject.Parse(result);
-                var invoice = new InvoiceResult();
-                invoice.Id = (string) rs["id"];
-                invoice.Status = (string) rs["status"];
-                invoice.Amount = (string) rs["Amount"];
+                var invoice = new InvoiceResult
+                {
+                    Id = (string) rs["id"],
+                    Status = (string) rs["status"],
+                    Amount = (string) rs["Amount"],
+                    Currency = (string) rs["Currency"],
+                    Description = (string) rs["Desciption"],
+                    LogoUrl = (string) rs["logo_url"],
+                    AmountFormat = (string) rs["Amount_format"],
+                    Url = (string) rs["url"],
+                    CreatedAt = (string) rs["created_at"],
+                    UpdatedAt = (string) rs["updated_at"]
+                };
 
-                invoice.Currency = (string) rs["Currency"];
-                invoice.Description = (string) rs["Desciption"];
 
-                invoice.LogoUrl = (string) rs["logo_url"];
-                invoice.AmountFormat = (string) rs["Amount_format"];
 
-                invoice.Url = (string) rs["url"];
-                invoice.CreatedAt = (string) rs["created_at"];
-                invoice.UpdatedAt = (string) rs["updated_at"];
                 return invoice;
             }
 

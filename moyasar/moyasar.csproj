@@ -51,8 +51,12 @@
     <Compile Include="InvoiceArea\InvoiceResult.cs" />
     <Compile Include="MessagesMap\EnMessages.cs" />
     <Compile Include="MoyasarBase.cs" />
+    <Compile Include="PaymentArea\IPaymentResult.cs" />
+    <Compile Include="PaymentArea\MetaResult.cs" />
     <Compile Include="PaymentArea\Payment.cs" />
+    <Compile Include="PaymentArea\PaymentListResult.cs" />
     <Compile Include="PaymentArea\PaymentResult.cs" />
+    <Compile Include="PaymentArea\PaymentResultBase.cs" />
     <Compile Include="PaymentArea\RefundMap\MoyasarRefundBase.cs" />
     <Compile Include="PaymentArea\RefundMap\RefundResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

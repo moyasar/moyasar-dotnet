@@ -5,7 +5,7 @@ using System.Text;
 
 namespace moyasar.PaymentArea
 {
-   public class PaymentResult
+   public class PaymentResult:PaymentResultBase
     {
        public string id { get; set; }
        public string status { get; set; }
