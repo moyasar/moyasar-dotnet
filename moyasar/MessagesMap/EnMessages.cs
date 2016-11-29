@@ -13,6 +13,8 @@ namespace moyasar.MessagesMap
         public const string CreatedCardNameNotFound = "CreatedCard Company Required.";
         public const string CreatedCardNumberNotFound = "CreatedCard Number NotFound Required.";
         public const string ApiKeyNotFound = "Api Key Required.";
- 
-  }
+        public const string AmountNotZero = "Amount Can't Be Zero";
+
+        
+    }
 }

@@ -29,6 +29,9 @@ namespace Test
                 }
             };
             var i = p.GetPaymentById("429f4fde-2bd7-49b9-8fd8-2c6ca76be614");
+            var ix = p.Refund("d42aaec1-6997-46ab-a839-55c709bc5f7b", "100");
+             
+
             //var qx = p.IniParameters();
             //p.CreatePay();
             ////p.CreatePayment();
