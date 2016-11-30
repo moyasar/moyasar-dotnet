@@ -8,7 +8,7 @@ namespace moyasar.InvoiceArea
     public class Invoice : MoyasarBase
     {
         public string Amount { get; set; }
-        public string Desciption { get; set; }
+        public string Description { get; set; }
         public string Currency { get; set; }
 
         private string iniParam()
@@ -17,11 +17,11 @@ namespace moyasar.InvoiceArea
             {
                 Amount,
                 Desciption = Currency,
-                Currency = Desciption
+                Currency = Description
             };
 
-            var finalUrl = MakeInvoiceUrl + "?amount=" + Amount + "&currency=" + Currency + "&desciption=" +
-                           Desciption;
+            var finalUrl = MakeInvoiceUrl + "?amount=" + Amount + "&currency=" + Currency + "&description=" +
+                           Description;
             return finalUrl;
         }
 
@@ -42,11 +42,11 @@ namespace moyasar.InvoiceArea
                 {
                     Id = (string) rs["id"],
                     Status = (string) rs["status"],
-                    Amount = (string) rs["Amount"],
-                    Currency = (string) rs["Currency"],
-                    Description = (string) rs["Desciption"],
+                    Amount = (string) rs["amount"],
+                    Currency = (string) rs["currency"],
+                    Description = (string) rs["description"],
                     LogoUrl = (string) rs["logo_url"],
-                    AmountFormat = (string) rs["Amount_format"],
+                    AmountFormat = (string) rs["amount_format"],
                     Url = (string) rs["url"],
                     CreatedAt = (string) rs["created_at"],
                     UpdatedAt = (string) rs["updated_at"]

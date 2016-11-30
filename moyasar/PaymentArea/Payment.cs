@@ -17,7 +17,7 @@ namespace moyasar.PaymentArea
     [Serializable]
     public class Payment : MoyasarBase
     {
-        public double Amount { get; set; }
+        public int Amount { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
         public SourceReaultBase SourceReault { get; set; }
@@ -60,6 +60,8 @@ namespace moyasar.PaymentArea
                     {
                         type = Sd.Type,
                         username = Sd.Username,
+                        success_url = Sd.SuccessUrl,
+                        fail_url = Sd.FaildUrl
 
 
                     }
@@ -72,10 +74,87 @@ namespace moyasar.PaymentArea
 
         }
 
-        public PaymentResult CreatePay()
+        private void Validation()
         {
 
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create(MakePaymentUrl);
+            if (ApiKey == "" || ApiKey == string.Empty)
+            {
+                var ex = new MoyasarValidationException(EnMessages.ApiKeyNotFound) { ErrorCode = "#1559" };
+                throw ex;
+            }
+            if (SourceType == 0)
+            {
+                var ex = new MoyasarValidationException(EnMessages.SelectType) { ErrorCode = "#1550" };
+                throw ex;
+            }
+
+            if (this.SourceReault == null && this.SourceType == SourceType.CreditCard)
+            {
+                var ex = new MoyasarValidationException(EnMessages.SelectCreditCardType) { ErrorCode = "#1555" };
+                throw ex;
+            }
+
+            if (this.SourceReault == null)
+            {
+                var ex = new MoyasarValidationException(EnMessages.TypeEmpty) { ErrorCode = "#1500" };
+                throw ex;
+            }
+            if (string.IsNullOrEmpty(this.Currency) || this.Currency == string.Empty)
+            {
+                var ex = new MoyasarValidationException(EnMessages.CurrencyEmpty) { ErrorCode = "#1000" };
+                throw ex;
+            }
+            //check if this creditCard Type
+            if (this.SourceType == SourceType.CreditCard)
+            {
+                if (this.SourceReault != null)
+                {
+                    var credit = (CreditCard) SourceReault;
+                    if (credit.Company == string.Empty)
+                    {
+                        var ex = new MoyasarValidationException(EnMessages.CreatedCardCompanyNotFound) { ErrorCode = "#1110" };
+                        throw ex;
+                    }
+                    if (credit.Name == string.Empty)
+                    {
+                        var ex = new MoyasarValidationException(EnMessages.CreatedCardNameNotFound) { ErrorCode = "#1111" };
+                        throw ex;
+                    }
+                    if (credit.Name == string.Empty)
+                    {
+                        var ex = new MoyasarValidationException(EnMessages.CreatedCardNameNotFound) { ErrorCode = "#1112" };
+                        throw ex;
+                    }
+                    if (credit.Number == string.Empty)
+                    {
+                        var ex = new MoyasarValidationException(EnMessages.CreatedCardNumberNotFound) { ErrorCode = "#1113" };
+                        throw ex;
+                    }
+                    if (credit.Month == 0)
+                    {
+                        var ex = new MoyasarValidationException(EnMessages.CreatedCardNumberNotFound) { ErrorCode = "#1114" };
+                        throw ex;
+                    }
+                    if (credit.Year == 0)
+                    {
+                        var ex = new MoyasarValidationException(EnMessages.CreatedCardNumberNotFound) { ErrorCode = "#1115" };
+                        throw ex;
+                    }
+                }
+                else
+                {
+                    var ex = new MoyasarValidationException(EnMessages.CreatedCardNotReady) { ErrorCode = "#1110" };
+                    throw ex;
+
+                }
+            }
+
+        }
+
+        public PaymentResult CreatePay()
+        {
+            Validation();
+             var httpWebRequest = (HttpWebRequest) WebRequest.Create(MakePaymentUrl);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
             httpWebRequest.Method = "POST";
@@ -99,7 +178,7 @@ namespace moyasar.PaymentArea
                 {
                     id = (string) rs["id"],
                     status = (string) rs["status"],
-                    amount = (string) rs["amount"],
+                    amount = (int)rs["amount"],
                     description = (string) rs["description"],
                     currency = (string) rs["currency"],
                     amount_format = (string) rs["amount_format"],
@@ -170,7 +249,7 @@ namespace moyasar.PaymentArea
                 {
                     id = (string) rs["id"],
                     status = (string) rs["status"],
-                    amount = (string) rs["amount"],
+                    amount = (int) rs["amount"],
                     description = (string) rs["description"],
                     currency = (string) rs["currency"],
                     amount_format = (string) rs["amount_format"],
@@ -288,7 +367,7 @@ namespace moyasar.PaymentArea
 
         }
 
-        public PaymentResultBase GetPaymentsList()
+        public PaymentListResult GetPaymentsList()
         {
             var finalUrl = MakePaymentUrl;
             var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
@@ -312,7 +391,7 @@ namespace moyasar.PaymentArea
                     {
                         id = (string) item["id"],
                         status = (string) item["status"],
-                        amount = (string) item["amount"],
+                        amount = (int) item["amount"],
                         description = (string) item["description"],
                         currency = (string) item["currency"],
                         amount_format = (string) item["amount_format"],

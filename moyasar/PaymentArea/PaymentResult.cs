@@ -9,7 +9,7 @@ namespace moyasar.PaymentArea
     {
        public string id { get; set; }
        public string status { get; set; }
-       public string amount { get; set; }
+       public int amount { get; set; }
        public string fee { get; set; }
        public string currency { get; set; }
        public string refunded { get; set; }
