@@ -10,6 +10,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "webformTest", "..\webformTest\", "{50D5A8E7-510C-4C50-A9FF-007F6DEF84C4}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
+		ProjectReferences = "{9ec79375-df6a-4e74-a90c-731751711e0d}|moyasar.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_11089"
 		Debug.AspNetCompiler.PhysicalPath = "..\webformTest\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_11089\"
@@ -25,6 +26,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "webformTest", "..\webformTe
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "11089"
+		SlnRelativePath = "..\webformTest\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject

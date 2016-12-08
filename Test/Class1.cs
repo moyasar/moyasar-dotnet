@@ -15,7 +15,7 @@ namespace Test
       {
           Payment p = new Payment();
           p.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
-          
+          p.Amount = 200;
           p.Currency = "SAR";
           p.Description = "Payment testing onlny";
           p.SourceType = SourceType.Sadad;
