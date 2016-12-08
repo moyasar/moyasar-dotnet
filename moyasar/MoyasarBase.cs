@@ -11,12 +11,12 @@ namespace moyasar
     }
   public  class MoyasarBase
   {
-      public string MakePaymentUrl = "https://api.moyasar.com/v1/payments";
+      protected string MakePaymentUrl = "https://api.moyasar.com/v1/payments";
       protected string MakeInvoiceUrl = "https://api.moyasar.com/v1/invoices";
       protected WebRequest Request;
-        public string ApiKey { get; set; }
+        public static string ApiKey { get; set; }
 
-      internal bool Auth()
+      protected bool Auth()
       {
 
             // Create a request using a URL that can receive a post. 

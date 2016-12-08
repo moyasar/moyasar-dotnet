@@ -14,12 +14,14 @@ namespace Test
       public void CreatePayment()
       {
           Payment p = new Payment();
-          p.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+         // p.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
           p.Amount = 200;
           p.Currency = "SAR";
           p.Description = "Payment testing onlny";
           p.SourceType = SourceType.Sadad;
-          p.SourceReault = new SadadType() {Type = "sadad", Username = "u3042346X",SuccessUrl ="#",FaildUrl = "#"};
+          p.SourceReault = new SadadType()
+          { Type = "sadad",
+              Username = "u3042346X",SuccessUrl ="#",FaildUrl = "#"};
 
         var result =  p.CreatePay();
          
@@ -49,8 +51,9 @@ namespace Test
 
       public void refund()
       {
+            MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
             Payment p = new Payment();
-            p.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+             
          var refs =  p.Refund("787a9902-0866-4170-af5c-e8f2337624d3", "258900");
       }
 
