@@ -3,9 +3,9 @@ using moyasar.InvoiceArea;
 using moyasar.PaymentArea;
 using System;
 
-namespace Test
+namespace CodeExamples
 {
-    public class Class1
+    public class Examples
     {
         public void CreatePayment()
         {
@@ -83,8 +83,5 @@ namespace Test
 
 
         }
-
-
-
     }
 }
