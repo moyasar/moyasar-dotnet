@@ -3,13 +3,13 @@ using moyasar;
 using moyasar.InvoiceArea;
 using moyasar.PaymentArea;
 
-namespace Test
+namespace CodeExamples
 {
     internal class Program
     {
         private static void Main(string[] args)
         {
-            Class1 c = new Class1();
+            Examples c = new Examples();
             c.CreatePayment();
             //var p = new Payment
             //{

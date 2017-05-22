@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "moyasar", "moyasar.csproj", "{9EC79375-DF6A-4E74-A90C-731751711E0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "..\Test\Test.csproj", "{09445DCE-DB47-4086-9779-BEE24C754339}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeExamples", "..\CodeExamples\CodeExamples.csproj", "{09445DCE-DB47-4086-9779-BEE24C754339}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "webformTest", "..\webformTest\", "{50D5A8E7-510C-4C50-A9FF-007F6DEF84C4}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "", "..\webformTest", "{50D5A8E7-510C-4C50-A9FF-007F6DEF84C4}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
 		ProjectReferences = "{9ec79375-df6a-4e74-a90c-731751711e0d}|moyasar.dll;"
