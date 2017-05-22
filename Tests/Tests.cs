@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test.Tests
+namespace Moyasar.Tests
 {
     [TestClass()]
     public class Class1Tests
