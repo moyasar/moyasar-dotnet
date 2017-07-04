@@ -10,7 +10,6 @@ namespace moyasar.InvoiceArea
         [JsonProperty("status")]
         public string Status { get; set; }
 
-
         [JsonProperty("amount")]
         public string Amount { get; set; }
 

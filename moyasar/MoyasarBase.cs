@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 
 namespace moyasar
@@ -18,7 +22,7 @@ namespace moyasar
 
         protected bool Auth()
         {
-            // Create a request using a URL that can receive a post. 
+            // Create a request using a URL that can receive a post.
             Request = WebRequest.Create(MakePaymentUrl);
             
             // Set the Method property of the request to POST.
@@ -34,6 +38,18 @@ namespace moyasar
                 return true;
             else
                 return false;
+        }
+
+        protected MoyasarException HandleRequestErrors(WebException e)
+        {
+            using (var streamReader = new StreamReader(e.Response.GetResponseStream()))             {                 var result = streamReader.ReadToEnd();
+                var rs = JObject.Parse(result);
+                var msg = (string)rs["message"];
+                var type = (string)rs["type"];
+                var errors = rs["errors"].ToString();
+
+                var error = new MoyasarException(msg, type, errors);
+                return error;             }
         }
     }
 }
