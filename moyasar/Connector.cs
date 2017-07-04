@@ -1,11 +1,7 @@
-﻿
-
-namespace moyasar
+﻿namespace moyasar
 {
-   public class Connector
+    public class Connector
     {
-       
 
-      
     }
 }

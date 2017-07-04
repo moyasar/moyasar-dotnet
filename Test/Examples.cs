@@ -5,12 +5,12 @@ using System;
 
 namespace Test
 {
-    public class Class1
+    public class Examples
     {
         public void CreatePayment()
         {
             Payment p = new Payment();
-             
+
             p.Amount = 200;
             p.Currency = "SAR";
             p.Description = "";
@@ -18,8 +18,7 @@ namespace Test
             p.SourceReault = new SadadType()
             {
                 Type = "sadad",
-                Username = "u3042346X"
-                ,
+                Username = "u3042346X",
                 SuccessUrl = "#",
                 FaildUrl = "#"
             };
@@ -40,18 +39,13 @@ namespace Test
 
             Console.WriteLine(result.id);
             Console.Read();
-
         }
 
         public void ListOfPayment()
         {
-
             Payment p = new Payment();
             MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
             PaymentListResult rs = p.GetPaymentsList();
-
-
-
         }
 
         public void PaymentByID()
@@ -71,7 +65,6 @@ namespace Test
             var refs = p.Refund("787a9902-0866-4170-af5c-e8f2337624d3", "258900");
         }
 
-
         public void CreateInvoice()
         {
             Invoice v = new Invoice();
@@ -80,11 +73,6 @@ namespace Test
             v.Currency = "SAR";
             v.Description = "this invoice for testing";
             var res = v.GetInvoicesList();
-
-
         }
-
-
-
     }
 }

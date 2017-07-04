@@ -11,7 +11,6 @@ using moyasar.PaymentArea.RefundMap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-
 namespace moyasar.PaymentArea
 {
     [Serializable]
@@ -25,8 +24,6 @@ namespace moyasar.PaymentArea
 
         public string IniParameters()
         {
-
-
             var q = new object();
             if (this.SourceType == SourceType.CreditCard)
             {
@@ -62,21 +59,16 @@ namespace moyasar.PaymentArea
                         username = Sd.Username,
                         success_url = Sd.SuccessUrl,
                         fail_url = Sd.FaildUrl
-
-
                     }
                 };
             }
 
-
             var sm = JsonConvert.SerializeObject(q);
             return sm;
-
         }
 
         private void Validation()
         {
-
             if (ApiKey == "" || ApiKey == string.Empty)
             {
                 var ex = new MoyasarValidationException(EnMessages.ApiKeyNotFound) { ErrorCode = "#1559" };
@@ -104,7 +96,8 @@ namespace moyasar.PaymentArea
                 var ex = new MoyasarValidationException(EnMessages.CurrencyEmpty) { ErrorCode = "#1000" };
                 throw ex;
             }
-            //check if this creditCard Type
+
+            // Check if this creditCard Type
             if (this.SourceType == SourceType.CreditCard)
             {
                 if (this.SourceReault != null)
@@ -148,7 +141,6 @@ namespace moyasar.PaymentArea
 
                 }
             }
-
         }
 
         public PaymentResult CreatePay()
@@ -213,22 +205,10 @@ namespace moyasar.PaymentArea
                         Name = (string) rs["source"]["name"],
                         Number = (string) rs["source"]["number"],
                         Message = (string) rs["source"]["message"]
-
-
-
                     };
                 }
-
                 return payment;
-
-
             }
-
-
-
-
-
-
         }
 
         public PaymentResult GetPaymentById(string id)
@@ -289,8 +269,6 @@ namespace moyasar.PaymentArea
 
                 return payment;
             }
-
-            return null;
         }
 
 
@@ -353,18 +331,12 @@ namespace moyasar.PaymentArea
                         return exception;
 
                     }
-
-
-
-                    return null;
                 }
             }
             catch (Exception ex)
             {
-
                 return new RefundException() {Message = ex.Message, Error = null, Type = ex.Source};
             }
-
         }
 
         public PaymentListResult GetPaymentsList()
@@ -380,9 +352,11 @@ namespace moyasar.PaymentArea
             {
                 var result = streamReader.ReadToEnd();
                 var rs = JObject.Parse(result);
-                var  listResult = new PaymentListResult();
-                listResult.Payments = new List<PaymentResult>();
-                listResult.Meta = new MetaResult();
+                var listResult = new PaymentListResult()
+                {
+                    Payments = new List<PaymentResult>(),
+                    Meta = new MetaResult()
+                };
 
                 var paymentList = rs["payments"];
                 foreach (var item in paymentList)
@@ -428,9 +402,7 @@ namespace moyasar.PaymentArea
                             Message = (string) item["source"]["message"]
                         };
                     }
-
                     listResult.Payments.Add(payment);
-
                 }
 
                 //rs
@@ -441,8 +413,6 @@ namespace moyasar.PaymentArea
                 listResult.Meta.TotalPages = (string)rs["meta"]["total_count"];
                 return listResult;
             }
-
-
         }
     }
 }

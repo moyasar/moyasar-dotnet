@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace moyasar.PaymentArea
 {
-   public interface IPaymentResult
+    public interface IPaymentResult
     {
-      List<PaymentResult> Payments { get; set; }
-       MetaResult Meta { get; set; }
+        List<PaymentResult> Payments { get; set; }
+        MetaResult Meta { get; set; }
     }
 }

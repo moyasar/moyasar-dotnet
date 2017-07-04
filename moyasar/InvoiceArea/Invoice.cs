@@ -51,13 +51,8 @@ namespace moyasar.InvoiceArea
                     CreatedAt = (string) rs["created_at"],
                     UpdatedAt = (string) rs["updated_at"]
                 };
-
-
-
                 return invoice;
             }
-
-            return null;
         }
 
 
@@ -126,8 +121,6 @@ namespace moyasar.InvoiceArea
                 invoice.UpdatedAt = (string) rs["updated_at"];
                 return invoice;
             }
-
-            return null;
         }
     }
 }

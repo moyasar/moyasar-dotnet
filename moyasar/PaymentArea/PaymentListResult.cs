@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace moyasar.PaymentArea
 {
-   public class PaymentListResult:PaymentResultBase,IPaymentResult
+    public class PaymentListResult : PaymentResultBase, IPaymentResult
     {
-       public List<PaymentResult> Payments { get; set; }
-       public MetaResult Meta { get; set; }
+        public List<PaymentResult> Payments { get; set; }
+        public MetaResult Meta { get; set; }
     }
 }

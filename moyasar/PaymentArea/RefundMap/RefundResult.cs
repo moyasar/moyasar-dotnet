@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace moyasar.PaymentArea.RefundMap
+﻿namespace moyasar.PaymentArea.RefundMap
 {
-  public  class RefundResult:MoyasarRefundBase
+  public  class RefundResult : MoyasarRefundBase
     {
       public string Id { get; set; }
       public string Currency { get; set; }

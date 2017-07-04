@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace moyasar.PaymentArea.RefundMap
+﻿namespace moyasar.PaymentArea.RefundMap
 {
-  public abstract  class MoyasarRefundBase
+    public abstract class MoyasarRefundBase
     {
-      
+
     }
 }
