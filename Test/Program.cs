@@ -10,7 +10,12 @@ namespace Test
         private static void Main(string[] args)
         {
             var c = new Examples();
-            c.CreatePayment();
+            
+            // Credit Card Experiement 
+            c.CreateCreditCardPayment();
+
+            // Sadad Experiment
+            c.CreateSadadPayment();
 
             Console.Read();
         }

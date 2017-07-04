@@ -138,7 +138,6 @@ namespace moyasar.PaymentArea
                 {
                     var ex = new MoyasarValidationException(EnMessages.CreatedCardNotReady) { ErrorCode = "#1110" };
                     throw ex;
-
                 }
             }
         }
@@ -146,7 +145,7 @@ namespace moyasar.PaymentArea
         public PaymentResult CreatePay()
         {
             Validation();
-             var httpWebRequest = (HttpWebRequest) WebRequest.Create(MakePaymentUrl);
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create(MakePaymentUrl);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
             httpWebRequest.Method = "POST";
