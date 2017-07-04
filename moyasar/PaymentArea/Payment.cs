@@ -158,7 +158,8 @@ namespace moyasar.PaymentArea
                 streamWriter.Flush();
                 streamWriter.Close();
             }
-            try { 
+            try
+            { 
                 var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
@@ -223,55 +224,61 @@ namespace moyasar.PaymentArea
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
-            var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            try
             {
-                var result = streamReader.ReadToEnd();
-                var rs = JObject.Parse(result);
-
-                PaymentResult payment = new PaymentResult
+                var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    id = (string) rs["id"],
-                    status = (string) rs["status"],
-                    amount = (int) rs["amount"],
-                    description = (string) rs["description"],
-                    currency = (string) rs["currency"],
-                    amount_format = (string) rs["amount_format"],
-                    created_at = (string) rs["created_at"],
-                    fee = (string) rs["fee"],
-                    fee_format = (string) rs["fee_format"],
-                    invoice_id = (string) rs["invoice_id"],
-                    ip = (string) rs["ip"],
-                    refunded = (string) rs["refunded"],
-                    refunded_at = (string) rs["refunded_at"],
-                    updated_at = (string) rs["updated_at"]
+                    var result = streamReader.ReadToEnd();
+                    var rs = JObject.Parse(result);
 
-                };
-                if ("sadad" == (string) rs["source"]["type"])
-                {
-                    payment.source = new SadadType()
+                    PaymentResult payment = new PaymentResult
                     {
-                        Type = (string) rs["source"]["type"],
-                        Username = (string) rs["source"]["username"],
-                        TransactionUrl = (string) rs["source"]["transaction_url"],
-                        ErrorCode = (string) rs["source"]["error_code"],
-                        TransactionId = (string) rs["source"]["transaction_id"],
-                        Message = (string) rs["source"]["message"]
-                    };
-                }
-                if ("creditcard" == (string) rs["source"]["type"])
-                {
-                    payment.source = new CreditCard()
-                    {
-                        Type = (string) rs["source"]["type"],
-                        Company = (string) rs["source"]["company"],
-                        Name = (string) rs["source"]["name"],
-                        Number = (string) rs["source"]["number"],
-                        Message = (string) rs["source"]["message"]
-                    };
-                }
+                        id = (string)rs["id"],
+                        status = (string)rs["status"],
+                        amount = (int)rs["amount"],
+                        description = (string)rs["description"],
+                        currency = (string)rs["currency"],
+                        amount_format = (string)rs["amount_format"],
+                        created_at = (string)rs["created_at"],
+                        fee = (string)rs["fee"],
+                        fee_format = (string)rs["fee_format"],
+                        invoice_id = (string)rs["invoice_id"],
+                        ip = (string)rs["ip"],
+                        refunded = (string)rs["refunded"],
+                        refunded_at = (string)rs["refunded_at"],
+                        updated_at = (string)rs["updated_at"]
 
-                return payment;
+                    };
+                    if ("sadad" == (string)rs["source"]["type"])
+                    {
+                        payment.source = new SadadType()
+                        {
+                            Type = (string)rs["source"]["type"],
+                            Username = (string)rs["source"]["username"],
+                            TransactionUrl = (string)rs["source"]["transaction_url"],
+                            ErrorCode = (string)rs["source"]["error_code"],
+                            TransactionId = (string)rs["source"]["transaction_id"],
+                            Message = (string)rs["source"]["message"]
+                        };
+                    }
+                    if ("creditcard" == (string)rs["source"]["type"])
+                    {
+                        payment.source = new CreditCard()
+                        {
+                            Type = (string)rs["source"]["type"],
+                            Company = (string)rs["source"]["company"],
+                            Name = (string)rs["source"]["name"],
+                            Number = (string)rs["source"]["number"],
+                            Message = (string)rs["source"]["message"]
+                        };
+                    }
+                    return payment;
+                }
+            }
+            catch (WebException webEx)
+            {
+                throw HandleRequestErrors(webEx);
             }
         }
 
@@ -339,83 +346,89 @@ namespace moyasar.PaymentArea
             }
             catch (Exception ex)
             {
-                return new RefundException() {Message = ex.Message, Error = null, Type = ex.Source};
+                return new RefundException() { Message = ex.Message, Error = null, Type = ex.Source};
             }
         }
 
         public PaymentListResult GetPaymentsList()
         {
             var finalUrl = MakePaymentUrl;
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
-
-            var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            try
             {
-                var result = streamReader.ReadToEnd();
-                var rs = JObject.Parse(result);
-                var listResult = new PaymentListResult()
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    Payments = new List<PaymentResult>(),
-                    Meta = new MetaResult()
-                };
-
-                var paymentList = rs["payments"];
-                foreach (var item in paymentList)
-                {
-                    PaymentResult payment = new PaymentResult
+                    var result = streamReader.ReadToEnd();
+                    var rs = JObject.Parse(result);
+                    var listResult = new PaymentListResult()
                     {
-                        id = (string) item["id"],
-                        status = (string) item["status"],
-                        amount = (int) item["amount"],
-                        description = (string) item["description"],
-                        currency = (string) item["currency"],
-                        amount_format = (string) item["amount_format"],
-                        created_at = (string) item["created_at"],
-                        fee = (string) item["fee"],
-                        fee_format = (string) item["fee_format"],
-                        invoice_id = (string) item["invoice_id"],
-                        ip = (string) item["ip"],
-                        refunded = (string) item["refunded"],
-                        refunded_at = (string) item["refunded_at"],
-                        updated_at = (string) item["updated_at"]
-
+                        Payments = new List<PaymentResult>(),
+                        Meta = new MetaResult()
                     };
-                    if ("sadad" == (string) item["source"]["type"])
-                    {
-                        payment.source = new SadadType()
-                        {
-                            Type = (string) item["source"]["type"],
-                            Username = (string) item["source"]["username"],
-                            TransactionUrl = (string) item["source"]["transaction_url"],
-                            ErrorCode = (string) item["source"]["error_code"],
-                            TransactionId = (string) item["source"]["transaction_id"],
-                            Message = (string) item["source"]["message"]
-                        };
-                    }
-                    if ("creditcard" == (string)item["source"]["type"])
-                    {
-                        payment.source = new CreditCard()
-                        {
-                            Type = (string) item["source"]["type"],
-                            Company = (string) item["source"]["company"],
-                            Name = (string) item["source"]["name"],
-                            Number = (string) item["source"]["number"],
-                            Message = (string) item["source"]["message"]
-                        };
-                    }
-                    listResult.Payments.Add(payment);
-                }
 
-                //rs
-                listResult.Meta.CurrentPage = (string)rs["meta"]["current_page"];
-                listResult.Meta.NextPage = (string)rs["meta"]["next_page"];
-                listResult.Meta.PrevPage = (string)rs["meta"]["prev_page"];
-                listResult.Meta.TotalCount = (string)rs["meta"]["total_pages"];
-                listResult.Meta.TotalPages = (string)rs["meta"]["total_count"];
-                return listResult;
+                    var paymentList = rs["payments"];
+                    foreach (var item in paymentList)
+                    {
+                        PaymentResult payment = new PaymentResult
+                        {
+                            id = (string)item["id"],
+                            status = (string)item["status"],
+                            amount = (int)item["amount"],
+                            description = (string)item["description"],
+                            currency = (string)item["currency"],
+                            amount_format = (string)item["amount_format"],
+                            created_at = (string)item["created_at"],
+                            fee = (string)item["fee"],
+                            fee_format = (string)item["fee_format"],
+                            invoice_id = (string)item["invoice_id"],
+                            ip = (string)item["ip"],
+                            refunded = (string)item["refunded"],
+                            refunded_at = (string)item["refunded_at"],
+                            updated_at = (string)item["updated_at"]
+
+                        };
+                        if ("sadad" == (string)item["source"]["type"])
+                        {
+                            payment.source = new SadadType()
+                            {
+                                Type = (string)item["source"]["type"],
+                                Username = (string)item["source"]["username"],
+                                TransactionUrl = (string)item["source"]["transaction_url"],
+                                ErrorCode = (string)item["source"]["error_code"],
+                                TransactionId = (string)item["source"]["transaction_id"],
+                                Message = (string)item["source"]["message"]
+                            };
+                        }
+                        if ("creditcard" == (string)item["source"]["type"])
+                        {
+                            payment.source = new CreditCard()
+                            {
+                                Type = (string)item["source"]["type"],
+                                Company = (string)item["source"]["company"],
+                                Name = (string)item["source"]["name"],
+                                Number = (string)item["source"]["number"],
+                                Message = (string)item["source"]["message"]
+                            };
+                        }
+                        listResult.Payments.Add(payment);
+                    }
+
+                    //rs
+                    listResult.Meta.CurrentPage = (string)rs["meta"]["current_page"];
+                    listResult.Meta.NextPage = (string)rs["meta"]["next_page"];
+                    listResult.Meta.PrevPage = (string)rs["meta"]["prev_page"];
+                    listResult.Meta.TotalCount = (string)rs["meta"]["total_pages"];
+                    listResult.Meta.TotalPages = (string)rs["meta"]["total_count"];
+                    return listResult;
+                }
+            }
+            catch (WebException webEx)
+            {
+                throw HandleRequestErrors(webEx);
             }
         }
     }

@@ -25,7 +25,6 @@ namespace moyasar.InvoiceArea
             return finalUrl;
         }
 
-
         public InvoiceResult CreateInvoice()
         {
             var httpWebRequest = (HttpWebRequest) WebRequest.Create(iniParam());
@@ -33,28 +32,34 @@ namespace moyasar.InvoiceArea
             httpWebRequest.Method = "POST";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
-            var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            try
             {
-                var result = streamReader.ReadToEnd();
-                var rs = JObject.Parse(result);
-                var invoice = new InvoiceResult
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    Id = (string) rs["id"],
-                    Status = (string) rs["status"],
-                    Amount = (string) rs["amount"],
-                    Currency = (string) rs["currency"],
-                    Description = (string) rs["description"],
-                    LogoUrl = (string) rs["logo_url"],
-                    AmountFormat = (string) rs["amount_format"],
-                    Url = (string) rs["url"],
-                    CreatedAt = (string) rs["created_at"],
-                    UpdatedAt = (string) rs["updated_at"]
-                };
-                return invoice;
+                    var result = streamReader.ReadToEnd();
+                    var rs = JObject.Parse(result);
+                    var invoice = new InvoiceResult
+                    {
+                        Id = (string)rs["id"],
+                        Status = (string)rs["status"],
+                        Amount = (string)rs["amount"],
+                        Currency = (string)rs["currency"],
+                        Description = (string)rs["description"],
+                        LogoUrl = (string)rs["logo_url"],
+                        AmountFormat = (string)rs["amount_format"],
+                        Url = (string)rs["url"],
+                        CreatedAt = (string)rs["created_at"],
+                        UpdatedAt = (string)rs["updated_at"]
+                    };
+                    return invoice;
+                }
+            }
+            catch (WebException webEx)
+            {
+                throw HandleRequestErrors(webEx);
             }
         }
-
 
         public List<InvoiceResult> GetInvoicesList()
         {
@@ -64,31 +69,38 @@ namespace moyasar.InvoiceArea
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
-            var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            try
             {
-                var result = streamReader.ReadToEnd();
-                var j = JObject.Parse(result);
-
-                var inv = j["invoices"].Children();
-                foreach (var i in inv)
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var invoiceResult = new InvoiceResult
+                    var result = streamReader.ReadToEnd();
+                    var j = JObject.Parse(result);
+
+                    var inv = j["invoices"].Children();
+                    foreach (var i in inv)
                     {
-                        Currency = (string) i["Currency"],
-                        Amount = (string) i["Amount"],
-                        Description = (string) i["Desciption"],
-                        Id = (string) i["id"],
-                        Status = (string) i["status"],
-                        AmountFormat = (string) i["Amount_format"],
-                        LogoUrl = (string) i["url"],
-                        CreatedAt = (string) i["created_at"],
-                        UpdatedAt = (string) i["updated_at"],
-                        Url = (string) i["url"]
-                    };
-                    ls.Add(invoiceResult);
+                        var invoiceResult = new InvoiceResult
+                        {
+                            Currency = (string)i["Currency"],
+                            Amount = (string)i["Amount"],
+                            Description = (string)i["Desciption"],
+                            Id = (string)i["id"],
+                            Status = (string)i["status"],
+                            AmountFormat = (string)i["Amount_format"],
+                            LogoUrl = (string)i["url"],
+                            CreatedAt = (string)i["created_at"],
+                            UpdatedAt = (string)i["updated_at"],
+                            Url = (string)i["url"]
+                        };
+                        ls.Add(invoiceResult);
+                    }
+                    return ls;
                 }
-                return ls;
+            }
+            catch (WebException webEx)
+            {
+                throw HandleRequestErrors(webEx);
             }
         }
 
@@ -100,26 +112,33 @@ namespace moyasar.InvoiceArea
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
-            var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+            try
             {
-                var result = streamReader.ReadToEnd();
-                var rs = JObject.Parse(result);
-                var invoice = new InvoiceResult();
-                invoice.Id = (string) rs["id"];
-                invoice.Status = (string) rs["status"];
-                invoice.Amount = (string) rs["Amount"];
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                    var rs = JObject.Parse(result);
+                    var invoice = new InvoiceResult();
+                    invoice.Id = (string)rs["id"];
+                    invoice.Status = (string)rs["status"];
+                    invoice.Amount = (string)rs["Amount"];
 
-                invoice.Currency = (string) rs["Currency"];
-                invoice.Description = (string) rs["Desciption"];
+                    invoice.Currency = (string)rs["Currency"];
+                    invoice.Description = (string)rs["Desciption"];
 
-                invoice.LogoUrl = (string) rs["logo_url"];
-                invoice.AmountFormat = (string) rs["Amount_format"];
+                    invoice.LogoUrl = (string)rs["logo_url"];
+                    invoice.AmountFormat = (string)rs["Amount_format"];
 
-                invoice.Url = (string) rs["url"];
-                invoice.CreatedAt = (string) rs["created_at"];
-                invoice.UpdatedAt = (string) rs["updated_at"];
-                return invoice;
+                    invoice.Url = (string)rs["url"];
+                    invoice.CreatedAt = (string)rs["created_at"];
+                    invoice.UpdatedAt = (string)rs["updated_at"];
+                    return invoice;
+                }
+            }
+            catch (WebException webEx)
+            {
+                throw HandleRequestErrors(webEx);
             }
         }
     }
