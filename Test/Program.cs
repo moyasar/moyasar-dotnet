@@ -2,6 +2,7 @@
 using moyasar;
 using moyasar.InvoiceArea;
 using moyasar.PaymentArea;
+using moyasar.ExceptionsMap;
 
 namespace Test
 {
@@ -9,13 +10,25 @@ namespace Test
     {
         private static void Main(string[] args)
         {
-            var c = new Examples();
-            
+            var examples = new Examples();
+
             // Credit Card Experiement 
-            c.CreateCreditCardPayment();
+            examples.CreateCreditCardPayment();
 
             // Sadad Experiment
-            c.CreateSadadPayment();
+            examples.CreateSadadPayment();
+
+            // List Payments 
+            examples.ListOfPayment();
+
+            // Fetch Payment
+            examples.PaymentByID();
+
+            // Refund Payment
+            examples.refund();
+
+            // List Invoices
+            examples.ListInvoices();
 
             Console.Read();
         }

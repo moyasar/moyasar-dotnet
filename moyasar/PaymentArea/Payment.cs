@@ -282,7 +282,6 @@ namespace moyasar.PaymentArea
             }
         }
 
-
         public MoyasarRefundBase Refund(string id, string amount)
         {
             var finalUrl = MakePaymentUrl + "/" + id + "/refund?amount=" + amount;
@@ -340,7 +339,6 @@ namespace moyasar.PaymentArea
 
                         };
                         return exception;
-
                     }
                 }
             }
