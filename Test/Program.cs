@@ -16,21 +16,21 @@ namespace Test
             examples.CreateCreditCardPayment();
 
             // Sadad Experiment
-            examples.CreateSadadPayment();
+            // examples.CreateSadadPayment();
 
             // List Payments 
-            examples.ListOfPayment();
+            // examples.ListOfPayment();
 
             // Fetch Payment
-            examples.PaymentByID();
+            // examples.PaymentByID();
 
             // Refund Payment
-            examples.refund();
+            // examples.refund();
 
             // Create Invoices
 
             // List Invoices
-            examples.ListInvoices();
+            // examples.ListInvoices();
 
             // Update Invoices
 

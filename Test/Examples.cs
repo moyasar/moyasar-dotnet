@@ -139,5 +139,15 @@ namespace Test
             Console.WriteLine("ID: {0} ---- Status: {1}", all.First().Id, all.Last().Status);
             Console.WriteLine();
         }
+
+        public void CreateInvoice()
+        {
+
+        }
+
+        public void FetchInvoice()
+        {
+
+        }
     }
 }
