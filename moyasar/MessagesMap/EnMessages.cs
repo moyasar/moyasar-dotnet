@@ -1,4 +1,4 @@
-﻿namespace moyasar.MessagesMap
+﻿namespace Moyasar.MessagesMap
 {
     public static class EnMessages
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace moyasar.PaymentArea
+namespace Moyasar.PaymentArea
 {
     public interface IPaymentResult
     {

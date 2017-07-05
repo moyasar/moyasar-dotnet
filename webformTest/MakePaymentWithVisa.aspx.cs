@@ -4,14 +4,14 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using moyasar;
-using moyasar.PaymentArea;
+using Moyasar;
+using Moyasar.PaymentArea;
 
 public partial class MakePayment : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        moyasar.MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+        MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
     }
 
     protected void btnOk_Click(object sender, EventArgs e)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace moyasar
+namespace Moyasar
 {
     public class MoyasarException : Exception
     {

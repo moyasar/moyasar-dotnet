@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace moyasar.ExceptionsMap
+namespace Moyasar.ExceptionsMap
 {
     public class MoyasarValidationException : Exception
     {

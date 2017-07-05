@@ -1,4 +1,4 @@
-﻿namespace moyasar.PaymentArea.RefundMap
+﻿namespace Moyasar.PaymentArea.RefundMap
 {
   public  class RefundResult : MoyasarRefundBase
     {

@@ -4,14 +4,14 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Web;
-using moyasar.ExceptionsMap;
-using moyasar.InvoiceArea;
-using moyasar.MessagesMap;
-using moyasar.PaymentArea.RefundMap;
+using Moyasar.ExceptionsMap;
+using Moyasar.InvoiceArea;
+using Moyasar.MessagesMap;
+using Moyasar.PaymentArea.RefundMap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace moyasar.PaymentArea
+namespace Moyasar.PaymentArea
 {
     [Serializable]
     public class Payment : MoyasarBase

@@ -1,8 +1,8 @@
 ﻿using System;
-using moyasar;
-using moyasar.InvoiceArea;
-using moyasar.PaymentArea;
-using moyasar.ExceptionsMap;
+using Moyasar;
+using Moyasar.InvoiceArea;
+using Moyasar.PaymentArea;
+using Moyasar.ExceptionsMap;
 
 namespace Test
 {
@@ -27,8 +27,12 @@ namespace Test
             // Refund Payment
             examples.refund();
 
+            // Create Invoices
+
             // List Invoices
             examples.ListInvoices();
+
+            // Update Invoices
 
             Console.Read();
         }

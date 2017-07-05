@@ -1,6 +1,6 @@
-﻿using moyasar.PaymentArea.RefundMap;
+﻿using Moyasar.PaymentArea.RefundMap;
 
-namespace moyasar.ExceptionsMap
+namespace Moyasar.ExceptionsMap
 {
     public class RefundException : MoyasarRefundBase
     {
