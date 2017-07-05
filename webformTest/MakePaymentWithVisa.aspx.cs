@@ -10,7 +10,7 @@ public partial class MakePayment : Page
         MoyasarBase.ApiKey = "pk_test_yTqHr4bcm1eCJkGdpNExsU4f6s1FZkqpHzr7XezG";
     }
 
-    protected void btnOk_Click(object sender, EventArgs e)
+    protected void BtnOk_Click(object sender, EventArgs e)
     {
        Payment payment = new Payment();
         payment.SourceType = SourceType.CreditCard;
@@ -33,7 +33,7 @@ public partial class MakePayment : Page
         try
         {
             var p = payment.CreatePay();
-            txtResult.Text = p.id + ", " + p.amount + ", " + p.description;
+            txtResult.Text = p.Id + ", " + p.Amount + ", " + p.Description;
         } catch (MoyasarException ex)
         {   
             txtResult.Text = "Error <br> " + ex.Type + ", " + ex.Message + ", " + ex.Errors;

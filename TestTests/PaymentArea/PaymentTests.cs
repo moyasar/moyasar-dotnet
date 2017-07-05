@@ -15,7 +15,7 @@ namespace Moyasar.PaymentArea.Tests
         public void IniParametersTest()
         {
             Payment p = new Payment();
-            p.CreatePay();
+            p.Create();
 
         }
 

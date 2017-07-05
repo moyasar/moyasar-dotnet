@@ -55,7 +55,7 @@
                                 <tr>
                                     <td class="auto-style2">&nbsp;</td>
                                     <td>
-                                        <asp:Button ID="btnOk" runat="server" OnClick="btnOk_Click" Text="ok" Width="53px" />
+                                        <asp:Button ID="btnOk" runat="server" OnClick="BtnOk_Click" Text="ok" Width="53px" />
                                     </td>
                                 </tr>
                             </table>

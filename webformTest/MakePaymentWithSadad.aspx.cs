@@ -10,7 +10,7 @@ public partial class MakePaymentWithSadad : Page
         MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
     }
 
-    protected void btnOk_Click(object sender, EventArgs e)
+    protected void BtnOk_Click(object sender, EventArgs e)
     {
         Payment payment = new Payment();
         payment.SourceType = SourceType.Sadad;
@@ -29,7 +29,7 @@ public partial class MakePaymentWithSadad : Page
         try
         {
             var p = payment.CreatePay();
-            txtResult.Text = p.id + ", " + p.amount + ", " + p.description;
+            txtResult.Text = p.Id + ", " + p.Amount + ", " + p.Description;
         }
         catch (MoyasarException ex)
         {

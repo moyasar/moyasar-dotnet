@@ -13,7 +13,7 @@ namespace Test
             var examples = new Examples();
 
             // Credit Card Experiement 
-            examples.CreateCreditCardPayment();
+            // examples.CreateCreditCardPayment();
 
             // Sadad Experiment
             // examples.CreateSadadPayment();
@@ -22,10 +22,10 @@ namespace Test
             // examples.ListOfPayment();
 
             // Fetch Payment
-            // examples.PaymentByID();
+             examples.PaymentByID();
 
             // Refund Payment
-            // examples.refund();
+            // examples.RefundPayment();
 
             // Create Invoices
 

@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
-using System.Web;
 using Moyasar.ExceptionsMap;
-using Moyasar.InvoiceArea;
 using Moyasar.MessagesMap;
 using Moyasar.PaymentArea.RefundMap;
 using Newtonsoft.Json;
@@ -142,7 +139,7 @@ namespace Moyasar.PaymentArea
             }
         }
 
-        public PaymentResult CreatePay()
+        public PaymentResult Create()
         {
             Validation();
             var httpWebRequest = (HttpWebRequest) WebRequest.Create(MakePaymentUrl);
@@ -168,25 +165,25 @@ namespace Moyasar.PaymentArea
 
                     PaymentResult payment = new PaymentResult
                     {
-                        id = (string)rs["id"],
-                        status = (string)rs["status"],
-                        amount = (int)rs["amount"],
-                        description = (string)rs["description"],
-                        currency = (string)rs["currency"],
-                        amount_format = (string)rs["amount_format"],
-                        created_at = (string)rs["created_at"],
-                        fee = (string)rs["fee"],
-                        fee_format = (string)rs["fee_format"],
-                        invoice_id = (string)rs["invoice_id"],
-                        ip = (string)rs["ip"],
-                        refunded = (string)rs["refunded"],
-                        refunded_at = (string)rs["refunded_at"],
-                        updated_at = (string)rs["updated_at"]
+                        Id = (string)rs["id"],
+                        Status = (string)rs["status"],
+                        Amount = (int)rs["amount"],
+                        Description = (string)rs["description"],
+                        Currency = (string)rs["currency"],
+                        AmountFormat = (string)rs["amount_format"],
+                        CreatedAt = (string)rs["created_at"],
+                        Fee = (string)rs["fee"],
+                        FeeFormat = (string)rs["fee_format"],
+                        InvoiceId = (string)rs["invoice_id"],
+                        Ip = (string)rs["ip"],
+                        Refunded = (string)rs["refunded"],
+                        RefundedAt = (string)rs["refunded_at"],
+                        UpdatedAt = (string)rs["updated_at"]
 
                     };
                     if (this.SourceType == SourceType.Sadad)
                     {
-                        payment.source = new SadadType()
+                        payment.Source = new SadadType()
                         {
                             Type = (string)rs["source"]["type"],
                             Username = (string)rs["source"]["username"],
@@ -198,7 +195,7 @@ namespace Moyasar.PaymentArea
                     }
                     if (this.SourceType == SourceType.CreditCard)
                     {
-                        payment.source = new CreditCard()
+                        payment.Source = new CreditCard()
                         {
                             Type = (string)rs["source"]["type"],
                             Company = (string)rs["source"]["company"],
@@ -216,7 +213,7 @@ namespace Moyasar.PaymentArea
             }
         }
 
-        public PaymentResult GetPaymentById(string id)
+        public PaymentResult Fetch(string id)
         {
             var finalUrl = MakePaymentUrl + "/" + id;
             var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
@@ -234,25 +231,25 @@ namespace Moyasar.PaymentArea
 
                     PaymentResult payment = new PaymentResult
                     {
-                        id = (string)rs["id"],
-                        status = (string)rs["status"],
-                        amount = (int)rs["amount"],
-                        description = (string)rs["description"],
-                        currency = (string)rs["currency"],
-                        amount_format = (string)rs["amount_format"],
-                        created_at = (string)rs["created_at"],
-                        fee = (string)rs["fee"],
-                        fee_format = (string)rs["fee_format"],
-                        invoice_id = (string)rs["invoice_id"],
-                        ip = (string)rs["ip"],
-                        refunded = (string)rs["refunded"],
-                        refunded_at = (string)rs["refunded_at"],
-                        updated_at = (string)rs["updated_at"]
+                        Id = (string)rs["id"],
+                        Status = (string)rs["status"],
+                        Amount = (int)rs["amount"],
+                        Description = (string)rs["description"],
+                        Currency = (string)rs["currency"],
+                        AmountFormat = (string)rs["amount_format"],
+                        CreatedAt = (string)rs["created_at"],
+                        Fee = (string)rs["fee"],
+                        FeeFormat = (string)rs["fee_format"],
+                        InvoiceId = (string)rs["invoice_id"],
+                        Ip = (string)rs["ip"],
+                        Refunded = (string)rs["refunded"],
+                        RefundedAt = (string)rs["refunded_at"],
+                        UpdatedAt = (string)rs["updated_at"]
 
                     };
                     if ("sadad" == (string)rs["source"]["type"])
                     {
-                        payment.source = new SadadType()
+                        payment.Source = new SadadType()
                         {
                             Type = (string)rs["source"]["type"],
                             Username = (string)rs["source"]["username"],
@@ -264,13 +261,13 @@ namespace Moyasar.PaymentArea
                     }
                     if ("creditcard" == (string)rs["source"]["type"])
                     {
-                        payment.source = new CreditCard()
+                        payment.Source = new CreditCard()
                         {
                             Type = (string)rs["source"]["type"],
                             Company = (string)rs["source"]["company"],
                             Name = (string)rs["source"]["name"],
                             Number = (string)rs["source"]["number"],
-                            Message = (string)rs["source"]["message"]
+                            Message = (string)rs["source"]["message"],
                         };
                     }
                     return payment;
@@ -348,7 +345,7 @@ namespace Moyasar.PaymentArea
             }
         }
 
-        public PaymentListResult GetPaymentsList()
+        public PaymentListResult List()
         {
             var finalUrl = MakePaymentUrl;
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
@@ -373,25 +370,25 @@ namespace Moyasar.PaymentArea
                     {
                         PaymentResult payment = new PaymentResult
                         {
-                            id = (string)item["id"],
-                            status = (string)item["status"],
-                            amount = (int)item["amount"],
-                            description = (string)item["description"],
-                            currency = (string)item["currency"],
-                            amount_format = (string)item["amount_format"],
-                            created_at = (string)item["created_at"],
-                            fee = (string)item["fee"],
-                            fee_format = (string)item["fee_format"],
-                            invoice_id = (string)item["invoice_id"],
-                            ip = (string)item["ip"],
-                            refunded = (string)item["refunded"],
-                            refunded_at = (string)item["refunded_at"],
-                            updated_at = (string)item["updated_at"]
+                            Id = (string)item["id"],
+                            Status = (string)item["status"],
+                            Amount = (int)item["amount"],
+                            Description = (string)item["description"],
+                            Currency = (string)item["currency"],
+                            AmountFormat = (string)item["amount_format"],
+                            CreatedAt = (string)item["created_at"],
+                            Fee = (string)item["fee"],
+                            FeeFormat = (string)item["fee_format"],
+                            InvoiceId = (string)item["invoice_id"],
+                            Ip = (string)item["ip"],
+                            Refunded = (string)item["refunded"],
+                            RefundedAt = (string)item["refunded_at"],
+                            UpdatedAt = (string)item["updated_at"]
 
                         };
                         if ("sadad" == (string)item["source"]["type"])
                         {
-                            payment.source = new SadadType()
+                            payment.Source = new SadadType()
                             {
                                 Type = (string)item["source"]["type"],
                                 Username = (string)item["source"]["username"],
@@ -403,7 +400,7 @@ namespace Moyasar.PaymentArea
                         }
                         if ("creditcard" == (string)item["source"]["type"])
                         {
-                            payment.source = new CreditCard()
+                            payment.Source = new CreditCard()
                             {
                                 Type = (string)item["source"]["type"],
                                 Company = (string)item["source"]["company"],
@@ -428,6 +425,25 @@ namespace Moyasar.PaymentArea
             {
                 throw HandleRequestErrors(webEx);
             }
+        }
+
+        /// <summary>
+        /// Aliases for old names
+        /// </summary>
+
+        public PaymentResult CreatePay()
+        {
+            return Create();
+        }
+
+        public PaymentResult GetPaymentById(string id)
+        {
+            return Fetch(id);
+        }
+
+        public PaymentListResult GetPaymentsList()
+        {
+            return List();
         }
     }
 }

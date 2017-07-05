@@ -2,20 +2,20 @@
 {
     public class PaymentResult : PaymentResultBase
     {
-        public string id { get; set; }
-        public string status { get; set; }
-        public int amount { get; set; }
-        public string fee { get; set; }
-        public string currency { get; set; }
-        public string refunded { get; set; }
-        public string refunded_at { get; set; }
-        public string description { get; set; }
-        public string amount_format { get; set; }
-        public string fee_format { get; set; }
-        public string invoice_id { get; set; }
-        public string ip { get; set; }
-        public string created_at { get; set; }
-        public string updated_at { get; set; }
-        public SourceReaultBase source { get; set; }
+        public string Id { get; set; }
+        public string Status { get; set; }
+        public int Amount { get; set; }
+        public string Fee { get; set; }
+        public string Currency { get; set; }
+        public string Refunded { get; set; }
+        public string RefundedAt { get; set; }
+        public string Description { get; set; }
+        public string AmountFormat { get; set; }
+        public string FeeFormat { get; set; }
+        public string InvoiceId { get; set; }
+        public string Ip { get; set; }
+        public string CreatedAt { get; set; }
+        public string UpdatedAt { get; set; }
+        public SourceReaultBase Source { get; set; }
     }
 }

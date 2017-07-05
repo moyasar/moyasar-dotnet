@@ -1,10 +1,14 @@
 ﻿using Moyasar;
-using Moyasar.ExceptionsMap;
 using Moyasar.InvoiceArea;
 using Moyasar.PaymentArea;
 using Moyasar.PaymentArea.RefundMap;
 using System;
+using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+using Moyasar.ExceptionsMap;
 
 namespace Test
 {
@@ -14,28 +18,29 @@ namespace Test
         {
             MoyasarBase.ApiKey = "pk_test_yTqHr4bcm1eCJkGdpNExsU4f6s1FZkqpHzr7XezG";
 
-            Payment p = new Payment();
-            p.Amount = 100;
-            p.Currency = "SAR";
-            p.Description = "New Books Purchase";
-            p.SourceType = SourceType.CreditCard;
-            p.SourceReault = new CreditCard()
+            Payment payment = new Payment()
             {
-                Type = "creditcard",  //or master,
-                Message = "",
-                Company = "visa",
-                Number = "4111111111111111",
-                Name = "Abdullah Barrak",
-                Year = 2018,
-                Month = 03,
-                Cvc = "111"
-
+                Amount = 100,
+                Currency = "SAR",
+                Description = "New Suitcase Purchase",
+                SourceType = SourceType.CreditCard,
+                SourceReault = new CreditCard()
+                {
+                    Type = "creditcard",
+                    Message = "",
+                    Company = "visa",
+                    Number = "4111111111111111",
+                    Name = "Abdullah Barrak",
+                    Year = 2018,
+                    Month = 03,
+                    Cvc = "111"
+                }
             };
-            var result = p.CreatePay();
+            var result = payment.Create();
 
-            Console.WriteLine("Payment Id: {0}", result.id);
-            Console.WriteLine("Payment Status: {0}", result.status);
-            Console.WriteLine("Payment Source Message: {0}", result.source.Message);
+            Console.WriteLine("Payment Id: {0}", result.Id);
+            Console.WriteLine("Payment Status: {0}", result.Status);
+            Console.WriteLine("Payment Source Message: {0}", result.Source.Message);
             Console.WriteLine();
         }
 
@@ -43,27 +48,27 @@ namespace Test
         {
             MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
 
-            Payment p = new Payment();
-
-            p.Amount = 200;
-            p.Currency = "SAR";
-            p.Description = "Simple Test Payment";
-            p.SourceType = SourceType.Sadad;
-            p.SourceReault = new SadadType()
+            Payment payment = new Payment()
             {
-                Type = "sadad",
-                Username = "u3043090Xolp",
-                SuccessUrl = "https://moyasar.com",
-                FaildUrl = "https://moyasar.com/docs"
+                Amount = 200,
+                Currency = "SAR",
+                Description = "Simple Test Payment",
+                SourceType = SourceType.Sadad,
+                SourceReault = new SadadType()
+                {
+                    Type = "sadad",
+                    Username = "u3043090Xolp",
+                    SuccessUrl = "https://moyasar.com",
+                    FaildUrl = "https://moyasar.com/docs"
+                }
             };
+            var result = payment.Create();
 
-            var result = p.CreatePay();
-
-            Console.WriteLine("Payment Id: {0}", result.id);
-            Console.WriteLine("Payment Status: {0}", result.status);
-            Console.WriteLine("Payment Source Message: {0}", result.source.Message);
-            Console.WriteLine("Payment Source Transaction Id: {0}", (result.source as SadadType).TransactionId);
-            Console.WriteLine("Payment Source Transaction Url: {0}", (result.source as SadadType).TransactionUrl);
+            Console.WriteLine("Payment Id: {0}", result.Id);
+            Console.WriteLine("Payment Status: {0}", result.Status);
+            Console.WriteLine("Payment Source Message: {0}", result.Source.Message);
+            Console.WriteLine("Payment Source Transaction Id: {0}", (result.Source as SadadType).TransactionId);
+            Console.WriteLine("Payment Source Transaction Url: {0}", (result.Source as SadadType).TransactionUrl);
             Console.WriteLine();
         }
 
@@ -72,11 +77,11 @@ namespace Test
             MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
             Payment p = new Payment();
-            PaymentListResult rs = p.GetPaymentsList();
+            PaymentListResult rs = p.List();
 
             Console.WriteLine("Number Of Payments: {0}", rs.Payments.Count);
             Console.WriteLine("Last Payment from List:");
-            Console.WriteLine("ID: {0} ---- Status: {1}", rs.Payments.Last().id, rs.Payments.Last().status);
+            Console.WriteLine("ID: {0} ---- Status: {1}", rs.Payments.Last().Id, rs.Payments.Last().Status);
             Console.WriteLine();
         }
 
@@ -85,20 +90,19 @@ namespace Test
             MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
             // Getting existing payment ...
-            Payment p = new Payment();
-            var py = p.GetPaymentById("2eac340c-713d-4556-9d53-9a3f4671be6f");
-            var amount = py.amount;
-            var cur = py.currency;
+
+            var payment = new Payment().Fetch("2eac340c-713d-4556-9d53-9a3f4671be6f");
+            var amount = payment.Amount;
+            var cur = payment.Currency;
 
             Console.WriteLine("Found Payment with:");
-            Console.WriteLine("ID: {0} ---- Amount: {1} ---- Currency: {2}", py.id, py.amount, py.currency);
+            Console.WriteLine("ID: {0} ---- Amount: {1} ---- Currency: {2}", payment.Id, payment.Amount, payment.Currency);
 
             // Getting non-existing payment ...
             try
             {
-                Payment payment = new Payment();
-                var not_py = payment.GetPaymentById("2eac340c-713d-4556-9d53-XXX");
-                var py_amount = not_py.amount;
+                payment = new Payment().GetPaymentById("2eac340c-713d-4556-9d53-XXX");
+                amount = payment.Amount;
             }
             catch (MoyasarException ex)
             {
@@ -108,21 +112,23 @@ namespace Test
             Console.WriteLine();
         }
 
-        public void refund()
+        public void RefundPayment()
         {
             MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
             Payment p = new Payment();
             var refs = p.Refund("a76ffffe-3479-4491-a7e5-64803a055cec", "100");
 
-            if (refs is RefundException) {
+            if (refs is RefundException)
+            {
                 Console.WriteLine("Error While doing refund with Credit Card");
                 Console.WriteLine("Error Type: {0} || Error Messag: {1}", ((RefundException)refs).Type, ((RefundException)refs).Message);
             }
             else
             {
                 Console.WriteLine("Refunded Payment");
-                Console.WriteLine("Id: {0} || Refunded: {1} || Refunded At: {3}", ((RefundResult)refs).Id, ((RefundResult)refs).Refunded, ((RefundResult)refs).RefundedAt);
+                Console.WriteLine("Id: {0} || Refunded: {" +
+                    "1} || Refunded At: {3}", ((RefundResult)refs).Id, ((RefundResult)refs).Refunded, ((RefundResult)refs).RefundedAt);
             }
             Console.WriteLine();
         }
@@ -150,4 +156,5 @@ namespace Test
 
         }
     }
+
 }
