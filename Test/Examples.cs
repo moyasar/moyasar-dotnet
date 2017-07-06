@@ -95,6 +95,7 @@ namespace Test
             var amount = payment.Amount;
             var cur = payment.Currency;
 
+
             Console.WriteLine("Found Payment with:");
             Console.WriteLine("ID: {0} ---- Amount: {1} ---- Currency: {2}", payment.Id, payment.Amount, payment.Currency);
 
@@ -117,18 +118,22 @@ namespace Test
             MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
             Payment p = new Payment();
-            var refs = p.Refund("a76ffffe-3479-4491-a7e5-64803a055cec", "100");
+            var refund = p.Refund("e3c4c61b-b14c-4141-8c7d-736a7198c300");
 
-            if (refs is RefundException)
+            if (refund is RefundException)
             {
                 Console.WriteLine("Error While doing refund with Credit Card");
-                Console.WriteLine("Error Type: {0} || Error Messag: {1}", ((RefundException)refs).Type, ((RefundException)refs).Message);
+                Console.WriteLine("Error Type: {0} || Error Messag: {1}",
+                    ((RefundException)refund).Type,
+                    ((RefundException)refund).Message);
             }
             else
             {
                 Console.WriteLine("Refunded Payment");
-                Console.WriteLine("Id: {0} || Refunded: {" +
-                    "1} || Refunded At: {3}", ((RefundResult)refs).Id, ((RefundResult)refs).Refunded, ((RefundResult)refs).RefundedAt);
+                Console.WriteLine("Id: {0} || Refunded: {1} || Refunded At: {2}",
+                    ((RefundResult)refund).Id,
+                    ((RefundResult)refund).Refunded,
+                    ((RefundResult)refund).RefundedAt);
             }
             Console.WriteLine();
         }
@@ -156,5 +161,4 @@ namespace Test
 
         }
     }
-
 }

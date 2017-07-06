@@ -279,10 +279,11 @@ namespace Moyasar.PaymentArea
             }
         }
 
-        public MoyasarRefundBase Refund(string id, string amount)
+        public MoyasarRefundBase Refund(string id, string amount = null)
         {
-            var finalUrl = MakePaymentUrl + "/" + id + "/refund?amount=" + amount;
-            if (amount.Equals("0"))
+            var finalUrl = MakePaymentUrl + "/" + id + "/refund";
+            finalUrl = amount == null ? finalUrl : (finalUrl + "? amount = " + amount);
+            if (amount != null && amount.Equals("0"))
             {
                 MoyasarValidationException ex = new MoyasarValidationException(EnMessages.AmountNotZero);
                 throw ex;
@@ -306,11 +307,11 @@ namespace Moyasar.PaymentArea
                     {
                         refundResult = new RefundResult()
                         {
-                            Currency = (string) rs["currency"],
-                            Amount = (string) rs["amount"],
-                            Id = (string) rs["id"],
-                            Fee = (string) rs["fee"],
-                            Refunded = (string) rs["refunded"],
+                            Currency = (string)rs["currency"],
+                            Amount = (string)rs["amount"],
+                            Id = (string)rs["id"],
+                            Fee = (string)rs["fee"],
+                            Refunded = (string)rs["refunded"],
                             RefundedAt = (string) rs["refunded_at"]
                         };
                         if ((string) rs["source"]["type"] == "creditcard")

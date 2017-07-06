@@ -22,10 +22,10 @@ namespace Test
             // examples.ListOfPayment();
 
             // Fetch Payment
-             examples.PaymentByID();
+             // examples.PaymentByID();
 
             // Refund Payment
-            // examples.RefundPayment();
+            examples.RefundPayment();
 
             // Create Invoices
 
