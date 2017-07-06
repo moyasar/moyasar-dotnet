@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using Moyasar.ExceptionsMap;
 using Moyasar.MessagesMap;
-using Moyasar.PaymentArea.RefundMap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -279,7 +278,7 @@ namespace Moyasar.PaymentArea
             }
         }
 
-        public MoyasarRefundBase Refund(string id, string amount = null)
+        public PaymentResult Refund(string id, string amount = null)
         {
             var finalUrl = MakePaymentUrl + "/" + id + "/refund";
             finalUrl = amount == null ? finalUrl : (finalUrl + "? amount = " + amount);
@@ -289,60 +288,66 @@ namespace Moyasar.PaymentArea
                 throw ex;
             }
 
+            var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
+            httpWebRequest.ContentType = "application/json; charset=utf-8";
+            httpWebRequest.Method = "POST";
+            httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
+
             try
             {
-                var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
-                httpWebRequest.ContentType = "application/json; charset=utf-8";
-                httpWebRequest.Method = "POST";
-                httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
-
-                var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
                     var rs = JObject.Parse(result);
-                    RefundResult refundResult = new RefundResult();
-                    var type = (string) rs["type"];
-                    if (type == null)
-                    {
-                        refundResult = new RefundResult()
-                        {
-                            Currency = (string)rs["currency"],
-                            Amount = (string)rs["amount"],
-                            Id = (string)rs["id"],
-                            Fee = (string)rs["fee"],
-                            Refunded = (string)rs["refunded"],
-                            RefundedAt = (string) rs["refunded_at"]
-                        };
-                        if ((string) rs["source"]["type"] == "creditcard")
-                        {
-                            refundResult.Source = new CreditCard()
-                            {
-                                Type = (string) rs["source"]["type"],
-                                Company = (string) rs["source"]["company"],
-                                Name = (string) rs["source"]["name"],
-                                Number = (string) rs["source"]["number"],
-                                Message = (string) rs["source"]["message"]
-                            };
-                        }
-                        return refundResult;
-                    }
-                    else
-                    {
-                        RefundException exception = new RefundException
-                        {
-                            Type = (string) rs["type"],
-                            Message = (string) rs["message"],
-                            Error = (string) rs["errors"]
 
+                    PaymentResult payment = new PaymentResult
+                    {
+                        Id = (string)rs["id"],
+                        Status = (string)rs["status"],
+                        Amount = (int)rs["amount"],
+                        Description = (string)rs["description"],
+                        Currency = (string)rs["currency"],
+                        AmountFormat = (string)rs["amount_format"],
+                        CreatedAt = (string)rs["created_at"],
+                        Fee = (string)rs["fee"],
+                        FeeFormat = (string)rs["fee_format"],
+                        InvoiceId = (string)rs["invoice_id"],
+                        Ip = (string)rs["ip"],
+                        Refunded = (string)rs["refunded"],
+                        RefundedAt = (string)rs["refunded_at"],
+                        UpdatedAt = (string)rs["updated_at"]
+
+                    };
+                    if ("sadad" == (string)rs["source"]["type"])
+                    {
+                        payment.Source = new SadadType()
+                        {
+                            Type = (string)rs["source"]["type"],
+                            Username = (string)rs["source"]["username"],
+                            TransactionUrl = (string)rs["source"]["transaction_url"],
+                            ErrorCode = (string)rs["source"]["error_code"],
+                            TransactionId = (string)rs["source"]["transaction_id"],
+                            Message = (string)rs["source"]["message"]
                         };
-                        return exception;
                     }
+                    if ("creditcard" == (string)rs["source"]["type"])
+                    {
+                        payment.Source = new CreditCard()
+                        {
+                            Type = (string)rs["source"]["type"],
+                            Company = (string)rs["source"]["company"],
+                            Name = (string)rs["source"]["name"],
+                            Number = (string)rs["source"]["number"],
+                            Message = (string)rs["source"]["message"],
+                        };
+                    }
+                    return payment;
                 }
             }
-            catch (Exception ex)
+            catch (WebException webEx)
             {
-                return new RefundException() { Message = ex.Message, Error = null, Type = ex.Source};
+                throw HandleRequestErrors(webEx);
             }
         }
 
