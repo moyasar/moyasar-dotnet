@@ -21,14 +21,14 @@ namespace Moyasar.PaymentArea
         public string IniParameters()
         {
             var q = new object();
-            if (this.SourceType == SourceType.CreditCard)
+            if (SourceType == SourceType.CreditCard)
             {
                 CreditCard crd = (CreditCard) SourceReault;
                 q = new
                 {
-                    amount = this.Amount,
-                    currency = this.Currency,
-                    description = this.Description,
+                    amount = Amount,
+                    currency = Currency,
+                    description = Description,
                     source = new
                     {
                         type = crd.Type,

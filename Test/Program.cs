@@ -1,8 +1,4 @@
 ﻿using System;
-using Moyasar;
-using Moyasar.InvoiceArea;
-using Moyasar.PaymentArea;
-using Moyasar.ExceptionsMap;
 
 namespace Test
 {
@@ -10,6 +6,14 @@ namespace Test
     {
         private static void Main(string[] args)
         {
+            ///
+            /// Uncomment one of the examples below to watch its output.
+            /// Inspect the methods to learn about API endpoints and returns ..
+            /// 
+            /// For more:
+            ///     htttps://moyasar.com/docs/api/?csharp
+            ///
+
             var examples = new Examples();
 
             // Credit Card Experiement 
@@ -22,17 +26,19 @@ namespace Test
             // examples.ListOfPayment();
 
             // Fetch Payment
-             // examples.PaymentByID();
+            // examples.PaymentByID();
 
             // Refund Payment
-            examples.RefundPayment();
+            // examples.RefundPayment();
 
-            // Create Invoices
+            // Create Invoice
+            // examples.CreateInvoice();
 
             // List Invoices
             // examples.ListInvoices();
 
-            // Update Invoices
+            // Fetch Invoice
+            // examples.FetchInvoice();
 
             Console.Read();
         }

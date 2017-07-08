@@ -25,7 +25,7 @@ namespace Moyasar.InvoiceArea
             return finalUrl;
         }
 
-        public InvoiceResult CreateInvoice()
+        public InvoiceResult Create()
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(IniParam());
             httpWebRequest.ContentType = "application/json; charset=utf-8";
@@ -61,7 +61,7 @@ namespace Moyasar.InvoiceArea
             }
         }
 
-        public List<InvoiceResult> GetInvoicesList()
+        public List<InvoiceResult> List()
         {
             var ls = new List<InvoiceResult>();
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(MakeInvoiceUrl);
@@ -82,16 +82,15 @@ namespace Moyasar.InvoiceArea
                     {
                         var invoiceResult = new InvoiceResult
                         {
-                            Currency = (string)i["Currency"],
-                            Amount = (string)i["Amount"],
-                            Description = (string)i["Desciption"],
                             Id = (string)i["id"],
                             Status = (string)i["status"],
-                            AmountFormat = (string)i["Amount_format"],
-                            LogoUrl = (string)i["url"],
+                            Amount = (string)i["amount"],
+                            Currency = (string)i["currency"],
+                            Description = (string)i["description"],
+                            AmountFormat = (string)i["amount_format"],
+                            Url = (string)i["url"],
                             CreatedAt = (string)i["created_at"],
-                            UpdatedAt = (string)i["updated_at"],
-                            Url = (string)i["url"]
+                            UpdatedAt = (string)i["updated_at"]
                         };
                         ls.Add(invoiceResult);
                     }
@@ -104,7 +103,7 @@ namespace Moyasar.InvoiceArea
             }
         }
 
-        public InvoiceResult GetInvoiceById(string id)
+        public InvoiceResult Fetch(string id)
         {
             var finalUrl = MakeInvoiceUrl + "/" + id;
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
@@ -123,11 +122,11 @@ namespace Moyasar.InvoiceArea
                     {
                         Id = (string)rs["id"],
                         Status = (string)rs["status"],
-                        Amount = (string)rs["Amount"],
-                        Currency = (string)rs["Currency"],
-                        Description = (string)rs["Desciption"],
+                        Amount = (string)rs["amount"],
+                        Currency = (string)rs["currency"],
+                        Description = (string)rs["description"],
                         LogoUrl = (string)rs["logo_url"],
-                        AmountFormat = (string)rs["Amount_format"],
+                        AmountFormat = (string)rs["amount_format"],
                         Url = (string)rs["url"],
                         CreatedAt = (string)rs["created_at"],
                         UpdatedAt = (string)rs["updated_at"]
@@ -140,5 +139,25 @@ namespace Moyasar.InvoiceArea
                 throw HandleRequestErrors(webEx);
             }
         }
+
+        /// <summary>
+        /// Aliases for old names
+        /// </summary>
+
+        public InvoiceResult GetInvoiceById(string id)
+        {
+            return Fetch(id);
+        }
+
+        public List<InvoiceResult> GetInvoicesList()
+        {
+            return List();
+        }
+
+        public InvoiceResult CreateInvoice()
+        {
+            return Create();
+        }
+
     }
 }

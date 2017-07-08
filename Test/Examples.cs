@@ -1,13 +1,8 @@
-﻿using Moyasar;
+﻿using System;
+using System.Linq;
+using Moyasar;
 using Moyasar.InvoiceArea;
 using Moyasar.PaymentArea;
-using System;
-using System.Collections;
-using System.Linq;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using Moyasar.ExceptionsMap;
 
 namespace Test
 {
@@ -37,6 +32,8 @@ namespace Test
             };
             var result = payment.Create();
 
+            Console.WriteLine(ObjectDumper.Dump(result));
+
             Console.WriteLine("Payment Id: {0}", result.Id);
             Console.WriteLine("Payment Status: {0}", result.Status);
             Console.WriteLine("Payment Source Message: {0}", result.Source.Message);
@@ -63,6 +60,8 @@ namespace Test
             };
             var result = payment.Create();
 
+            Console.WriteLine(ObjectDumper.Dump(result));
+
             Console.WriteLine("Payment Id: {0}", result.Id);
             Console.WriteLine("Payment Status: {0}", result.Status);
             Console.WriteLine("Payment Source Message: {0}", result.Source.Message);
@@ -75,12 +74,13 @@ namespace Test
         {
             MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
-            Payment p = new Payment();
-            PaymentListResult rs = p.List();
+            var all = new Payment().List();
 
-            Console.WriteLine("Number Of Payments: {0}", rs.Payments.Count);
+            Console.WriteLine(ObjectDumper.Dump(all));
+
+            Console.WriteLine("Number Of Payments: {0}", all.Payments.Count);
             Console.WriteLine("Last Payment from List:");
-            Console.WriteLine("ID: {0} ---- Status: {1}", rs.Payments.Last().Id, rs.Payments.Last().Status);
+            Console.WriteLine("ID: {0} ---- Status: {1}", all.Payments.Last().Id, all.Payments.Last().Status);
             Console.WriteLine();
         }
 
@@ -91,9 +91,8 @@ namespace Test
             // Getting existing payment ...
 
             var payment = new Payment().Fetch("2eac340c-713d-4556-9d53-9a3f4671be6f");
-            var amount = payment.Amount;
-            var cur = payment.Currency;
 
+            Console.WriteLine(ObjectDumper.Dump(payment));
 
             Console.WriteLine("Found Payment with:");
             Console.WriteLine("ID: {0} ---- Amount: {1} ---- Currency: {2}", payment.Id, payment.Amount, payment.Currency);
@@ -102,7 +101,6 @@ namespace Test
             try
             {
                 payment = new Payment().GetPaymentById("2eac340c-713d-4556-9d53-XXX");
-                amount = payment.Amount;
             }
             catch (MoyasarException ex)
             {
@@ -120,8 +118,7 @@ namespace Test
             {
                 var refund = new Payment().Refund("dc3c16ac-579b-455a-adda-892357155df1");
 
-                var dump = ObjectDumper.Dump(refund);
-                Console.WriteLine(dump);
+                Console.WriteLine(ObjectDumper.Dump(refund));
 
                 Console.WriteLine("Refunded Payment");
                 Console.WriteLine("Id: {0} || Refunded: {1} || Refunded At: {2}", refund.Id, refund.Refunded, refund.RefundedAt);
@@ -139,7 +136,9 @@ namespace Test
             MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
             Invoice v = new Invoice();
-            var all = v.GetInvoicesList();
+            var all = v.List();
+
+            Console.WriteLine(ObjectDumper.Dump(all));
 
             Console.WriteLine("Number Of Invoices: {0}", all.Count);
             Console.WriteLine("First Invoice from List:");
@@ -149,12 +148,38 @@ namespace Test
 
         public void CreateInvoice()
         {
+            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
+            Invoice inv = new Invoice()
+            {
+                Amount = "320",
+                Currency = "USD",
+                Description = "Sample Pharmacy Invoice",
+            };
+            var invoice = inv.Create();
+
+            Console.WriteLine(ObjectDumper.Dump(invoice));
+
+            Console.WriteLine("Invoice Id: {0}", invoice.Id);
+            Console.WriteLine("Invoice Status: {0}", invoice.Status);
+            Console.WriteLine("Invoice Amount: {0}", invoice.Amount);
+            Console.WriteLine("Invoice Description: {0}", invoice.Description);
+            Console.WriteLine();
         }
 
         public void FetchInvoice()
         {
+            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
+            var invoice = new Invoice().Fetch("50b88f06-3ef5-4a36-9af8-8cb473b7ba88");
+
+            Console.WriteLine(ObjectDumper.Dump(invoice));
+
+            Console.WriteLine("Invoice Id: {0}", invoice.Id);
+            Console.WriteLine("Invoice Status: {0}", invoice.Status);
+            Console.WriteLine("Invoice Amount: {0}", invoice.Amount);
+            Console.WriteLine("Invoice Description: {0}", invoice.Description);
+            Console.WriteLine();
         }
     }
 }

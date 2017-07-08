@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Moyasar.PaymentArea;
 
 namespace Moyasar.InvoiceArea
 {
@@ -18,14 +19,18 @@ namespace Moyasar.InvoiceArea
 
         [JsonProperty("description")]
         public string Description { get; set; }
+
         [JsonProperty("logo_url")]
         public string LogoUrl { get; set; }
 
         [JsonProperty("amount_format")]
         public string AmountFormat { get; set; }
+
         [JsonProperty("url")]
         public string Url { get; set; }
 
+        [JsonProperty("payments")]
+        public PaymentResult Payments { get; set; }
 
         [JsonProperty("created_at")]
         public string CreatedAt { get; set; }
