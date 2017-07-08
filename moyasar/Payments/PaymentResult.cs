@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Moyasar.PaymentArea
+namespace Moyasar.Payments
 {
     public class PaymentResult : PaymentResultBase
     {

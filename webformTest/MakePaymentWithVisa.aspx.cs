@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.UI;
 using Moyasar;
-using Moyasar.PaymentArea;
+using Moyasar.Payments;
 
 public partial class MakePayment : Page
 {

@@ -1,4 +1,4 @@
-﻿namespace Moyasar.PaymentArea
+﻿namespace Moyasar.Payments
 {
     public class MetaResult : PaymentResultBase
     {

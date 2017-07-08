@@ -3,7 +3,7 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
 
-namespace Moyasar.InvoiceArea
+namespace Moyasar.Invoices
 {
     public class Invoice : MoyasarBase
     {

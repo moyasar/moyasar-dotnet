@@ -7,7 +7,7 @@ using Moyasar.MessagesMap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Moyasar.PaymentArea
+namespace Moyasar.Payments
 {
     [Serializable]
     public class Payment : MoyasarBase

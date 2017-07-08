@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moyasar.PaymentArea;
+using Moyasar.Payments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Moyasar.PaymentArea.Tests
+namespace Moyasar.Payments.Tests
 {
     [TestClass()]
     public class PaymentTests

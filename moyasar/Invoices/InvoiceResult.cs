@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Moyasar.PaymentArea;
+using Moyasar.Payments;
 
-namespace Moyasar.InvoiceArea
+namespace Moyasar.Invoices
 {
     public class InvoiceResult
     {

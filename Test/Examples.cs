@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Moyasar;
-using Moyasar.InvoiceArea;
-using Moyasar.PaymentArea;
+using Moyasar.Invoices;
+using Moyasar.Payments;
 
 namespace Test
 {
