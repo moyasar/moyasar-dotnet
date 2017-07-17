@@ -10,7 +10,9 @@ namespace Test
     {
         public void CreateCreditCardPayment()
         {
-            MoyasarBase.ApiKey = "pk_test_yTqHr4bcm1eCJkGdpNExsU4f6s1FZkqpHzr7XezG";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             Payment payment = new Payment()
             {
@@ -42,7 +44,9 @@ namespace Test
 
         public void CreateSadadPayment()
         {
-            MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             Payment payment = new Payment()
             {
@@ -72,7 +76,9 @@ namespace Test
 
         public void ListOfPayment()
         {
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             var all = new Payment().List();
 
@@ -86,7 +92,9 @@ namespace Test
 
         public void PaymentByID()
         {
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             // Getting existing payment ...
 
@@ -112,7 +120,9 @@ namespace Test
 
         public void RefundPayment()
         {
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             try
             {
@@ -133,7 +143,9 @@ namespace Test
 
         public void ListInvoices()
         {
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             Invoice v = new Invoice();
             var all = v.List();
@@ -148,7 +160,9 @@ namespace Test
 
         public void CreateInvoice()
         {
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             Invoice inv = new Invoice()
             {
@@ -169,7 +183,9 @@ namespace Test
 
         public void FetchInvoice()
         {
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             var invoice = new Invoice().Fetch("50b88f06-3ef5-4a36-9af8-8cb473b7ba88");
 

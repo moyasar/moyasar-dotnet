@@ -60,7 +60,7 @@
       <Project>{9EC79375-DF6A-4E74-A90C-731751711E0D}</Project>
       <Name>moyasar</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Test\CodeExamples.csproj">
+    <ProjectReference Include="..\CodeExamples\CodeExamples.csproj">
       <Project>{09445DCE-DB47-4086-9779-BEE24C754339}</Project>
       <Name>CodeExamples</Name>
     </ProjectReference>
