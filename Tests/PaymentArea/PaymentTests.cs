@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using moyasar.PaymentArea;
+using Moyasar.Payments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace moyasar.PaymentArea.Tests
+namespace Moyasar.Payments.Tests
 {
     [TestClass()]
     public class PaymentTests
@@ -15,7 +15,7 @@ namespace moyasar.PaymentArea.Tests
         public void IniParametersTest()
         {
             Payment p = new Payment();
-            p.CreatePay();
+            p.Create();
 
         }
 

@@ -1,31 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using moyasar;
-using moyasar.PaymentArea;
+using Moyasar;
+using Moyasar.Payments;
 
-public partial class MakePayment : System.Web.UI.Page
+public partial class MakePayment : Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        moyasar.MoyasarBase.ApiKey = "sk_test_73b6rMCw9N1zHz7Ki6foweoqqXTWnoi5GcVmEEhR";
+        MoyasarBase.ApiKey = "pk_test_yTqHr4bcm1eCJkGdpNExsU4f6s1FZkqpHzr7XezG";
     }
 
-    protected void btnOk_Click(object sender, EventArgs e)
+    protected void BtnOk_Click(object sender, EventArgs e)
     {
        Payment payment = new Payment();
-        payment.SourceType=SourceType.CreditCard;
+        payment.SourceType = SourceType.CreditCard;
         payment.Amount = int.Parse(txtAmount.Text);
         payment.Currency = txtCurrency.Text;
         payment.Description = txtDescription.Text;
         payment.SourceReault = new CreditCard()
         {
-            Type = "CreditCard",
+            Type = "creditcard",
             Message = "",
-            Company = txtCreditCardType.Text,
+            Company = txtCreditCardType.SelectedValue.ToLower(),
             Number = txtNumber.Text,
             Name = txtName.Text,
             Year = int.Parse(txtYear.Text),
@@ -33,8 +29,15 @@ public partial class MakePayment : System.Web.UI.Page
             Cvc = txtCvc.Text,
            
         };
-        var p = payment.CreatePay();
-        txtResult.Text = p.id + "," + p.amount + "," + p.description;
+
+        try
+        {
+            var p = payment.CreatePay();
+            txtResult.Text = p.Id + ", " + p.Amount + ", " + p.Description;
+        } catch (MoyasarException ex)
+        {   
+            txtResult.Text = "Error <br> " + ex.Type + ", " + ex.Message + ", " + ex.Errors;
+        }
 
     }
 }
