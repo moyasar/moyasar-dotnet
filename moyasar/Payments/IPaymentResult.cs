@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Moyasar.Common;
+using System.Collections.Generic;
 
 namespace Moyasar.Payments
 {

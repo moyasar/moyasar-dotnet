@@ -6,6 +6,7 @@ using Moyasar.ExceptionsMap;
 using Moyasar.MessagesMap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Moyasar.Common;
 
 namespace Moyasar.Payments
 {

@@ -39,16 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\MetaResult.cs" />
     <Compile Include="Connector.cs" />
     <Compile Include="CreditCard.cs" />
     <Compile Include="ExceptionsMap\ValidationException.cs" />
     <Compile Include="Invoices\Invoice.cs" />
+    <Compile Include="Invoices\InvoiceListResult.cs" />
     <Compile Include="Invoices\InvoiceResult.cs" />
     <Compile Include="MessagesMap\EnMessages.cs" />
     <Compile Include="MoyasarBase.cs" />
     <Compile Include="MoyasarError.cs" />
     <Compile Include="Payments\IPaymentResult.cs" />
-    <Compile Include="Payments\MetaResult.cs" />
     <Compile Include="Payments\Payment.cs" />
     <Compile Include="Payments\PaymentListResult.cs" />
     <Compile Include="Payments\PaymentResult.cs" />
