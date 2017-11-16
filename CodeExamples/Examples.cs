@@ -80,14 +80,31 @@ namespace Test
             // Always keep your secret keys saved in secure place and not exposed publicly.
             MoyasarBase.ApiKey = "<Your API Key>";
 
-            var all = new Payment().List();
+            var results = new Payment().List();
 
-            Console.WriteLine(ObjectDumper.Dump(all));
+            Console.WriteLine(ObjectDumper.Dump(results));
 
-            Console.WriteLine("Number Of Payments: {0}", all.Payments.Count);
+            Console.WriteLine("Number Of Payments: {0}", results.Payments.Count);
             Console.WriteLine("Last Payment from List:");
-            Console.WriteLine("ID: {0} ---- Status: {1}", all.Payments.Last().Id, all.Payments.Last().Status);
+            Console.WriteLine("ID: {0} ---- Status: {1}", results.Payments.Last().Id, results.Payments.Last().Status);
             Console.WriteLine();
+
+            Console.WriteLine("\nMeta Data");
+            Console.WriteLine(results.Meta.TotalCount);
+            Console.WriteLine(results.Meta.TotalPages);
+            Console.WriteLine(results.Meta.CurrentPage);
+            Console.WriteLine(results.Meta.NextPage, "\n");
+
+            // With Specific Page
+            results = new Payment().List(2);
+
+            Console.WriteLine(ObjectDumper.Dump(results));
+
+            Console.WriteLine("Number Of Payments in Page 2: {0}", results.Payments.Count);
+            Console.WriteLine("Last Payment from List:");
+            Console.WriteLine("ID: {0} ---- Status: {1}", results.Payments.Last().Id, results.Payments.Last().Status);
+            Console.WriteLine();
+
         }
 
         public void PaymentByID()
