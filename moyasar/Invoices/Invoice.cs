@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
@@ -152,6 +153,18 @@ namespace Moyasar.Invoices
             {
                 throw HandleRequestErrors(webEx);
             }
+        }
+
+        public IEnumerable<InvoiceListResult> ListAll()
+        {
+            var allList = new InvoiceListResult();
+            int? nextPage = null;
+            do
+            {
+                allList = List(nextPage);
+                nextPage = Int32.Parse(allList.Meta.CurrentPage) + 1;
+                yield return allList;
+            } while (allList.Meta.NextPage != null);
         }
 
         /// <summary>

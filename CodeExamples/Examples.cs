@@ -215,6 +215,25 @@ namespace Test
             }
         }
 
+        public void ListAllInvoices()
+        {
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
+
+            var invoiceAPI = new Invoice();
+
+            foreach (var invoiceBatch in invoiceAPI.ListAll())
+            {
+                Console.WriteLine("---------------- *** -----------------");
+                Console.WriteLine("Total number Of invoices: {0} in page: {1} : \n", invoiceBatch.Invoices.Count, invoiceBatch.Meta.CurrentPage);
+                Console.WriteLine(ObjectDumper.Dump(invoiceBatch.Invoices));
+                Console.WriteLine("Last Invoice from List:");
+                Console.WriteLine("ID: {0} ---- Status: {1} \n", invoiceBatch.Invoices.Last().Id, invoiceBatch.Invoices.Last().Status);
+                Console.WriteLine("---------------- *** -----------------");
+            }
+        }
+
         public void CreateInvoice()
         {
             // Replace '<Your API Key>' with your account API Key.
