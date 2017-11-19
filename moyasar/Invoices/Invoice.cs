@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
+using Moyasar.Common;
 
 namespace Moyasar.Invoices
 {
@@ -61,10 +63,11 @@ namespace Moyasar.Invoices
             }
         }
 
-        public List<InvoiceResult> List()
+        public InvoiceListResult List(int? page = null)
         {
-            var ls = new List<InvoiceResult>();
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(MakeInvoiceUrl);
+            var finalUrl = page == null ? MakeInvoiceUrl : MakeInvoiceUrl + "?page=" + page.ToString();
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
@@ -76,6 +79,11 @@ namespace Moyasar.Invoices
                 {
                     var result = streamReader.ReadToEnd();
                     var j = JObject.Parse(result);
+                    var list = new InvoiceListResult
+                    {
+                        Invoices = new List<InvoiceResult>(),
+                        Meta = new MetaResult()
+                    };
 
                     var inv = j["invoices"].Children();
                     foreach (var i in inv)
@@ -92,9 +100,16 @@ namespace Moyasar.Invoices
                             CreatedAt = (string)i["created_at"],
                             UpdatedAt = (string)i["updated_at"]
                         };
-                        ls.Add(invoiceResult);
+                        list.Invoices.Add(invoiceResult);
                     }
-                    return ls;
+
+                    list.Meta.CurrentPage = (string)j["meta"]["current_page"];
+                    list.Meta.NextPage = (string)j["meta"]["next_page"];
+                    list.Meta.PrevPage = (string)j["meta"]["prev_page"];
+                    list.Meta.TotalCount = (string)j["meta"]["total_pages"];
+                    list.Meta.TotalPages = (string)j["meta"]["total_count"];
+
+                    return list;
                 }
             }
             catch (WebException webEx)
@@ -140,6 +155,18 @@ namespace Moyasar.Invoices
             }
         }
 
+        public IEnumerable<InvoiceListResult> ListAll()
+        {
+            var allList = new InvoiceListResult();
+            int? nextPage = null;
+            do
+            {
+                allList = List(nextPage);
+                nextPage = Int32.Parse(allList.Meta.CurrentPage) + 1;
+                yield return allList;
+            } while (allList.Meta.NextPage != null);
+        }
+
         /// <summary>
         /// Aliases for old names
         /// </summary>
@@ -149,7 +176,7 @@ namespace Moyasar.Invoices
             return Fetch(id);
         }
 
-        public List<InvoiceResult> GetInvoicesList()
+        public InvoiceListResult GetInvoicesList()
         {
             return List();
         }

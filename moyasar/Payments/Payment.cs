@@ -6,6 +6,7 @@ using Moyasar.ExceptionsMap;
 using Moyasar.MessagesMap;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Moyasar.Common;
 
 namespace Moyasar.Payments
 {
@@ -351,9 +352,10 @@ namespace Moyasar.Payments
             }
         }
 
-        public PaymentListResult List()
+        public PaymentListResult List(int? page = null)
         {
-            var finalUrl = MakePaymentUrl;
+            var finalUrl = page == null ? MakePaymentUrl : MakePaymentUrl + "?page=" + page.ToString();
+
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "GET";
@@ -431,6 +433,18 @@ namespace Moyasar.Payments
             {
                 throw HandleRequestErrors(webEx);
             }
+        }
+
+        public IEnumerable<PaymentListResult> ListAll()
+        {
+            var allList = new PaymentListResult();
+            int? nextPage = null;
+            do
+            {
+                allList = List(nextPage);
+                nextPage = Int32.Parse(allList.Meta.CurrentPage) + 1;
+                yield return allList;
+            } while (allList.Meta.NextPage != null);
         }
 
         /// <summary>

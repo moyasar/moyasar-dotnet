@@ -80,13 +80,29 @@ namespace Test
             // Always keep your secret keys saved in secure place and not exposed publicly.
             MoyasarBase.ApiKey = "<Your API Key>";
 
-            var all = new Payment().List();
+            var results = new Payment().List();
 
-            Console.WriteLine(ObjectDumper.Dump(all));
+            Console.WriteLine(ObjectDumper.Dump(results));
 
-            Console.WriteLine("Number Of Payments: {0}", all.Payments.Count);
+            Console.WriteLine("Number Of Payments: {0}", results.Payments.Count);
             Console.WriteLine("Last Payment from List:");
-            Console.WriteLine("ID: {0} ---- Status: {1}", all.Payments.Last().Id, all.Payments.Last().Status);
+            Console.WriteLine("ID: {0} ---- Status: {1}", results.Payments.Last().Id, results.Payments.Last().Status);
+            Console.WriteLine();
+
+            Console.WriteLine("\nMeta Data");
+            Console.WriteLine(results.Meta.TotalCount);
+            Console.WriteLine(results.Meta.TotalPages);
+            Console.WriteLine(results.Meta.CurrentPage);
+            Console.WriteLine(results.Meta.NextPage, "\n");
+
+            // With Specific Page
+            results = new Payment().List(2);
+
+            Console.WriteLine(ObjectDumper.Dump(results));
+
+            Console.WriteLine("Number Of Payments in Page 2: {0}", results.Payments.Count);
+            Console.WriteLine("Last Payment from List:");
+            Console.WriteLine("ID: {0} ---- Status: {1}", results.Payments.Last().Id, results.Payments.Last().Status);
             Console.WriteLine();
         }
 
@@ -141,21 +157,81 @@ namespace Test
             Console.WriteLine();
         }
 
-        public void ListInvoices()
+        public void ListAllPayments()
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
             MoyasarBase.ApiKey = "<Your API Key>";
 
+            var paymentAPI = new Payment();
+
+            foreach (var paymentBatch in paymentAPI.ListAll())
+            {
+                Console.WriteLine("---------------- *** -----------------");
+                Console.WriteLine("Total number Of payments: {0} in Page: {1} : \n", paymentBatch.Payments.Count, paymentBatch.Meta.CurrentPage);
+                Console.WriteLine(ObjectDumper.Dump(paymentBatch.Payments));
+                Console.WriteLine("Last Payment from List:");
+                Console.WriteLine("ID: {0} ---- Status: {1} \n", paymentBatch.Payments.Last().Id, paymentBatch.Payments.Last().Status);
+                Console.WriteLine("---------------- *** -----------------");
+            }
+        }
+
+        public void ListInvoices()
+        {
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+
             Invoice v = new Invoice();
-            var all = v.List();
+            var results = v.List();
 
-            Console.WriteLine(ObjectDumper.Dump(all));
+            Console.WriteLine(ObjectDumper.Dump(results.Invoices));
 
-            Console.WriteLine("Number Of Invoices: {0}", all.Count);
+            Console.WriteLine("Number Of Invoices: {0}", results.Meta.TotalCount);
             Console.WriteLine("First Invoice from List:");
-            Console.WriteLine("ID: {0} ---- Status: {1}", all.First().Id, all.Last().Status);
+            Console.WriteLine("ID: {0} ---- Status: {1}", results.Invoices.First().Id, results.Invoices.First().Status);
             Console.WriteLine();
+
+            Console.WriteLine("\nMeta Data");
+            Console.WriteLine(results.Meta.TotalCount);
+            Console.WriteLine(results.Meta.TotalPages);
+            Console.WriteLine(results.Meta.CurrentPage);
+
+            // list invoices from next page if exists ..
+            if (results.Meta.NextPage != null)
+            {
+
+                Console.WriteLine(results.Meta.NextPage, "\n");
+
+                // With Specific Page
+                results = v.List(2);
+
+                Console.WriteLine(ObjectDumper.Dump(results));
+
+                Console.WriteLine("Number Of Invoice in Page 2: {0}", results.Invoices.Count);
+                Console.WriteLine("Last Invoice from List:");
+                Console.WriteLine("ID: {0} ---- Status: {1}", results.Invoices.Last().Id, results.Invoices.Last().Status);
+                Console.WriteLine();
+            }
+        }
+
+        public void ListAllInvoices()
+        {
+            // Replace '<Your API Key>' with your account API Key.
+            // Always keep your secret keys saved in secure place and not exposed publicly.
+            MoyasarBase.ApiKey = "<Your API Key>";
+
+            var invoiceAPI = new Invoice();
+
+            foreach (var invoiceBatch in invoiceAPI.ListAll())
+            {
+                Console.WriteLine("---------------- *** -----------------");
+                Console.WriteLine("Total number Of invoices: {0} in page: {1} : \n", invoiceBatch.Invoices.Count, invoiceBatch.Meta.CurrentPage);
+                Console.WriteLine(ObjectDumper.Dump(invoiceBatch.Invoices));
+                Console.WriteLine("Last Invoice from List:");
+                Console.WriteLine("ID: {0} ---- Status: {1} \n", invoiceBatch.Invoices.Last().Id, invoiceBatch.Invoices.Last().Status);
+                Console.WriteLine("---------------- *** -----------------");
+            }
         }
 
         public void CreateInvoice()

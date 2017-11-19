@@ -25,6 +25,9 @@ namespace Test
             // List Payments 
             // examples.ListOfPayment();
 
+            // List All Payments
+            // examples.ListAllPayments();
+
             // Fetch Payment
             // examples.PaymentByID();
 
@@ -36,6 +39,9 @@ namespace Test
 
             // List Invoices
             // examples.ListInvoices();
+
+            // List All Invoices
+            // examples.ListAllInvoices();
 
             // Fetch Invoice
             // examples.FetchInvoice();
