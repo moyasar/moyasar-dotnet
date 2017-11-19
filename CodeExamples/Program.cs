@@ -25,6 +25,9 @@ namespace Test
             // List Payments 
             // examples.ListOfPayment();
 
+            // List All Payments
+            examples.ListAllPayments();
+
             // Fetch Payment
             // examples.PaymentByID();
 

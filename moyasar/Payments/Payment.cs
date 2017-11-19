@@ -435,6 +435,18 @@ namespace Moyasar.Payments
             }
         }
 
+        public IEnumerable<PaymentListResult> ListAll()
+        {
+            var allList = new PaymentListResult();
+            int? nextPage = null;
+            do
+            {
+                allList = List(nextPage);
+                nextPage = Int32.Parse(allList.Meta.CurrentPage) + 1;
+                yield return allList;
+            } while (allList.Meta.NextPage != null);
+        }
+
         /// <summary>
         /// Aliases for old names
         /// </summary>
