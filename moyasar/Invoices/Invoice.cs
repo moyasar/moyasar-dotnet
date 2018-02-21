@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using Moyasar.Common;
+using Newtonsoft.Json;
 
 namespace Moyasar.Invoices
 {
@@ -12,27 +13,34 @@ namespace Moyasar.Invoices
         public string Amount { get; set; }
         public string Description { get; set; }
         public string Currency { get; set; }
+        public string CallbackUrl { get; set; }
 
-        private string IniParam()
+        private string InitParam()
         {
             var q = new
             {
-                Amount,
-                Desciption = Currency,
-                Currency = Description
+                amount = Amount,
+                description = Description,
+                currency = Currency,
+                callback_url = CallbackUrl,
             };
 
-            var finalUrl = MakeInvoiceUrl + "?amount=" + Amount + "&currency=" + Currency + "&description=" +
-                           Description;
-            return finalUrl;
+            return JsonConvert.SerializeObject(q);
         }
 
         public InvoiceResult Create()
         {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(IniParam());
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(MakeInvoiceUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "POST";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                streamWriter.Write(InitParam());
+                streamWriter.Flush();
+                streamWriter.Close();
+            }
 
             try
             {
@@ -48,6 +56,7 @@ namespace Moyasar.Invoices
                         Amount = (string)rs["amount"],
                         Currency = (string)rs["currency"],
                         Description = (string)rs["description"],
+                        CallbackUrl = (string)rs["callback_url"],
                         LogoUrl = (string)rs["logo_url"],
                         AmountFormat = (string)rs["amount_format"],
                         Url = (string)rs["url"],
@@ -95,6 +104,7 @@ namespace Moyasar.Invoices
                             Amount = (string)i["amount"],
                             Currency = (string)i["currency"],
                             Description = (string)i["description"],
+                            CallbackUrl = (string)i["callback_url"],
                             AmountFormat = (string)i["amount_format"],
                             Url = (string)i["url"],
                             CreatedAt = (string)i["created_at"],
@@ -140,6 +150,7 @@ namespace Moyasar.Invoices
                         Amount = (string)rs["amount"],
                         Currency = (string)rs["currency"],
                         Description = (string)rs["description"],
+                        CallbackUrl = (string)rs["callback_url"],
                         LogoUrl = (string)rs["logo_url"],
                         AmountFormat = (string)rs["amount_format"],
                         Url = (string)rs["url"],
@@ -185,6 +196,5 @@ namespace Moyasar.Invoices
         {
             return Create();
         }
-
     }
 }

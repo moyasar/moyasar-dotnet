@@ -29,6 +29,9 @@ namespace Moyasar.Invoices
         [JsonProperty("url")]
         public string Url { get; set; }
 
+        [JsonProperty("callback_url")]
+        public string CallbackUrl { get; set; }
+
         [JsonProperty("payments")]
         public PaymentResult Payments { get; set; }
 
