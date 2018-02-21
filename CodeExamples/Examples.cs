@@ -245,6 +245,7 @@ namespace Test
                 Amount = "320",
                 Currency = "USD",
                 Description = "Sample Pharmacy Invoice",
+                CallbackUrl = "https://https://requestb.in/17tgsjy1"
             };
             var invoice = inv.Create();
 
