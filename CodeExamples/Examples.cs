@@ -180,7 +180,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             Invoice v = new Invoice();
             var results = v.List();
@@ -245,7 +245,7 @@ namespace Test
                 Amount = "320",
                 Currency = "USD",
                 Description = "Sample Pharmacy Invoice",
-                CallbackUrl = "https://https://requestb.in/17tgsjy1"
+                CallbackUrl = "https://requestb.in/17tgsjy1"
             };
             var invoice = inv.Create();
 
