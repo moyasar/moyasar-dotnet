@@ -12,15 +12,16 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
+            MoyasarBase.ApiKey = "<Your API Key>";
 
             Payment payment = new Payment()
             {
                 Amount = 100,
                 Currency = "SAR",
                 Description = "New Suitcase Purchase",
+                CallbackUrl = "https://example.com/store/123/finished_order",
                 SourceType = SourceType.CreditCard,
-                SourceReault = new CreditCard()
+                SourceResult = new CreditCard()
                 {
                     Type = "creditcard",
                     Message = "",
@@ -54,8 +55,9 @@ namespace Test
                 Amount = 200,
                 Currency = "SAR",
                 Description = "Simple Test Payment",
+                CallbackUrl = "https://example.com/store/123/finished_order",
                 SourceType = SourceType.Sadad,
-                SourceReault = new SadadType()
+                SourceResult = new SadadType()
                 {
                     Type = "sadad",
                     Username = "u3043090Xolp",

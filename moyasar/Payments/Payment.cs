@@ -16,7 +16,9 @@ namespace Moyasar.Payments
         public int Amount { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
-        public SourceResultBase SourceReault { get; set; }
+        public string CallbackUrl { get; set; }
+
+        public SourceResultBase SourceResult { get; set; }
         public SourceType SourceType { get; set; }
 
         public string IniParameters()
@@ -24,12 +26,13 @@ namespace Moyasar.Payments
             var q = new object();
             if (SourceType == SourceType.CreditCard)
             {
-                CreditCard crd = (CreditCard) SourceReault;
+                CreditCard crd = (CreditCard) SourceResult;
                 q = new
                 {
                     amount = Amount,
                     currency = Currency,
                     description = Description,
+                    callback_url = CallbackUrl,
                     source = new
                     {
                         type = crd.Type,
@@ -38,13 +41,12 @@ namespace Moyasar.Payments
                         cvc = crd.Cvc,
                         month = crd.Month,
                         year = crd.Year
-
-                    }
+                    },
                 };
             }
             if (this.SourceType == SourceType.Sadad)
             {
-                SadadType Sd = (SadadType) this.SourceReault;
+                SadadType Sd = (SadadType) this.SourceResult;
                 q = new
                 {
                     amount = this.Amount,
@@ -77,13 +79,13 @@ namespace Moyasar.Payments
                 throw ex;
             }
 
-            if (this.SourceReault == null && this.SourceType == SourceType.CreditCard)
+            if (this.SourceResult == null && this.SourceType == SourceType.CreditCard)
             {
                 var ex = new MoyasarValidationException(EnMessages.SelectCreditCardType) { ErrorCode = "#1555" };
                 throw ex;
             }
 
-            if (this.SourceReault == null)
+            if (this.SourceResult == null)
             {
                 var ex = new MoyasarValidationException(EnMessages.TypeEmpty) { ErrorCode = "#1500" };
                 throw ex;
@@ -97,9 +99,9 @@ namespace Moyasar.Payments
             // Check if this creditCard Type
             if (this.SourceType == SourceType.CreditCard)
             {
-                if (this.SourceReault != null)
+                if (this.SourceResult != null)
                 {
-                    var credit = (CreditCard) SourceReault;
+                    var credit = (CreditCard) SourceResult;
                     if (credit.Company == string.Empty)
                     {
                         var ex = new MoyasarValidationException(EnMessages.CreatedCardCompanyNotFound) { ErrorCode = "#1110" };
@@ -170,6 +172,7 @@ namespace Moyasar.Payments
                         Amount = (int)rs["amount"],
                         Description = (string)rs["description"],
                         Currency = (string)rs["currency"],
+                        CallbackUrl = (string)rs["callback_url"],
                         AmountFormat = (string)rs["amount_format"],
                         CreatedAt = (string)rs["created_at"],
                         Fee = (string)rs["fee"],
@@ -238,6 +241,7 @@ namespace Moyasar.Payments
                         Description = (string)rs["description"],
                         Currency = (string)rs["currency"],
                         AmountFormat = (string)rs["amount_format"],
+                        CallbackUrl = (string)rs["callback_url"],
                         CreatedAt = (string)rs["created_at"],
                         Fee = (string)rs["fee"],
                         FeeFormat = (string)rs["fee_format"],
@@ -310,6 +314,7 @@ namespace Moyasar.Payments
                         Status = (string)rs["status"],
                         Amount = (int)rs["amount"],
                         Description = (string)rs["description"],
+                        CallbackUrl = (string)rs["callback_url"],
                         Currency = (string)rs["currency"],
                         AmountFormat = (string)rs["amount_format"],
                         CreatedAt = (string)rs["created_at"],
@@ -386,6 +391,7 @@ namespace Moyasar.Payments
                             Amount = (int)item["amount"],
                             Description = (string)item["description"],
                             Currency = (string)item["currency"],
+                            CallbackUrl = (string)rs["callback_url"],
                             AmountFormat = (string)item["amount_format"],
                             CreatedAt = (string)item["created_at"],
                             Fee = (string)item["fee"],
@@ -417,7 +423,7 @@ namespace Moyasar.Payments
                                 Name = (string)item["source"]["name"],
                                 Number = (string)item["source"]["number"],
                                 Message = (string)item["source"]["message"],
-                                TransactionUrl = (string)rs["source"]["transaction_url"],
+                                TransactionUrl = (string)item["source"]["transaction_url"],
                             };
                         }
                         listResult.Payments.Add(payment);

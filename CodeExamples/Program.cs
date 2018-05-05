@@ -17,7 +17,7 @@ namespace Test
             var examples = new Examples();
 
             // Credit Card Experiement 
-            examples.CreateCreditCardPayment();
+            // examples.CreateCreditCardPayment();
 
             // Sadad Experiment
             // examples.CreateSadadPayment();

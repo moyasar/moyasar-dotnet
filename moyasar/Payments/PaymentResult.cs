@@ -40,6 +40,9 @@ namespace Moyasar.Payments
         [JsonProperty("ip")]
         public string Ip { get; set; }
 
+        [JsonProperty("callback_url")]
+        public string CallbackUrl { get; set; }
+
         [JsonProperty("created_at")]
         public string CreatedAt { get; set; }
 
