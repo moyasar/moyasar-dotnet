@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Moyasar
+﻿namespace Moyasar
 {
- public  abstract  class SourceReaultBase
+ public  abstract  class SourceResultBase
     {
      public string Type { get; set; }
      public string Message { get; set; }

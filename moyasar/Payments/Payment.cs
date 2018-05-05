@@ -16,7 +16,7 @@ namespace Moyasar.Payments
         public int Amount { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
-        public SourceReaultBase SourceReault { get; set; }
+        public SourceResultBase SourceReault { get; set; }
         public SourceType SourceType { get; set; }
 
         public string IniParameters()
@@ -201,7 +201,8 @@ namespace Moyasar.Payments
                             Company = (string)rs["source"]["company"],
                             Name = (string)rs["source"]["name"],
                             Number = (string)rs["source"]["number"],
-                            Message = (string)rs["source"]["message"]
+                            Message = (string)rs["source"]["message"],
+                            TransactionUrl = (string)rs["source"]["transaction_url"],
                         };
                     }
                     return payment;
@@ -268,6 +269,7 @@ namespace Moyasar.Payments
                             Name = (string)rs["source"]["name"],
                             Number = (string)rs["source"]["number"],
                             Message = (string)rs["source"]["message"],
+                            TransactionUrl = (string)rs["source"]["transaction_url"],
                         };
                     }
                     return payment;
@@ -341,6 +343,7 @@ namespace Moyasar.Payments
                             Name = (string)rs["source"]["name"],
                             Number = (string)rs["source"]["number"],
                             Message = (string)rs["source"]["message"],
+                            TransactionUrl = (string)rs["source"]["transaction_url"],
                         };
                     }
                     return payment;
@@ -392,7 +395,6 @@ namespace Moyasar.Payments
                             Refunded = (string)item["refunded"],
                             RefundedAt = (string)item["refunded_at"],
                             UpdatedAt = (string)item["updated_at"]
-
                         };
                         if ("sadad" == (string)item["source"]["type"])
                         {
@@ -414,7 +416,8 @@ namespace Moyasar.Payments
                                 Company = (string)item["source"]["company"],
                                 Name = (string)item["source"]["name"],
                                 Number = (string)item["source"]["number"],
-                                Message = (string)item["source"]["message"]
+                                Message = (string)item["source"]["message"],
+                                TransactionUrl = (string)rs["source"]["transaction_url"],
                             };
                         }
                         listResult.Payments.Add(payment);

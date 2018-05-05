@@ -46,6 +46,6 @@ namespace Moyasar.Payments
         [JsonProperty("updated_at")]
         public string UpdatedAt { get; set; }
 
-        public SourceReaultBase Source { get; set; }
+        public SourceResultBase Source { get; set; }
     }
 }

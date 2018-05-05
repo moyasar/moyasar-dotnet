@@ -5,8 +5,6 @@ namespace Moyasar.ExceptionsMap
     public class MoyasarValidationException : Exception
     {
         public string ErrorCode { get; set; }
-        public MoyasarValidationException(string messages) : base(messages)
-        {
-        }
+        public MoyasarValidationException(string messages) : base(messages) { }
     }
 }

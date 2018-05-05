@@ -12,7 +12,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_NpdJByQ5fE9ACfNBvQPEu9jakiFrH36fUA9cSGdP";
 
             Payment payment = new Payment()
             {
@@ -27,10 +27,10 @@ namespace Test
                     Company = "visa",
                     Number = "4111111111111111",
                     Name = "Abdullah Barrak",
-                    Year = 2018,
-                    Month = 03,
+                    Year = 2020,
+                    Month = 05,
                     Cvc = "111"
-                }
+                },
             };
             var result = payment.Create();
 
@@ -39,6 +39,7 @@ namespace Test
             Console.WriteLine("Payment Id: {0}", result.Id);
             Console.WriteLine("Payment Status: {0}", result.Status);
             Console.WriteLine("Payment Source Message: {0}", result.Source.Message);
+            Console.WriteLine("Payment Source Tranx Url: {0}", ((CreditCard)result.Source).TransactionUrl);
             Console.WriteLine();
         }
 
