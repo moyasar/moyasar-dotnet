@@ -17,7 +17,7 @@ public partial class MakePayment : Page
         payment.Amount = int.Parse(txtAmount.Text);
         payment.Currency = txtCurrency.Text;
         payment.Description = txtDescription.Text;
-        payment.SourceReault = new CreditCard()
+        payment.SourceResult = new CreditCard()
         {
             Type = "creditcard",
             Message = "",
@@ -27,7 +27,6 @@ public partial class MakePayment : Page
             Year = int.Parse(txtYear.Text),
             Month = int.Parse(txtMonth.Text),
             Cvc = txtCvc.Text,
-           
         };
 
         try

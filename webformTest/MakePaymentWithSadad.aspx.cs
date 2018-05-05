@@ -12,20 +12,21 @@ public partial class MakePaymentWithSadad : Page
 
     protected void BtnOk_Click(object sender, EventArgs e)
     {
-        Payment payment = new Payment();
-        payment.SourceType = SourceType.Sadad;
-        payment.Amount = int.Parse(txtAmount.Text);
-        payment.Currency = txtCurrency.Text;
-        payment.Description = txtDescription.Text;
-        payment.SourceReault = new SadadType()
+        Payment payment = new Payment()
         {
-            Type = "sadad",
-            Message = "",
-            SuccessUrl = txtSuccessUrl.Text,
-            Username = txtUserName.Text,
-            FaildUrl = txtFaildUrl.Text
+            SourceType = SourceType.Sadad,
+            Amount = int.Parse(txtAmount.Text),
+            Currency = txtCurrency.Text,
+            Description = txtDescription.Text,
+            SourceResult = new SadadType()
+            {
+                Type = "sadad",
+                Message = "",
+                SuccessUrl = txtSuccessUrl.Text,
+                Username = txtUserName.Text,
+                FaildUrl = txtFaildUrl.Text
+            }
         };
-
         try
         {
             var p = payment.CreatePay();
