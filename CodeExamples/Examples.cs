@@ -19,18 +19,19 @@ namespace Test
                 Amount = 100,
                 Currency = "SAR",
                 Description = "New Suitcase Purchase",
+                CallbackUrl = "https://example.com/store/123/finished_order",
                 SourceType = SourceType.CreditCard,
-                SourceReault = new CreditCard()
+                SourceResult = new CreditCard()
                 {
                     Type = "creditcard",
                     Message = "",
                     Company = "visa",
                     Number = "4111111111111111",
                     Name = "Abdullah Barrak",
-                    Year = 2018,
-                    Month = 03,
+                    Year = 2020,
+                    Month = 05,
                     Cvc = "111"
-                }
+                },
             };
             var result = payment.Create();
 
@@ -39,6 +40,7 @@ namespace Test
             Console.WriteLine("Payment Id: {0}", result.Id);
             Console.WriteLine("Payment Status: {0}", result.Status);
             Console.WriteLine("Payment Source Message: {0}", result.Source.Message);
+            Console.WriteLine("Payment Source Tranx Url: {0}", ((CreditCard)result.Source).TransactionUrl);
             Console.WriteLine();
         }
 
@@ -53,8 +55,9 @@ namespace Test
                 Amount = 200,
                 Currency = "SAR",
                 Description = "Simple Test Payment",
+                CallbackUrl = "https://example.com/store/123/finished_order",
                 SourceType = SourceType.Sadad,
-                SourceReault = new SadadType()
+                SourceResult = new SadadType()
                 {
                     Type = "sadad",
                     Username = "u3043090Xolp",
