@@ -17,34 +17,34 @@ namespace Test
             var examples = new Examples();
 
             // Credit Card Experiement 
-            // examples.CreateCreditCardPayment();
+             examples.CreateCreditCardPayment();
 
             // Sadad Experiment
-            // examples.CreateSadadPayment();
+             examples.CreateSadadPayment();
 
             // List Payments 
-            // examples.ListOfPayment();
+             examples.ListOfPayment();
 
             // List All Payments
-            // examples.ListAllPayments();
+             examples.ListAllPayments();
 
             // Fetch Payment
-            // examples.PaymentByID();
+             examples.PaymentByID();
 
             // Refund Payment
-            // examples.RefundPayment();
+             examples.RefundPayment();
 
             // Create Invoice
-            // examples.CreateInvoice();
+             examples.CreateInvoice();
 
             // List Invoices
-            // examples.ListInvoices();
+             examples.ListInvoices();
 
             // List All Invoices
-            // examples.ListAllInvoices();
+             examples.ListAllInvoices();
 
             // Fetch Invoice
-            // examples.FetchInvoice();
+             examples.FetchInvoice();
 
             Console.Read();
         }

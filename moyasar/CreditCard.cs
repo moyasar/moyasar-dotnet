@@ -1,5 +1,8 @@
-﻿namespace Moyasar
+﻿using System;
+
+namespace Moyasar
 {
+    [Serializable]
     public class CreditCard : SourceResultBase
     {
         public string Company { get; set; }

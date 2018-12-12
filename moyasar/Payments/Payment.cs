@@ -1,12 +1,10 @@
-﻿using System;
+﻿using Moyasar.Common;
+using Moyasar.ExceptionsMap;
+using Moyasar.MessagesMap;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Moyasar.ExceptionsMap;
-using Moyasar.MessagesMap;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Moyasar.Common;
 
 namespace Moyasar.Payments
 {
@@ -24,15 +22,15 @@ namespace Moyasar.Payments
         public string IniParameters()
         {
             var q = new object();
-            if (SourceType == SourceType.CreditCard)
+            if (this.SourceType == SourceType.CreditCard)
             {
-                CreditCard crd = (CreditCard) SourceResult;
+                CreditCard crd = (CreditCard)this.SourceResult;
                 q = new
                 {
-                    amount = Amount,
-                    currency = Currency,
-                    description = Description,
-                    callback_url = CallbackUrl,
+                    amount = this.Amount,
+                    currency = this.Currency,
+                    description = this.Description,
+                    callback_url = this.CallbackUrl,
                     source = new
                     {
                         type = crd.Type,
@@ -46,7 +44,7 @@ namespace Moyasar.Payments
             }
             if (this.SourceType == SourceType.Sadad)
             {
-                SadadType Sd = (SadadType) this.SourceResult;
+                SadadType Sd = (SadadType)this.SourceResult;
                 q = new
                 {
                     amount = this.Amount,
@@ -62,7 +60,7 @@ namespace Moyasar.Payments
                 };
             }
 
-            var sm = JsonConvert.SerializeObject(q);
+            var sm = this.js.Serialize(q); //JsonConvert.SerializeObject(q);
             return sm;
         }
 
@@ -73,7 +71,7 @@ namespace Moyasar.Payments
                 var ex = new MoyasarValidationException(EnMessages.ApiKeyNotFound) { ErrorCode = "#1559" };
                 throw ex;
             }
-            if (SourceType == 0)
+            if (this.SourceType == 0)
             {
                 var ex = new MoyasarValidationException(EnMessages.SelectType) { ErrorCode = "#1550" };
                 throw ex;
@@ -101,7 +99,7 @@ namespace Moyasar.Payments
             {
                 if (this.SourceResult != null)
                 {
-                    var credit = (CreditCard) SourceResult;
+                    var credit = (CreditCard)this.SourceResult;
                     if (credit.Company == string.Empty)
                     {
                         var ex = new MoyasarValidationException(EnMessages.CreatedCardCompanyNotFound) { ErrorCode = "#1110" };
@@ -143,29 +141,29 @@ namespace Moyasar.Payments
 
         public PaymentResult Create()
         {
-            Validation();
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create(MakePaymentUrl);
+            this.Validation();
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(this.MakePaymentUrl);
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
             httpWebRequest.Method = "POST";
 
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
-                string json = IniParameters();
+                string json = this.IniParameters();
 
                 streamWriter.Write(json);
                 streamWriter.Flush();
                 streamWriter.Close();
             }
             try
-            { 
-                var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            {
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    var rs = JObject.Parse(result);
+                    var rs = this.js.Deserialize<PaymentResult>(result); //JObject.Parse(result);
 
-                    PaymentResult payment = new PaymentResult
+                    PaymentResult payment = rs; /*new PaymentResult
                     {
                         Id = (string)rs["id"],
                         Status = (string)rs["status"],
@@ -183,29 +181,47 @@ namespace Moyasar.Payments
                         RefundedAt = (string)rs["refunded_at"],
                         UpdatedAt = (string)rs["updated_at"]
 
-                    };
+                    };      */
                     if (this.SourceType == SourceType.Sadad)
                     {
+                        //payment.Source = new SadadType()
+                        //{
+                        //    Type = (string)rs["source"]["type"],
+                        //    Username = (string)rs["source"]["username"],
+                        //    TransactionUrl = (string)rs["source"]["transaction_url"],
+                        //    ErrorCode = (string)rs["source"]["error_code"],
+                        //    TransactionId = (string)rs["source"]["transaction_id"],
+                        //    Message = (string)rs["source"]["message"]
+                        //};  
                         payment.Source = new SadadType()
                         {
-                            Type = (string)rs["source"]["type"],
-                            Username = (string)rs["source"]["username"],
-                            TransactionUrl = (string)rs["source"]["transaction_url"],
-                            ErrorCode = (string)rs["source"]["error_code"],
-                            TransactionId = (string)rs["source"]["transaction_id"],
-                            Message = (string)rs["source"]["message"]
+                            Type = rs.Source.Type, //(string)rs["source"]["type"],
+                            Username = rs.Source.UserName, //(string)rs["source"]["username"],
+                            TransactionUrl = rs.Source.Transaction_Url, //(string)rs["source"]["transaction_url"],
+                            ErrorCode = rs.Source.Error_Code,//(string)rs["source"]["error_code"],
+                            TransactionId = rs.Source.Transaction_Id, //(string)rs["source"]["transaction_id"],
+                            Message = rs.Source.Message //(string)rs["source"]["message"]
                         };
                     }
                     if (this.SourceType == SourceType.CreditCard)
                     {
+                        /*  payment.Source = rs.Source; new CreditCard()
+                          {
+                              Type = (string)rs["source"]["type"],
+                              Company = (string)rs["source"]["company"],
+                              Name = (string)rs["source"]["name"],
+                              Number = (string)rs["source"]["number"],
+                              Message = (string)rs["source"]["message"],
+                              TransactionUrl = (string)rs["source"]["transaction_url"],
+                          };    */
                         payment.Source = new CreditCard()
                         {
-                            Type = (string)rs["source"]["type"],
-                            Company = (string)rs["source"]["company"],
-                            Name = (string)rs["source"]["name"],
-                            Number = (string)rs["source"]["number"],
-                            Message = (string)rs["source"]["message"],
-                            TransactionUrl = (string)rs["source"]["transaction_url"],
+                            Type = rs.Source.Type, // (string)rs["source"]["type"],
+                            Company = rs.Source.Company,//(string)rs["source"]["company"],
+                            Name = rs.Source.Name,//(string)rs["source"]["name"],
+                            Number = rs.Source.Number, //(string)rs["source"]["number"],
+                            Message = rs.Source.Message, //(string)rs["source"]["message"],
+                            TransactionUrl = rs.Source.Transaction_Url //(string)rs["source"]["transaction_url"],
                         };
                     }
                     return payment;
@@ -213,27 +229,27 @@ namespace Moyasar.Payments
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
         public PaymentResult Fetch(string id)
         {
-            var finalUrl = MakePaymentUrl + "/" + id;
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
+            var finalUrl = this.MakePaymentUrl + "/" + id;
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
             try
             {
-                var httpResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    var rs = JObject.Parse(result);
+                    var rs = this.js.Deserialize<PaymentResult>(result); //JObject.Parse(result);
 
-                    PaymentResult payment = new PaymentResult
+                    PaymentResult payment = rs; /*new PaymentResult
                     {
                         Id = (string)rs["id"],
                         Status = (string)rs["status"],
@@ -251,29 +267,29 @@ namespace Moyasar.Payments
                         RefundedAt = (string)rs["refunded_at"],
                         UpdatedAt = (string)rs["updated_at"]
 
-                    };
-                    if ("sadad" == (string)rs["source"]["type"])
+                    };        */
+                    if ("sadad" == rs.Source.Type) //(string)rs["source"]["type"]
                     {
                         payment.Source = new SadadType()
                         {
-                            Type = (string)rs["source"]["type"],
-                            Username = (string)rs["source"]["username"],
-                            TransactionUrl = (string)rs["source"]["transaction_url"],
-                            ErrorCode = (string)rs["source"]["error_code"],
-                            TransactionId = (string)rs["source"]["transaction_id"],
-                            Message = (string)rs["source"]["message"]
+                            Type = rs.Source.Type, //(string)rs["source"]["type"],
+                            Username = rs.Source.UserName, //(string)rs["source"]["username"],
+                            TransactionUrl = rs.Source.Transaction_Url, //(string)rs["source"]["transaction_url"],
+                            ErrorCode = rs.Source.Error_Code,//(string)rs["source"]["error_code"],
+                            TransactionId = rs.Source.Transaction_Id, //(string)rs["source"]["transaction_id"],
+                            Message = rs.Source.Message //(string)rs["source"]["message"]
                         };
                     }
-                    if ("creditcard" == (string)rs["source"]["type"])
+                    if ("creditcard" == rs.Source.Type)     //(string)rs["source"]["type"]
                     {
                         payment.Source = new CreditCard()
                         {
-                            Type = (string)rs["source"]["type"],
-                            Company = (string)rs["source"]["company"],
-                            Name = (string)rs["source"]["name"],
-                            Number = (string)rs["source"]["number"],
-                            Message = (string)rs["source"]["message"],
-                            TransactionUrl = (string)rs["source"]["transaction_url"],
+                            Type = rs.Source.Type, // (string)rs["source"]["type"],
+                            Company = rs.Source.Company,//(string)rs["source"]["company"],
+                            Name = rs.Source.Name,//(string)rs["source"]["name"],
+                            Number = rs.Source.Number, //(string)rs["source"]["number"],
+                            Message = rs.Source.Message, //(string)rs["source"]["message"],
+                            TransactionUrl = rs.Source.Transaction_Url //(string)rs["source"]["transaction_url"],
                         };
                     }
                     return payment;
@@ -281,13 +297,13 @@ namespace Moyasar.Payments
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
         public PaymentResult Refund(string id, string amount = null)
         {
-            var finalUrl = MakePaymentUrl + "/" + id + "/refund";
+            var finalUrl = this.MakePaymentUrl + "/" + id + "/refund";
             finalUrl = amount == null ? finalUrl : (finalUrl + "? amount = " + amount);
             if (amount != null && amount.Equals("0"))
             {
@@ -295,7 +311,7 @@ namespace Moyasar.Payments
                 throw ex;
             }
 
-            var httpWebRequest = (HttpWebRequest) WebRequest.Create(finalUrl);
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "POST";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
@@ -306,9 +322,9 @@ namespace Moyasar.Payments
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    var rs = JObject.Parse(result);
+                    var rs = this.js.Deserialize<PaymentResult>(result); //JObject.Parse(result);
 
-                    PaymentResult payment = new PaymentResult
+                    PaymentResult payment = rs; /*new PaymentResult
                     {
                         Id = (string)rs["id"],
                         Status = (string)rs["status"],
@@ -326,29 +342,47 @@ namespace Moyasar.Payments
                         RefundedAt = (string)rs["refunded_at"],
                         UpdatedAt = (string)rs["updated_at"]
 
-                    };
-                    if ("sadad" == (string)rs["source"]["type"])
+                    }; */
+                    if ("sadad" == rs.Source.Type)  //(string)rs["source"]["type"]
                     {
+                        //payment.Source = new SadadType()
+                        //{
+                        //    Type = (string)rs["source"]["type"],
+                        //    Username = (string)rs["source"]["username"],
+                        //    TransactionUrl = (string)rs["source"]["transaction_url"],
+                        //    ErrorCode = (string)rs["source"]["error_code"],
+                        //    TransactionId = (string)rs["source"]["transaction_id"],
+                        //    Message = (string)rs["source"]["message"]
+                        //};
                         payment.Source = new SadadType()
                         {
-                            Type = (string)rs["source"]["type"],
-                            Username = (string)rs["source"]["username"],
-                            TransactionUrl = (string)rs["source"]["transaction_url"],
-                            ErrorCode = (string)rs["source"]["error_code"],
-                            TransactionId = (string)rs["source"]["transaction_id"],
-                            Message = (string)rs["source"]["message"]
+                            Type = rs.Source.Type, //(string)rs["source"]["type"],
+                            Username = rs.Source.UserName, //(string)rs["source"]["username"],
+                            TransactionUrl = rs.Source.Transaction_Url, //(string)rs["source"]["transaction_url"],
+                            ErrorCode = rs.Source.Error_Code,//(string)rs["source"]["error_code"],
+                            TransactionId = rs.Source.Transaction_Id, //(string)rs["source"]["transaction_id"],
+                            Message = rs.Source.Message //(string)rs["source"]["message"]
                         };
                     }
-                    if ("creditcard" == (string)rs["source"]["type"])
+                    if ("creditcard" == rs.Source.Type)  //(string)rs["source"]["type"]
                     {
+                        //payment.Source = new CreditCard()
+                        //{
+                        //    Type = (string)rs["source"]["type"],
+                        //    Company = (string)rs["source"]["company"],
+                        //    Name = (string)rs["source"]["name"],
+                        //    Number = (string)rs["source"]["number"],
+                        //    Message = (string)rs["source"]["message"],
+                        //    TransactionUrl = (string)rs["source"]["transaction_url"],
+                        //};
                         payment.Source = new CreditCard()
                         {
-                            Type = (string)rs["source"]["type"],
-                            Company = (string)rs["source"]["company"],
-                            Name = (string)rs["source"]["name"],
-                            Number = (string)rs["source"]["number"],
-                            Message = (string)rs["source"]["message"],
-                            TransactionUrl = (string)rs["source"]["transaction_url"],
+                            Type = rs.Source.Type, // (string)rs["source"]["type"],
+                            Company = rs.Source.Company,//(string)rs["source"]["company"],
+                            Name = rs.Source.Name,//(string)rs["source"]["name"],
+                            Number = rs.Source.Number, //(string)rs["source"]["number"],
+                            Message = rs.Source.Message, //(string)rs["source"]["message"],
+                            TransactionUrl = rs.Source.Transaction_Url //(string)rs["source"]["transaction_url"],
                         };
                     }
                     return payment;
@@ -356,13 +390,13 @@ namespace Moyasar.Payments
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
         public PaymentListResult List(int? page = null)
         {
-            var finalUrl = page == null ? MakePaymentUrl : MakePaymentUrl + "?page=" + page.ToString();
+            var finalUrl = page == null ? this.MakePaymentUrl : this.MakePaymentUrl + "?page=" + page.ToString();
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
@@ -374,73 +408,91 @@ namespace Moyasar.Payments
                 using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd();
-                    var rs = JObject.Parse(result);
+                    var rs = this.js.Deserialize<PaymentListResult>(result); //JObject.Parse(result);
                     var listResult = new PaymentListResult()
                     {
                         Payments = new List<PaymentResult>(),
                         Meta = new MetaResult()
                     };
 
-                    var paymentList = rs["payments"];
+                    var paymentList = rs.Payments;//rs["payments"];
                     foreach (var item in paymentList)
                     {
                         PaymentResult payment = new PaymentResult
                         {
-                            Id = (string)item["id"],
-                            Status = (string)item["status"],
-                            Amount = (int)item["amount"],
-                            Description = (string)item["description"],
-                            Currency = (string)item["currency"],
-                            CallbackUrl = (string)rs["callback_url"],
-                            AmountFormat = (string)item["amount_format"],
-                            CreatedAt = (string)item["created_at"],
-                            Fee = (string)item["fee"],
-                            FeeFormat = (string)item["fee_format"],
-                            InvoiceId = (string)item["invoice_id"],
-                            Ip = (string)item["ip"],
-                            Refunded = (string)item["refunded"],
-                            RefundedAt = (string)item["refunded_at"],
-                            UpdatedAt = (string)item["updated_at"]
+                            Id = item.Id, // (string)item["id"],
+                            Status = item.Status, //(string)item["status"],
+                            Amount = item.Amount, //(int)item["amount"],
+                            Description = item.Description, //(string)item["description"],
+                            Currency = item.Currency,// (string)item["currency"],
+                            CallbackUrl = item.CallbackUrl,// (string)rs["callback_url"],
+                            AmountFormat = item.AmountFormat, //(string)item["amount_format"],
+                            CreatedAt = item.CreatedAt,// (string)item["created_at"],
+                            Fee = item.Fee, //(string)item["fee"],
+                            FeeFormat = item.FeeFormat,// (string)item["fee_format"],
+                            InvoiceId = item.InvoiceId,//(string)item["invoice_id"],
+                            Ip = item.Ip, //(string)item["ip"],
+                            Refunded = item.Refunded, //(string)item["refunded"],
+                            RefundedAt = item.RefundedAt, //(string)item["refunded_at"],
+                            UpdatedAt = item.UpdatedAt //(string)item["updated_at"]
                         };
-                        if ("sadad" == (string)item["source"]["type"])
+                        if ("sadad" == item.Source.Type) //(string)item["source"]["type"]
                         {
+                            //payment.Source = new SadadType()
+                            //{
+                            //    Type = (string)item["source"]["type"],
+                            //    Username = (string)item["source"]["username"],
+                            //    TransactionUrl = (string)item["source"]["transaction_url"],
+                            //    ErrorCode = (string)item["source"]["error_code"],
+                            //    TransactionId = (string)item["source"]["transaction_id"],
+                            //    Message = (string)item["source"]["message"]
+                            //};
                             payment.Source = new SadadType()
                             {
-                                Type = (string)item["source"]["type"],
-                                Username = (string)item["source"]["username"],
-                                TransactionUrl = (string)item["source"]["transaction_url"],
-                                ErrorCode = (string)item["source"]["error_code"],
-                                TransactionId = (string)item["source"]["transaction_id"],
-                                Message = (string)item["source"]["message"]
+                                Type = item.Source.Type, //(string)rs["source"]["type"],
+                                Username = item.Source.UserName, //(string)rs["source"]["username"],
+                                TransactionUrl = item.Source.Transaction_Url, //(string)rs["source"]["transaction_url"],
+                                ErrorCode = item.Source.Error_Code,//(string)rs["source"]["error_code"],
+                                TransactionId = item.Source.Transaction_Id, //(string)rs["source"]["transaction_id"],
+                                Message = item.Source.Message //(string)rs["source"]["message"]
                             };
                         }
-                        if ("creditcard" == (string)item["source"]["type"])
+                        if ("creditcard" == item.Source.Type)//(string)item["source"]["type"]
                         {
+                            //payment.Source = new CreditCard()
+                            //{
+                            //    Type = (string)item["source"]["type"],
+                            //    Company = (string)item["source"]["company"],
+                            //    Name = (string)item["source"]["name"],
+                            //    Number = (string)item["source"]["number"],
+                            //    Message = (string)item["source"]["message"],
+                            //    TransactionUrl = (string)item["source"]["transaction_url"],
+                            //};
                             payment.Source = new CreditCard()
                             {
-                                Type = (string)item["source"]["type"],
-                                Company = (string)item["source"]["company"],
-                                Name = (string)item["source"]["name"],
-                                Number = (string)item["source"]["number"],
-                                Message = (string)item["source"]["message"],
-                                TransactionUrl = (string)item["source"]["transaction_url"],
+                                Type = item.Source.Type, // (string)rs["source"]["type"],
+                                Company = item.Source.Company,//(string)rs["source"]["company"],
+                                Name = item.Source.Name,//(string)rs["source"]["name"],
+                                Number = item.Source.Number, //(string)rs["source"]["number"],
+                                Message = item.Source.Message, //(string)rs["source"]["message"],
+                                TransactionUrl = item.Source.Transaction_Url //(string)rs["source"]["transaction_url"],
                             };
                         }
                         listResult.Payments.Add(payment);
                     }
 
                     //rs
-                    listResult.Meta.CurrentPage = (string)rs["meta"]["current_page"];
-                    listResult.Meta.NextPage = (string)rs["meta"]["next_page"];
-                    listResult.Meta.PrevPage = (string)rs["meta"]["prev_page"];
-                    listResult.Meta.TotalCount = (string)rs["meta"]["total_pages"];
-                    listResult.Meta.TotalPages = (string)rs["meta"]["total_count"];
+                    listResult.Meta.CurrentPage = rs.Meta.CurrentPage; //(string)rs["meta"]["current_page"];
+                    listResult.Meta.NextPage = rs.Meta.NextPage; //(string)rs["meta"]["next_page"];
+                    listResult.Meta.PrevPage = rs.Meta.PrevPage;//(string)rs["meta"]["prev_page"];
+                    listResult.Meta.TotalCount = rs.Meta.TotalCount; //(string)rs["meta"]["total_pages"];
+                    listResult.Meta.TotalPages = rs.Meta.TotalPages; //(string)rs["meta"]["total_count"];
                     return listResult;
                 }
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
@@ -450,7 +502,7 @@ namespace Moyasar.Payments
             int? nextPage = null;
             do
             {
-                allList = List(nextPage);
+                allList = this.List(nextPage);
                 nextPage = Int32.Parse(allList.Meta.CurrentPage) + 1;
                 yield return allList;
             } while (allList.Meta.NextPage != null);
@@ -462,17 +514,17 @@ namespace Moyasar.Payments
 
         public PaymentResult CreatePay()
         {
-            return Create();
+            return this.Create();
         }
 
         public PaymentResult GetPaymentById(string id)
         {
-            return Fetch(id);
+            return this.Fetch(id);
         }
 
         public PaymentListResult GetPaymentsList()
         {
-            return List();
+            return this.List();
         }
     }
 }

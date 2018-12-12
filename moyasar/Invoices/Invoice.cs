@@ -1,15 +1,12 @@
-﻿using System;
+﻿using Moyasar.Common;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using Newtonsoft.Json.Linq;
-using Moyasar.Common;
-using Newtonsoft.Json;
-
 namespace Moyasar.Invoices
 {
     public class Invoice : MoyasarBase
     {
+
         public string Amount { get; set; }
         public string Description { get; set; }
         public string Currency { get; set; }
@@ -19,161 +16,161 @@ namespace Moyasar.Invoices
         {
             var q = new
             {
-                amount = Amount,
-                description = Description,
-                currency = Currency,
-                callback_url = CallbackUrl,
+                amount = this.Amount,
+                description = this.Description,
+                currency = this.Currency,
+                callback_url = this.CallbackUrl,
             };
 
-            return JsonConvert.SerializeObject(q);
+            return this.js.Serialize(q); //JsonConvert.SerializeObject(q);
         }
 
         public InvoiceResult Create()
         {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(MakeInvoiceUrl);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(this.MakeInvoiceUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "POST";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            using (StreamWriter streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
-                streamWriter.Write(InitParam());
+                streamWriter.Write(this.InitParam());
                 streamWriter.Flush();
                 streamWriter.Close();
             }
 
             try
             {
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var result = streamReader.ReadToEnd();
-                    var rs = JObject.Parse(result);
-                    var invoice = new InvoiceResult
+                    string result = streamReader.ReadToEnd();
+                    InvoiceResult rs = this.js.Deserialize<InvoiceResult>(result);  // JObject.Parse(result);
+                    InvoiceResult invoice = new InvoiceResult
                     {
-                        Id = (string)rs["id"],
-                        Status = (string)rs["status"],
-                        Amount = (string)rs["amount"],
-                        Currency = (string)rs["currency"],
-                        Description = (string)rs["description"],
-                        CallbackUrl = (string)rs["callback_url"],
-                        LogoUrl = (string)rs["logo_url"],
-                        AmountFormat = (string)rs["amount_format"],
-                        Url = (string)rs["url"],
-                        CreatedAt = (string)rs["created_at"],
-                        UpdatedAt = (string)rs["updated_at"]
+                        Id = rs.Id, //(string)rs["id"],
+                        Status = rs.Status, //(string)rs["status"],
+                        Amount = rs.Amount, //(string)rs["amount"],
+                        Currency = rs.Currency, //(string)rs["currency"],
+                        Description = rs.Description, //(string)rs["description"],
+                        CallbackUrl = rs.CallbackUrl, //(string)rs["callback_url"],
+                        LogoUrl = rs.LogoUrl, //(string)rs["logo_url"],
+                        AmountFormat = rs.AmountFormat, //(string)rs["amount_format"],
+                        Url = rs.Url, //(string)rs["url"],
+                        CreatedAt = rs.CreatedAt, //(string)rs["created_at"],
+                        UpdatedAt = rs.UpdatedAt //(string)rs["updated_at"]
                     };
                     return invoice;
                 }
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
         public InvoiceListResult List(int? page = null)
         {
-            var finalUrl = page == null ? MakeInvoiceUrl : MakeInvoiceUrl + "?page=" + page.ToString();
+            string finalUrl = page == null ? this.MakeInvoiceUrl : this.MakeInvoiceUrl + "?page=" + page.ToString();
 
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
             try
             {
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var result = streamReader.ReadToEnd();
-                    var j = JObject.Parse(result);
-                    var list = new InvoiceListResult
+                    string result = streamReader.ReadToEnd();
+                    InvoiceListResult j = this.js.Deserialize<InvoiceListResult>(result); // JObject.Parse(result);
+                    InvoiceListResult list = new InvoiceListResult
                     {
                         Invoices = new List<InvoiceResult>(),
                         Meta = new MetaResult()
                     };
 
-                    var inv = j["invoices"].Children();
-                    foreach (var i in inv)
+                    List<InvoiceResult> inv = j.Invoices; //j["invoices"].Children();
+                    foreach (InvoiceResult i in inv)
                     {
-                        var invoiceResult = new InvoiceResult
+                        InvoiceResult invoiceResult = new InvoiceResult
                         {
-                            Id = (string)i["id"],
-                            Status = (string)i["status"],
-                            Amount = (string)i["amount"],
-                            Currency = (string)i["currency"],
-                            Description = (string)i["description"],
-                            CallbackUrl = (string)i["callback_url"],
-                            AmountFormat = (string)i["amount_format"],
-                            Url = (string)i["url"],
-                            CreatedAt = (string)i["created_at"],
-                            UpdatedAt = (string)i["updated_at"]
+                            Id = i.Id, //(string)i["id"],
+                            Status = i.Status,//(string)i["status"],
+                            Amount = i.Amount, //(string)i["amount"],
+                            Currency = i.Currency, //(string)i["currency"],
+                            Description = i.Description,// //(string)i["description"],
+                            CallbackUrl = i.CallbackUrl,// (string)i["callback_url"],
+                            AmountFormat = i.AmountFormat,// (string)i["amount_format"],
+                            Url = i.Url, //(string)i["url"],
+                            CreatedAt = i.CreatedAt,//(string)i["created_at"],
+                            UpdatedAt = i.UpdatedAt //(string)i["updated_at"]
                         };
                         list.Invoices.Add(invoiceResult);
                     }
 
-                    list.Meta.CurrentPage = (string)j["meta"]["current_page"];
-                    list.Meta.NextPage = (string)j["meta"]["next_page"];
-                    list.Meta.PrevPage = (string)j["meta"]["prev_page"];
-                    list.Meta.TotalCount = (string)j["meta"]["total_pages"];
-                    list.Meta.TotalPages = (string)j["meta"]["total_count"];
+                    list.Meta.CurrentPage = j.Meta.CurrentPage; //(string)j["meta"]["current_page"];
+                    list.Meta.NextPage = j.Meta.NextPage; // (string)j["meta"]["next_page"];
+                    list.Meta.PrevPage = j.Meta.PrevPage; //(string)j["meta"]["prev_page"];
+                    list.Meta.TotalCount = j.Meta.TotalCount; //(string)j["meta"]["total_pages"];
+                    list.Meta.TotalPages = j.Meta.TotalPages; //(string)j["meta"]["total_count"];
 
                     return list;
                 }
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
         public InvoiceResult Fetch(string id)
         {
-            var finalUrl = MakeInvoiceUrl + "/" + id;
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
+            string finalUrl = this.MakeInvoiceUrl + "/" + id;
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(finalUrl);
             httpWebRequest.ContentType = "application/json; charset=utf-8";
             httpWebRequest.Method = "GET";
             httpWebRequest.Credentials = new NetworkCredential(ApiKey, ApiKey);
 
             try
             {
-                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                HttpWebResponse httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream()))
                 {
-                    var result = streamReader.ReadToEnd();
-                    var rs = JObject.Parse(result);
-                    var invoice = new InvoiceResult()
+                    string result = streamReader.ReadToEnd();
+                    InvoiceResult rs = this.js.Deserialize<InvoiceResult>(result); //JObject.Parse(result);
+                    InvoiceResult invoice = new InvoiceResult()
                     {
-                        Id = (string)rs["id"],
-                        Status = (string)rs["status"],
-                        Amount = (string)rs["amount"],
-                        Currency = (string)rs["currency"],
-                        Description = (string)rs["description"],
-                        CallbackUrl = (string)rs["callback_url"],
-                        LogoUrl = (string)rs["logo_url"],
-                        AmountFormat = (string)rs["amount_format"],
-                        Url = (string)rs["url"],
-                        CreatedAt = (string)rs["created_at"],
-                        UpdatedAt = (string)rs["updated_at"]
+                        Id = rs.Id, //(string)rs["id"],
+                        Status = rs.Status,//(string)rs["status"],
+                        Amount = rs.Amount, //(string)rs["amount"],
+                        Currency = rs.Currency, //(string)rs["currency"],
+                        Description = rs.Description, //(string)rs["description"],
+                        CallbackUrl = rs.CallbackUrl,// (string)rs["callback_url"],
+                        LogoUrl = rs.LogoUrl, //(string)rs["logo_url"],
+                        AmountFormat = rs.AmountFormat, //(string)rs["amount_format"],
+                        Url = rs.Url,//(string)rs["url"],
+                        CreatedAt = rs.CreatedAt, //(string)rs["created_at"],
+                        UpdatedAt = rs.UpdatedAt //(string)rs["updated_at"]
                     };
                     return invoice;
                 }
             }
             catch (WebException webEx)
             {
-                throw HandleRequestErrors(webEx);
+                throw this.HandleRequestErrors(webEx);
             }
         }
 
         public IEnumerable<InvoiceListResult> ListAll()
         {
-            var allList = new InvoiceListResult();
+            InvoiceListResult allList = new InvoiceListResult();
             int? nextPage = null;
             do
             {
-                allList = List(nextPage);
-                nextPage = Int32.Parse(allList.Meta.CurrentPage) + 1;
+                allList = this.List(nextPage);
+                nextPage = int.Parse(allList.Meta.CurrentPage) + 1;
                 yield return allList;
             } while (allList.Meta.NextPage != null);
         }
@@ -184,17 +181,17 @@ namespace Moyasar.Invoices
 
         public InvoiceResult GetInvoiceById(string id)
         {
-            return Fetch(id);
+            return this.Fetch(id);
         }
 
         public InvoiceListResult GetInvoicesList()
         {
-            return List();
+            return this.List();
         }
 
         public InvoiceResult CreateInvoice()
         {
-            return Create();
+            return this.Create();
         }
     }
 }
