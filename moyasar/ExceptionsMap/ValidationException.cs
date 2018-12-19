@@ -2,6 +2,7 @@
 
 namespace Moyasar.ExceptionsMap
 {
+    [Serializable]
     public class MoyasarValidationException : Exception
     {
         public string ErrorCode { get; set; }

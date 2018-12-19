@@ -1,5 +1,8 @@
-﻿namespace Moyasar.Payments
+﻿using System;
+
+namespace Moyasar.Payments
 {
+    [Serializable]
     public abstract class PaymentResultBase
     {
     }

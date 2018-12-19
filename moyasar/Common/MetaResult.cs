@@ -1,5 +1,8 @@
-﻿namespace Moyasar.Common
+﻿using System;
+
+namespace Moyasar.Common
 {
+    [Serializable]
     public class MetaResult
     {
         public string CurrentPage { get; set; }

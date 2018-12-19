@@ -12,7 +12,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg"; ;
 
             Payment payment = new Payment()
             {
@@ -48,7 +48,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg"; //"<Your API Key>";
 
             Payment payment = new Payment()
             {
@@ -81,7 +81,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";//"<Your API Key>";
 
             var results = new Payment().List();
 
@@ -96,7 +96,7 @@ namespace Test
             Console.WriteLine(results.Meta.TotalCount);
             Console.WriteLine(results.Meta.TotalPages);
             Console.WriteLine(results.Meta.CurrentPage);
-            Console.WriteLine(results.Meta.NextPage, "\n");
+            Console.WriteLine(results.Meta.NextPage?.ToString(), "\n");
 
             // With Specific Page
             results = new Payment().List(2);
@@ -113,7 +113,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";//"<Your API Key>";
 
             // Getting existing payment ...
 
@@ -141,7 +141,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";//"<Your API Key>";
 
             try
             {
@@ -164,7 +164,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";//"<Your API Key>";
 
             var paymentAPI = new Payment();
 
@@ -183,7 +183,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";// "<Your API Key>";
 
             Invoice v = new Invoice();
             var results = v.List();
@@ -222,7 +222,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";//"<Your API Key>";
 
             var invoiceAPI = new Invoice();
 
@@ -241,14 +241,14 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg"; //" < Your API Key>";
 
             Invoice inv = new Invoice()
             {
                 Amount = "320",
                 Currency = "USD",
                 Description = "Sample Pharmacy Invoice",
-                CallbackUrl = "https://requestb.in/17tgsjy1"
+                CallbackUrl = "https://requestb.in/17tgsjy1"  
             };
             var invoice = inv.Create();
 
@@ -265,7 +265,7 @@ namespace Test
         {
             // Replace '<Your API Key>' with your account API Key.
             // Always keep your secret keys saved in secure place and not exposed publicly.
-            MoyasarBase.ApiKey = "<Your API Key>";
+            MoyasarBase.ApiKey = "sk_test_XeVDsEJuavVwnxaW4ccnrC4JyHbnF3i7vhJJR7Vg";//"<Your API Key>";
 
             var invoice = new Invoice().Fetch("50b88f06-3ef5-4a36-9af8-8cb473b7ba88");
 
