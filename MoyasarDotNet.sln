@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moyasar", "Moyasar\Moyasar.csproj", "{1852F9AD-ECDD-4E72-A17A-428FABDFF3E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoyasarTest", "MoyasarTest\MoyasarTest.csproj", "{DF80A79F-A069-4EFC-86D9-B349D0D0D82A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoyasarEasyCli", "MoyasarEasyCli\MoyasarEasyCli.csproj", "{F562E552-FB35-463B-ADEC-DDF644E536FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1852F9AD-ECDD-4E72-A17A-428FABDFF3E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1852F9AD-ECDD-4E72-A17A-428FABDFF3E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1852F9AD-ECDD-4E72-A17A-428FABDFF3E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1852F9AD-ECDD-4E72-A17A-428FABDFF3E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF80A79F-A069-4EFC-86D9-B349D0D0D82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF80A79F-A069-4EFC-86D9-B349D0D0D82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF80A79F-A069-4EFC-86D9-B349D0D0D82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF80A79F-A069-4EFC-86D9-B349D0D0D82A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F562E552-FB35-463B-ADEC-DDF644E536FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F562E552-FB35-463B-ADEC-DDF644E536FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F562E552-FB35-463B-ADEC-DDF644E536FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F562E552-FB35-463B-ADEC-DDF644E536FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
