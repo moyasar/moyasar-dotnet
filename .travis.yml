@@ -1,0 +1,9 @@
+language: csharp
+solution: MoyasarDotNet.sln
+mono: none
+dotnet: 2.1.502
+install:
+  - dotnet restore
+script:
+  - dotnet build
+  - dotnet test -f "netcoreapp2.1"
