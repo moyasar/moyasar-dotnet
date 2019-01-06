@@ -1,6 +1,7 @@
 language: csharp
 solution: MoyasarDotNet.sln
-mono: none
+mono: 
+  - latest
 dotnet: 2.1.502
 install:
   - dotnet restore
