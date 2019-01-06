@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
-using System.Text;
-using Moq;
+using System.Threading.Tasks;
 using Moyasar.Exceptions;
 using MoyasarTest.Helpers;
 using Xunit;
@@ -18,11 +17,14 @@ namespace MoyasarTest
             
             await Assert.ThrowsAsync<ApiException>(async () =>
             {
-                Moyasar.Moyasar.SendRequest(
-                    "GET",
-                    "http://someurl/",
-                    null
-                );
+                await Task.Run(() =>
+                {
+                    Moyasar.MoyasarService.SendRequest(
+                        "GET",
+                        "http://someurl/",
+                        null
+                    );
+                });
             });
         }
         
@@ -31,13 +33,16 @@ namespace MoyasarTest
         {
             HttpMockHelper.MockTransportError();
             
-            await Assert.ThrowsAsync<TransportException>(async () =>
+            await Assert.ThrowsAsync<NetworkException>(async () =>
             {
-                Moyasar.Moyasar.SendRequest(
-                    "GET",
-                    "http://someurl/",
-                    null
-                );
+                await Task.Run(() =>
+                {
+                    Moyasar.MoyasarService.SendRequest(
+                        "GET",
+                        "http://someurl/",
+                        null
+                    );
+                });
             });
         }
 
@@ -53,7 +58,7 @@ namespace MoyasarTest
             
             Assert.Equal(
                 "https://api.moyasar.com/v1/payments?id=81c0fc10-9424-476d-b2c3-67e7aae1088a&created[gt]=13/12/2017",
-                Moyasar.Moyasar.AppendUrlParameters(url, urlParams));
+                Moyasar.MoyasarService.AppendUrlParameters(url, urlParams));
         }
     }
 }

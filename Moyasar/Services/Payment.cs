@@ -1,100 +1,93 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Dynamic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Moyasar.Core;
-using Moyasar.Extensions;
-using Moyasar.Services.Abstraction;
-using Moyasar.Services.Models;
+using Moyasar.Abstraction;
+using Moyasar.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace Moyasar.Services
 {
     public class Payment : Resource
     {
         // Field Names
-        private const string IdFieldName = "id";
-        private const string StatusFieldName = "status";
-        private const string AmountFieldName = "amount";
-        private const string FeeFieldName = "fee";
-        private const string RefundedAmountFieldName = "refunded";
-        private const string RefundedAtFieldName = "refunded_at";
-        private const string FormattedAmountFieldName = "amount_format";
-        private const string FormattedFeeFieldName = "fee_format";
-        private const string FormattedRefundedAmountFieldName = "refunded_format";
-        private const string CurrencyFieldName = "currency";
-        private const string InvoiceIdFieldName = "invoice_id";
-        private const string IpFieldName = "ip";
-        private const string CallbackUrlFieldName = "callback_url";
-        private const string CreatedAtFieldName = "created_at";
-        private const string UpdatedAtFieldName = "updated_at";
-        private const string SourceFieldName = "source";
-        private const string DescriptionFieldName = "description";
+        private const string IdField = "id";
+        private const string StatusField = "status";
+        private const string AmountField = "amount";
+        private const string FeeField = "fee";
+        private const string RefundedAmountField = "refunded";
+        private const string RefundedAtField = "refunded_at";
+        private const string FormattedAmountField = "amount_format";
+        private const string FormattedFeeField = "fee_format";
+        private const string FormattedRefundedAmountField = "refunded_format";
+        private const string CurrencyField = "currency";
+        private const string InvoiceIdField = "invoice_id";
+        private const string IpField = "ip";
+        private const string CallbackUrlField = "callback_url";
+        private const string CreatedAtField = "created_at";
+        private const string UpdatedAtField = "updated_at";
+        private const string SourceField = "source";
+        private const string DescriptionField = "description";
         
-        [JsonProperty(IdFieldName)]
+        [JsonProperty(IdField)]
         public string Id { get; private set; }
         
-        [JsonProperty(StatusFieldName)]
+        [JsonProperty(StatusField)]
         public string Status { get; private set; }
         
-        [JsonProperty(AmountFieldName)]
+        [JsonProperty(AmountField)]
         public int Amount { get; private set; }
         
-        [JsonProperty(FeeFieldName)]
+        [JsonProperty(FeeField)]
         public int Fee { get; private set; }
         
-        [JsonProperty(RefundedAmountFieldName)]
+        [JsonProperty(RefundedAmountField)]
         public int RefundedAmount { get; private set; }
         
-        [JsonProperty(RefundedAtFieldName)]
+        [JsonProperty(RefundedAtField)]
         public DateTime? RefundedAt { get; private set; }
         
-        [JsonProperty(FormattedAmountFieldName)]
+        [JsonProperty(FormattedAmountField)]
         public string FormattedAmount { get; private set; }
         
-        [JsonProperty(FormattedFeeFieldName)]
+        [JsonProperty(FormattedFeeField)]
         public string FormattedFee { get; private set; }
         
-        [JsonProperty(FormattedRefundedAmountFieldName)]
+        [JsonProperty(FormattedRefundedAmountField)]
         public string FormattedRefundedAmount { get; private set; }
         
-        [JsonProperty(CurrencyFieldName)]
+        [JsonProperty(CurrencyField)]
         public string Currency { get; private set; }
         
-        [JsonProperty(InvoiceIdFieldName)]
+        [JsonProperty(InvoiceIdField)]
         public string InvoiceId { get; private set; }
         
-        [JsonProperty(IpFieldName)]
+        [JsonProperty(IpField)]
         public string Ip { get; private set; }
         
-        [JsonProperty(CallbackUrlFieldName)]
+        [JsonProperty(CallbackUrlField)]
         public string CallbackUrl { get; private set; }
         
-        [JsonProperty(CreatedAtFieldName)]
+        [JsonProperty(CreatedAtField)]
         public DateTime? CreatedAt { get; private set; }
         
-        [JsonProperty(UpdatedAtFieldName)]
+        [JsonProperty(UpdatedAtField)]
         public DateTime? UpdatedAt { get; private set; }
         
-        [JsonProperty(SourceFieldName)]
+        [JsonProperty(SourceField)]
         public PaymentMethod Source { get; private set; }
         
-        [JsonProperty(DescriptionFieldName)]
+        [JsonProperty(DescriptionField)]
         public string Description { get; set; }
         
-        private Payment() { }
+        internal Payment() { }
         
         protected static string GetRefundUrl(string id) => $"{ResourceUrl}/{id}/refund";
 
         public void Update()
         {
-            Moyasar.SendRequest("PUT", GetUpdateUrl(Id), new Dictionary<string, object>()
+            MoyasarService.SendRequest("PUT", GetUpdateUrl(Id), new Dictionary<string, object>()
             {
-                { nameof(Description).ToLower(), Description }
+                { DescriptionField, Description }
             });           
         }
 
@@ -102,12 +95,12 @@ namespace Moyasar.Services
         {
             var reqParams = amount != null ? new Dictionary<string, Object>()
             {
-                { AmountFieldName, amount.Value }
+                { AmountField, amount.Value }
             } : null;
 
             return DeserializePayment
             (
-                Moyasar.SendRequest("POST", GetRefundUrl(Id), reqParams), 
+                MoyasarService.SendRequest("POST", GetRefundUrl(Id), reqParams), 
                 this
             );
         }
@@ -116,13 +109,13 @@ namespace Moyasar.Services
         {
             info.Validate();
             var requestParams = info.ToDictionary();
-            var response = Moyasar.SendRequest("POST", GetCreateUrl(), requestParams);
+            var response = MoyasarService.SendRequest("POST", GetCreateUrl(), requestParams);
             return DeserializePayment(response);
         }
 
         public static Payment Fetch(string id)
         {
-            return DeserializePayment(Moyasar.SendRequest(
+            return DeserializePayment(MoyasarService.SendRequest(
                 "GET",
                 GetFetchUrl(id),
                 null
@@ -131,20 +124,20 @@ namespace Moyasar.Services
 
         public static List<Payment> List(dynamic queryParams = null)
         {
-            string result = Moyasar.SendRequest(
+            string result = MoyasarService.SendRequest(
                 "GET",
                 GetListUrl(),
                 queryParams != null ? queryParams as Dictionary<string, object> : null
             );
 
-            var paymentObjects = Moyasar.Serializer.Deserialize<List<object>>(result);
-            return paymentObjects.Select(po => DeserializePayment(Moyasar.Serializer.Serialize(po))).ToList();
+            var paymentObjects = MoyasarService.Serializer.Deserialize<List<object>>(result);
+            return paymentObjects.Select(po => DeserializePayment(MoyasarService.Serializer.Serialize(po))).ToList();
         }
 
-        private static Payment DeserializePayment(string json, Payment obj = null)
+        internal static Payment DeserializePayment(string json, Payment obj = null)
         {
             var payment = obj ?? new Payment();
-            Moyasar.Serializer.PopulateObject(json, payment);
+            MoyasarService.Serializer.PopulateObject(json, payment);
             return payment;
         }
     }

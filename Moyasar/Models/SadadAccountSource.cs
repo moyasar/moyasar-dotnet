@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Moyasar.Core;
+using Moyasar.Abstraction;
 using Moyasar.Exceptions;
-using Moyasar.Services.Abstraction;
 
-namespace Moyasar.Services.Models
+namespace Moyasar.Models
 {
     public class SadadAccountSource : IPaymentSource
     {

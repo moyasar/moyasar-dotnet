@@ -1,12 +1,8 @@
 using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using Moyasar.Core.Abstraction;
-using Moyasar.Core.SerializerAddins;
+using Moyasar.Abstraction;
 using Newtonsoft.Json;
 
-namespace Moyasar.Core
+namespace Moyasar.Providers
 {
     public class JsonSerializer : ISerializer
     {

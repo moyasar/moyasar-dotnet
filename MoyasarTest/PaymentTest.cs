@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moyasar.Exceptions;
+using Moyasar.Models;
 using Moyasar.Services;
-using Moyasar.Services.Models;
 using MoyasarTest.Helpers;
 using Xunit;
-using MoyasarBase = Moyasar.Moyasar;
 
 namespace MoyasarTest
 {
@@ -20,22 +21,20 @@ namespace MoyasarTest
         [Fact]
         public async void TestPaymentInfoValidationRules()
         {
-            PaymentInfo info;
-            
-            info = GetValidPaymentInfoVisa();
+            var info = GetValidPaymentInfoVisa();
             info.Validate();
             info.Amount = -1;
-            await Assert.ThrowsAsync<ValidationException>(async () => info.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => info.Validate()));
             
             info = GetValidPaymentInfoVisa();
             info.Validate();
             info.Source = null;
-            await Assert.ThrowsAsync<ValidationException>(async () => info.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => info.Validate()));
             
             info = GetValidPaymentInfoVisa();
             info.Validate();
             info.CallbackUrl = "hey";
-            await Assert.ThrowsAsync<ValidationException>(async () => info.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => info.Validate()));
             
             // Callback url is not required for Sadad Account
             info = GetValidPaymentInfoSadadAccount();
@@ -47,54 +46,50 @@ namespace MoyasarTest
         [Fact]
         public async void TestCcSourceValidationRules()
         {
-            CreditCardSource source;
-
-            source = GetValidCcSource();
+            var source = GetValidCcSource();
             source.Validate();
             source.Name = "";
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
             
             source = GetValidCcSource();
             source.Validate();
             source.Number = "";
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
             
             source = GetValidCcSource();
             source.Validate();
             source.Cvc = 0;
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
             source.Cvc = 1000;
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
             
             source = GetValidCcSource();
             source.Validate();
             source.Month = 0;
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
             source.Month = 13;
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
             
             source = GetValidCcSource();
             source.Validate();
             source.Year = -1;
-            await Assert.ThrowsAsync<ValidationException>(async () => source.Validate());
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
         }
 
         [Fact]
         public async void TestSadadSourceValidationRules()
         {
-            SadadAccountSource accountSource;
-
-            accountSource = GetValidSadadSource();
-            accountSource.Validate();
-            accountSource.UserName = "";
-            await Assert.ThrowsAsync<ValidationException>(async () => accountSource.Validate());
+            var source = GetValidSadadSource();
+            source.Validate();
+            source.UserName = "";
+            await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => source.Validate()));
         }
 
         [Fact]
         public void TestDeserializingPayment()
         {
             var paymentInfo = GetValidPaymentInfoVisa();
-            PaymentMockHelper.MockPaymentResponse(paymentInfo);
+            ServicesMockHelper.MockPaymentResponse(paymentInfo);
             
             var payment = Payment.Fetch("some-random-id");
             Assert.Equal(paymentInfo.Amount, payment.Amount);
@@ -110,7 +105,7 @@ namespace MoyasarTest
         public void TestCreatePayment()
         {
             var paymentInfo = GetValidPaymentInfoVisa();
-            PaymentMockHelper.MockPaymentResponse(paymentInfo);
+            ServicesMockHelper.MockPaymentResponse(paymentInfo);
             
             var payment = Payment.Create(paymentInfo);
             Assert.Equal(paymentInfo.Amount, payment.Amount);
@@ -126,13 +121,13 @@ namespace MoyasarTest
         public void TestRefundPayment()
         {
             var paymentInfo = GetValidPaymentInfoVisa();
-            PaymentMockHelper.MockPaymentResponse(paymentInfo);
+            ServicesMockHelper.MockPaymentResponse(paymentInfo);
             
             var payment = Payment.Create(paymentInfo);
             var id = payment.Id;
             var amount = payment.Amount;
             
-            PaymentMockHelper.MockPaymentResponse
+            ServicesMockHelper.MockPaymentResponse
             (
                 paymentInfo, 
                 id: id,
@@ -156,14 +151,14 @@ namespace MoyasarTest
                 GetValidPaymentInfoSadadAccount()
             };
             
-            PaymentMockHelper.MockPaymentListResponse(infoList);
+            ServicesMockHelper.MockPaymentListResponse(infoList);
             var payments = Payment.List();
 
             Assert.IsType<CreditCard>(payments[0].Source);
             Assert.IsType<SadadAccount>(payments[1].Source);
         }
         
-        private PaymentInfo GetValidPaymentInfoVisa()
+        internal static PaymentInfo GetValidPaymentInfoVisa()
         {
             return new PaymentInfo()
             {
@@ -175,7 +170,7 @@ namespace MoyasarTest
             };
         }
         
-        private PaymentInfo GetValidPaymentInfoSadadAccount()
+        internal static PaymentInfo GetValidPaymentInfoSadadAccount()
         {
             return new PaymentInfo()
             {
@@ -187,7 +182,7 @@ namespace MoyasarTest
             };
         }
 
-        private CreditCardSource GetValidCcSource()
+        internal static CreditCardSource GetValidCcSource()
         {
             return new CreditCardSource()
             {
@@ -199,7 +194,7 @@ namespace MoyasarTest
             };
         }
 
-        private SadadAccountSource GetValidSadadSource()
+        internal static SadadAccountSource GetValidSadadSource()
         {
             return new SadadAccountSource()
             {

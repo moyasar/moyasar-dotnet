@@ -6,13 +6,13 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using Moyasar.Core;
-using Moyasar.Core.Abstraction;
+using Moyasar.Abstraction;
 using Moyasar.Exceptions;
+using Moyasar.Providers;
 
 namespace Moyasar
 {
-    public static class Moyasar
+    public static class MoyasarService
     {
         public const string ApiBaseUrl = "https://api.moyasar.com";
         public const string ApiVersion = "v1";
@@ -21,7 +21,7 @@ namespace Moyasar
         public static ISerializer Serializer { get; set; }
         public static Func<string, HttpWebRequest> HttpWebRequestFactory { get; set; }
 
-        static Moyasar()
+        static MoyasarService()
         {
             Serializer = new JsonSerializer();
             HttpWebRequestFactory = WebRequest.CreateHttp;
@@ -87,7 +87,7 @@ namespace Moyasar
             }
             catch (WebException ex)
             {
-                throw new TransportException("Could not connect to Moyasar service", ex);
+                throw new NetworkException("Could not connect to Moyasar service", ex);
             }
         }
 

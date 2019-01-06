@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using Moyasar.Services.Models;
-using MoyasarBase = Moyasar.Moyasar;
+using Moyasar;
+using Moyasar.Models;
+using Moyasar.Services;
 
 namespace MoyasarTest.Helpers
 {   
@@ -46,6 +48,41 @@ namespace MoyasarTest.Helpers
                 invoiceId ?? "null",
                 source,
                 info.CallbackUrl
+            );
+        }
+        
+        public static string GetInvoiceJson(InvoiceInfo info, 
+            string payments = "null",
+            string id = null, 
+            string status = "initiated"
+        )
+        {
+            if (id == null) id = Guid.NewGuid().ToString().ToLower();
+            var invoiceJson = File.ReadAllText("Fixtures/Invoice.json");
+
+            var expiredAt = "null";
+            if (info.ExpiredAt != null)
+            {
+                expiredAt = $@"""{info.ExpiredAt.Value:O}""";
+            }
+
+            var callback = "null";
+            if (info.CallbackUrl != null)
+            {
+                callback = $@"""{info.CallbackUrl}""";
+            }
+
+            return String.Format(
+                invoiceJson,
+                id,
+                status,
+                info.Amount,
+                info.Currency,
+                info.Description,
+                expiredAt,
+                info.Amount / 100.0,
+                payments,
+                callback
             );
         }
     }

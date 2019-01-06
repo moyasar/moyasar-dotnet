@@ -1,4 +1,4 @@
-namespace Moyasar.Core.Abstraction
+namespace Moyasar.Abstraction
 {
     public interface ISerializer
     {

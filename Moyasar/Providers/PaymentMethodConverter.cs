@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Moyasar.Services.Abstraction;
-using Moyasar.Services.Models;
+using Moyasar.Abstraction;
+using Moyasar.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
-namespace Moyasar.Core.SerializerAddins
+namespace Moyasar.Providers
 {
     public class PaymentMethodConverter : JsonConverter<PaymentMethod>
     {

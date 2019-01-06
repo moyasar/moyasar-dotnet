@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using Moyasar.Core;
+using Moyasar.Abstraction;
 using Moyasar.Exceptions;
 using Moyasar.Helpers;
-using Moyasar.Services.Abstraction;
 
-namespace Moyasar.Services.Models
+namespace Moyasar.Models
 {
     [DataContract]
     public class CreditCardSource : IPaymentSource

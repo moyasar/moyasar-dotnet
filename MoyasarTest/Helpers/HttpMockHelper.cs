@@ -23,7 +23,7 @@ namespace MoyasarTest.Helpers
             httpWebRequest.Setup(req => req.GetResponse()).Returns(httpWebResponse.Object);
             httpWebRequest.Setup(req => req.GetRequestStream()).Returns(new MemoryStream());
             
-            Moyasar.Moyasar.HttpWebRequestFactory = url =>
+            Moyasar.MoyasarService.HttpWebRequestFactory = url =>
             {
                 httpWebRequest.Setup(req => req.RequestUri).Returns(new Uri(url));
                 return httpWebRequest.Object;
@@ -35,7 +35,7 @@ namespace MoyasarTest.Helpers
             var httpWebRequest = new Mock<HttpWebRequest>(MockBehavior.Loose);
             httpWebRequest.Setup(req => req.GetResponse()).Throws<WebException>();
             
-            Moyasar.Moyasar.HttpWebRequestFactory = url =>
+            Moyasar.MoyasarService.HttpWebRequestFactory = url =>
             {
                 httpWebRequest.Setup(req => req.RequestUri).Returns(new Uri(url));
                 return httpWebRequest.Object;

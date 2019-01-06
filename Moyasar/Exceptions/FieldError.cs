@@ -1,4 +1,4 @@
-namespace Moyasar.Core
+namespace Moyasar.Exceptions
 {
     public class FieldError
     {

@@ -1,7 +1,7 @@
-using Moyasar.Services.Abstraction;
+using Moyasar.Abstraction;
 using Newtonsoft.Json;
 
-namespace Moyasar.Services.Models
+namespace Moyasar.Models
 {
     public class CreditCard : PaymentMethod
     {

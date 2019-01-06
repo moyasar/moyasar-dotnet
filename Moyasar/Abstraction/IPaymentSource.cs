@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 
-namespace Moyasar.Services.Abstraction
+namespace Moyasar.Abstraction
 {
     public interface IPaymentSource
     {

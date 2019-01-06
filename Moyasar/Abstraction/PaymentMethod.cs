@@ -1,4 +1,4 @@
-namespace Moyasar.Services.Abstraction
+namespace Moyasar.Abstraction
 {
     public abstract class PaymentMethod
     {
