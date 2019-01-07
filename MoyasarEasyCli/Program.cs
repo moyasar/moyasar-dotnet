@@ -1,4 +1,5 @@
 ﻿using System;
+using Moyasar;
 
 namespace MoyasarEasyCli
 {
@@ -6,6 +7,8 @@ namespace MoyasarEasyCli
     {
         static void Main(string[] args)
         {
+            MoyasarService.ApiKey = "sk_test_xNXaMTEADmd8n4WjfFuXHKtKY8ogogzRfnhSg2pG";
+            
             var exit = false;
             while (!exit)
             {   
@@ -14,7 +17,7 @@ namespace MoyasarEasyCli
             }
         }
 
-        private static void ClearPrintOutWelcomeDetails()
+        public static void ClearPrintOutWelcomeDetails()
         {
             Console.Clear();
             Console.WriteLine("Welcome to Moyasar Easy Cli!");
@@ -38,10 +41,7 @@ namespace MoyasarEasyCli
             try
             {
                 if (option != null) return ProcessMainMenuOption(option);
-                else
-                {
-                    throw new Exception();
-                }
+                throw new Exception();
             }
             catch
             {
@@ -57,25 +57,28 @@ namespace MoyasarEasyCli
         private static void PrintOutMainMenuOptions()
         {
             Console.WriteLine("[1] Set Api Key");
-            Console.WriteLine("[2] Create Payment");
-            Console.WriteLine("[3] Fetch Payment");
-            Console.WriteLine("[4] List Payment");
+            Console.WriteLine("[2] Payments");
+            Console.WriteLine("[3] Invoices");
             Console.WriteLine("[0] Exit");
         }
 
         private static bool ProcessMainMenuOption(string option)
         {
-            if (option == "0")
+            switch (option)
             {
-                return true; // Exit
-            }
-            else if(option == "1")
-            {
-                SetApiKey();
-            }
-            else
-            {
-                throw new Exception();
+                case "0":
+                    return true; // Exit
+                case "1":
+                    SetApiKey();
+                    break;
+                case "2":
+                    PaymentProcessor.PrintOutPaymentMenu();
+                    break;
+                case "3":
+                    InvoiceProcessor.PrintOutInvoiceMenu();
+                    break;
+                default:
+                    throw new Exception();
             }
 
             return false;

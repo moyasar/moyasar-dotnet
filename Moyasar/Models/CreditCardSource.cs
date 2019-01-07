@@ -32,7 +32,7 @@ namespace Moyasar.Models
         {
             return new Dictionary<string, object>()
             {
-                { TypeFieldName, "sadad" },
+                { TypeFieldName, "creditcard" },
                 { NameFieldName, Name },
                 { NumberFieldName, Number },
                 { CvcFieldName, Cvc },

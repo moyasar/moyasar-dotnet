@@ -2,9 +2,9 @@ using System.Reflection;
 
 namespace Moyasar.Abstraction
 {
-    public class Resource
+    public class Resource<TResource>
     {
-        protected static string Name => MethodBase.GetCurrentMethod().DeclaringType.Name.ToLower();
+        protected static string Name => typeof(TResource).Name.ToLower();
         protected static string PluralName => $"{Name}s";
         protected static string ResourceUrl => $"{MoyasarService.CurrentVersionUrl}/{PluralName}";
         

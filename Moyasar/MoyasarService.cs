@@ -59,34 +59,44 @@ namespace Moyasar
                     result = sr.ReadToEnd();
                 }
 
-                if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 600)
-                {
-                    dynamic resObj = Serializer.Deserialize<object>(result);
-
-                    var msg = "";
-                    try { msg = resObj.message; } catch {}
-                    var ex = new ApiException(msg)
-                    {
-                        HttpStatusCode = (int)response.StatusCode,
-                        ResponsePayload = result,
-                    };
-
-                    try { ex.Type = resObj.type.ToString(); } catch {}
-                    try { ex.Errors = resObj.errors.ToString(); } catch {}
-
-                    try
-                    {
-                        ex.ErrorsDictionary = 
-                            Serializer.Deserialize<Dictionary<string, List<string>>>(resObj.errors.ToString());
-                    } catch {}
-
-                    throw ex;
-                }
-
                 return result;
             }
             catch (WebException ex)
             {
+                if (ex.Status == WebExceptionStatus.ProtocolError)
+                {
+                    string result = null;
+                    var response = ex.Response as HttpWebResponse;
+                    using (var sr = new StreamReader(response.GetResponseStream()))
+                    {
+                        result = sr.ReadToEnd();
+                    }
+                    
+                    if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 600)
+                    {
+                        dynamic resObj = Serializer.Deserialize<object>(result);
+
+                        var msg = "";
+                        try { msg = resObj.message; } catch {}
+                        var exception = new ApiException(msg)
+                        {
+                            HttpStatusCode = (int)response.StatusCode,
+                            ResponsePayload = result,
+                        };
+
+                        try { exception.Type = resObj.type.ToString(); } catch {}
+                        try { exception.Errors = resObj.errors.ToString(); } catch {}
+
+                        try
+                        {
+                            exception.ErrorsDictionary = 
+                                Serializer.Deserialize<Dictionary<string, List<string>>>(resObj.errors.ToString());
+                        } catch {}
+
+                        throw exception;
+                    }
+                }
+                
                 throw new NetworkException("Could not connect to Moyasar service", ex);
             }
         }

@@ -10,6 +10,8 @@ namespace MoyasarTest.Helpers
     {
         public static void MockHttpResponse(HttpStatusCode statusCode, string response)
         {
+            
+
             var httpWebResponse = new Mock<HttpWebResponse>(MockBehavior.Loose);
             httpWebResponse.Setup(r => r.StatusCode).Returns(statusCode);
 
@@ -20,7 +22,22 @@ namespace MoyasarTest.Helpers
             );
 
             var httpWebRequest = new Mock<HttpWebRequest>(MockBehavior.Loose);
-            httpWebRequest.Setup(req => req.GetResponse()).Returns(httpWebResponse.Object);
+            
+            if ((int)statusCode >= 400 && (int)statusCode < 600)
+            {
+                httpWebRequest.Setup(req => req.GetResponse()).Callback(() => throw new WebException
+                (
+                    "Protocol Error", 
+                    null,
+                    WebExceptionStatus.ProtocolError,
+                    httpWebResponse.Object
+                ));
+            }
+            else
+            {
+                httpWebRequest.Setup(req => req.GetResponse()).Returns(httpWebResponse.Object);
+            }
+            
             httpWebRequest.Setup(req => req.GetRequestStream()).Returns(new MemoryStream());
             
             Moyasar.MoyasarService.HttpWebRequestFactory = url =>

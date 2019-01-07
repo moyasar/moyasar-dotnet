@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Services
 {
-    public class Invoice : Resource
+    public class Invoice : Resource<Invoice>
     {
         private const string IdField = "id";
         private const string StatusField = "status";

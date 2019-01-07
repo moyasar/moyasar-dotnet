@@ -22,14 +22,20 @@ namespace Moyasar.Models
 
         public Dictionary<string, object> ToDictionary()
         {
-            return new Dictionary<string, object>()
+            var dict = new Dictionary<string, object>()
             {
                 { AmountFieldName, Amount },
                 { CurrencyFieldName, Currency },
-                { DescriptionFieldName, Description },
                 { SourceFieldName, Source.ToDictionary() },
                 { CallbackFieldName, CallbackUrl }
             };
+
+            if (!string.IsNullOrEmpty(Description))
+            {
+                dict.Add(DescriptionFieldName, Description);
+            }
+            
+            return dict;
         }
 
         public void Validate()

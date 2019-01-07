@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Moyasar.Exceptions
 {
@@ -14,6 +15,27 @@ namespace Moyasar.Exceptions
         
         public ApiException(string message) : base(message)
         {
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            builder.Append($"Status Code: {HttpStatusCode.ToString()}\n");
+            builder.Append($"Error Type: {Type}\n");
+            builder.Append($"Message: {Message}\n");
+            
+            foreach (var error in ErrorsDictionary)
+            {
+                builder.Append($"Error [{error.Key}]:\n");
+                foreach (var s in error.Value)
+                {
+                    builder.Append($"\t- {s}\n");
+                }
+            }
+            
+            builder.Append($"Payload:\n{ResponsePayload}");
+            
+            return builder.ToString();
         }
     }
 }
