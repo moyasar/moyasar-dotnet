@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Moyasar.Abstraction;
 using Moyasar.Exceptions;
 using Moyasar.Models;
@@ -51,14 +52,111 @@ namespace MoyasarEasyCli
                     CreatePayment();
                     break;
                 case "2":
+                    FetchPayment();
                     break;
                 case "3":
+                    ListPayments();
                     break;
                 default:
                     throw new Exception();
             }
             
             return false;
+        }
+
+        private static void FetchPayment()
+        {
+            Program.ClearPrintOutWelcomeDetails();
+            Console.WriteLine();
+
+            var id = "";
+            while (string.IsNullOrEmpty(id))
+            {
+                Console.Write("Payment Id: ");
+                id = Console.ReadLine();
+            }
+
+            Payment payment;
+            try
+            {
+                payment = Payment.Fetch(id);
+            }
+            catch (NetworkException)
+            {
+                Console.WriteLine("Could not connect to Internet");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+                return;
+            }
+            catch (ApiException e)
+            {
+                Console.WriteLine($"Api Exception:\n{e}");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+                return;
+            }
+
+            PrintOutPayment(payment);
+        }
+        
+        private static void ListPayments()
+        {
+            Program.ClearPrintOutWelcomeDetails();
+            Console.WriteLine();
+            Console.WriteLine("Retrieving payments");
+            
+            var payments = Payment.List();
+
+            if (!payments.Any())
+            {
+                Console.WriteLine("No payments found");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey();
+            }
+            else
+            {
+                while (true)
+                {
+                    Program.ClearPrintOutWelcomeDetails();
+                    Console.WriteLine();
+
+                    for (int i = 0; i < payments.Count; ++i)
+                    {
+                        Console.WriteLine($"[{i + 1}] {payments[i].Id}");
+                    }
+                    
+                    Console.WriteLine("[0] Go Back");
+
+                    var choice = 0;
+                    while (true)
+                    {
+                        Console.WriteLine();
+                        Console.Write("Please choose an option: ");
+                        try
+                        {
+                            choice = int.Parse(Console.ReadLine());
+                            break;
+                        }
+                        catch
+                        {
+                            // ignored
+                        }
+                    }
+
+                    if (choice == 0) break;
+                    if (choice < 0 || choice > payments.Count)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine("Error: Invalid option");
+                        Console.WriteLine("Press any key to continue...");
+                        Console.ReadKey();
+                    }
+                    else
+                    {
+                        PrintOutPayment(payments[choice - 1]);
+                    }
+                }
+            }
         }
 
         private static void CreatePayment()
@@ -118,7 +216,7 @@ namespace MoyasarEasyCli
                 Console.ReadKey();
                 return;
             }
-            catch (NetworkException e)
+            catch (NetworkException)
             {
                 Console.WriteLine("Could not connect to Internet");
                 Console.WriteLine("Press any key to continue...");

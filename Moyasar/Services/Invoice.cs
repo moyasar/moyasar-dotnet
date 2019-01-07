@@ -160,13 +160,13 @@ namespace Moyasar.Services
             return DeserializeInvoice(MoyasarService.SendRequest("GET", GetFetchUrl(id), null));
         }
 
-        public static List<Invoice> List(dynamic queryParams = null)
+        public static List<Invoice> List(SearchQuery query = null)
         {
             var response = MoyasarService.SendRequest
             (
                 "GET",
                 GetListUrl(),
-                queryParams != null ? queryParams as Dictionary<string, object> : null
+                query?.ToDictionary()
             );
 
             var invoiceObjects = MoyasarService.Serializer.Deserialize<List<object>>(response);

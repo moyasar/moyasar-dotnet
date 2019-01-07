@@ -122,15 +122,20 @@ namespace Moyasar.Services
             ));
         }
 
-        public static List<Payment> List(dynamic queryParams = null)
+        public static List<Payment> List(SearchQuery query = null)
         {
-            string result = MoyasarService.SendRequest(
+            var result = MoyasarService.SendRequest(
                 "GET",
                 GetListUrl(),
-                queryParams != null ? queryParams as Dictionary<string, object> : null
+                query?.ToDictionary()
             );
 
-            var paymentObjects = MoyasarService.Serializer.Deserialize<List<object>>(result);
+            dynamic response = MoyasarService.Serializer.Deserialize<object>(result);
+            
+            var paymentObjects =
+                MoyasarService.Serializer.Deserialize<List<object>>(
+                    MoyasarService.Serializer.Serialize((object)response.payments));
+            
             return paymentObjects.Select(po => DeserializePayment(MoyasarService.Serializer.Serialize(po))).ToList();
         }
 
