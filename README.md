@@ -1,5 +1,7 @@
 # Moyasar.Net
 
+[![Build Status](https://travis-ci.org/aliio/moyasar-dotnet.svg?branch=master)](https://travis-ci.org/aliio/moyasar-dotnet)
+
 Moyasar's .NET Client Library
 
 
