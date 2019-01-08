@@ -28,7 +28,10 @@ namespace MoyasarTest.Helpers
                     FixturesHelper.GetPaymentJson(info)
                 )).ToList();
 
-            var listJson = MoyasarService.Serializer.Serialize(paymentDictList);
+            var listJson = MoyasarService.Serializer.Serialize(new
+            {
+                payments = paymentDictList
+            });
             HttpMockHelper.MockHttpResponse(HttpStatusCode.OK, listJson);
         }
 
