@@ -30,7 +30,15 @@ namespace MoyasarTest.Helpers
 
             var listJson = MoyasarService.Serializer.Serialize(new
             {
-                payments = paymentDictList
+                payments = paymentDictList,
+                meta = new Dictionary<string, object>
+                {
+                    { "current_page", 1 },
+                    { "next_page", 2 },
+                    { "prev_page", null },
+                    { "total_pages", 51 },
+                    { "total_count", 1001 }
+                }
             });
             HttpMockHelper.MockHttpResponse(HttpStatusCode.OK, listJson);
         }

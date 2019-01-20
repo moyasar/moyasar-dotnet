@@ -122,7 +122,7 @@ namespace Moyasar.Services
             ));
         }
 
-        public static List<Payment> List(SearchQuery query = null)
+        public static PaginationResult<Payment> List(SearchQuery query = null)
         {
             var result = MoyasarService.SendRequest(
                 "GET",
@@ -131,12 +131,31 @@ namespace Moyasar.Services
             );
 
             dynamic response = MoyasarService.Serializer.Deserialize<object>(result);
+            var metaDict = 
+                MoyasarService.Serializer.Deserialize<Dictionary<string, object>>(
+                    MoyasarService.Serializer.Serialize((object)response.meta));
             
             var paymentObjects =
                 MoyasarService.Serializer.Deserialize<List<object>>(
                     MoyasarService.Serializer.Serialize((object)response.payments));
-            
-            return paymentObjects.Select(po => DeserializePayment(MoyasarService.Serializer.Serialize(po))).ToList();
+            var paymentsList = paymentObjects
+                .Select(po => DeserializePayment(MoyasarService.Serializer.Serialize(po))).ToList();
+
+            return new PaginationResult<Payment>
+            {
+                CurrentPage = 0,
+                NextPage = 0,
+                PreviousPage = 0,
+                TotalCount = 0,
+                TotalPages = 0,
+                Paginator = page =>
+                {
+                    var q = query.Clone();
+                    q.Page = page;
+                    return List(q);
+                },
+                Items = paymentsList
+            };
         }
 
         internal static Payment DeserializePayment(string json, Payment obj = null)
