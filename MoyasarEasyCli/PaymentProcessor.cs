@@ -107,7 +107,7 @@ namespace MoyasarEasyCli
             
             var payments = Payment.List();
 
-            if (!payments.Any())
+            if (!payments.Items.Any())
             {
                 Console.WriteLine("No payments found");
                 Console.WriteLine("Press any key to continue...");
@@ -120,9 +120,9 @@ namespace MoyasarEasyCli
                     Program.ClearPrintOutWelcomeDetails();
                     Console.WriteLine();
 
-                    for (int i = 0; i < payments.Count; ++i)
+                    for (int i = 0; i < payments.Items.Count; ++i)
                     {
-                        Console.WriteLine($"[{i + 1}] {payments[i].Id}");
+                        Console.WriteLine($"[{i + 1}] {payments.Items[i].Id}");
                     }
                     
                     Console.WriteLine("[0] Go Back");
@@ -144,7 +144,7 @@ namespace MoyasarEasyCli
                     }
 
                     if (choice == 0) break;
-                    if (choice < 0 || choice > payments.Count)
+                    if (choice < 0 || choice > payments.Items.Count)
                     {
                         Console.WriteLine();
                         Console.WriteLine("Error: Invalid option");
@@ -153,7 +153,7 @@ namespace MoyasarEasyCli
                     }
                     else
                     {
-                        PrintOutPayment(payments[choice - 1]);
+                        PrintOutPayment(payments.Items[choice - 1]);
                     }
                 }
             }
@@ -323,7 +323,7 @@ namespace MoyasarEasyCli
                 Console.WriteLine("Username: ");
                 var username = Console.ReadLine();
                 
-                return new SadadAccountSource
+                return new SadadSource
                 {
                     UserName = username
                 };
@@ -396,7 +396,7 @@ namespace MoyasarEasyCli
                     Console.WriteLine($"\t- Message: {cc.Message}");
                     Console.WriteLine($"\t- Transaction URL: {cc.TransactionUrl}");
                     break;
-                case SadadAccount sadad:
+                case Sadad sadad:
                     Console.WriteLine($"\t- UserName: {sadad.UserName}");
                     break;
             }

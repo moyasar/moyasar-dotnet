@@ -10,8 +10,6 @@ namespace MoyasarTest.Helpers
     {
         public static void MockHttpResponse(HttpStatusCode statusCode, string response)
         {
-            
-
             var httpWebResponse = new Mock<HttpWebResponse>(MockBehavior.Loose);
             httpWebResponse.Setup(r => r.StatusCode).Returns(statusCode);
 

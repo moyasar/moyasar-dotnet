@@ -14,7 +14,8 @@ namespace MoyasarTest.Helpers
             string status = "initiated", 
             int refunded = 0,
             string invoiceId = null,
-            string ccCompany = "visa"
+            string ccCompany = "visa",
+            string sadadMessage = null
         )
         {
             if (id == null) id = Guid.NewGuid().ToString().ToLower();
@@ -26,13 +27,15 @@ namespace MoyasarTest.Helpers
                 source = String.Format(
                     File.ReadAllText("Fixtures/CcSourceResult.json"),
                     ccCompany,
-                    (info.Source as CreditCardSource).Name
+                    ((CreditCardSource) info.Source).Name
                 );
             }
             else
             {
                 source = String.Format(
-                    File.ReadAllText("Fixtures/SadadSourceResult.json")
+                    File.ReadAllText("Fixtures/SadadSourceResult.json"),
+                    ((SadadSource) info.Source).UserName,
+                    sadadMessage != null ? $@"""{sadadMessage}""" : "null"
                 );
             }
 

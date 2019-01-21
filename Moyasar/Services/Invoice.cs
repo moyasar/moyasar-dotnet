@@ -160,17 +160,50 @@ namespace Moyasar.Services
             return DeserializeInvoice(MoyasarService.SendRequest("GET", GetFetchUrl(id), null));
         }
 
-        public static List<Invoice> List(SearchQuery query = null)
+        public static PaginationResult<Invoice> List(SearchQuery query = null)
         {
-            var response = MoyasarService.SendRequest
+            var responseJson = MoyasarService.SendRequest
             (
                 "GET",
                 GetListUrl(),
                 query?.ToDictionary()
             );
+            
+            dynamic response = MoyasarService.Serializer.Deserialize<object>(responseJson);
 
-            var invoiceObjects = MoyasarService.Serializer.Deserialize<List<object>>(response);
-            return invoiceObjects.Select(i => DeserializeInvoice(MoyasarService.Serializer.Serialize(i))).ToList();
+            string metaJson = null;
+            try
+            {
+                metaJson = MoyasarService.Serializer.Serialize((object)response.meta);
+            }
+            catch
+            {
+                // ignored
+            }
+
+            var invoiceObjects =
+                MoyasarService.Serializer.Deserialize<List<object>>(
+                    MoyasarService.Serializer.Serialize((object)response.invoices));
+            var invoicesList = invoiceObjects
+                .Select(i => DeserializeInvoice(MoyasarService.Serializer.Serialize(i))).ToList();
+
+            var pagination = new PaginationResult<Invoice>
+            {
+                Paginator = page =>
+                {
+                    var q = query?.Clone();
+                    if (q != null) q.Page = page;
+                    return List(q);
+                },
+                Items = invoicesList
+            };
+            
+            if (metaJson != null)
+            {
+                MoyasarService.Serializer.PopulateObject(metaJson, pagination);
+            }
+            
+            return pagination;
         }
 
         internal static Invoice DeserializeInvoice(string json, Invoice obj = null)

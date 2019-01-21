@@ -7,8 +7,7 @@ namespace Moyasar.Extensions
         
         public static TValue GetOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key, TValue defaultValue)
         {
-            if (dict.ContainsKey(key)) return dict[key];
-            return defaultValue;
+            return dict.ContainsKey(key) ? dict[key] : defaultValue;
         }
     }
 }

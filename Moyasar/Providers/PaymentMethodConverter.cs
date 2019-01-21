@@ -26,7 +26,7 @@ namespace Moyasar.Providers
             }
             else
             {
-                return JsonConvert.DeserializeObject<SadadAccount>(JsonConvert.SerializeObject(dict));
+                return JsonConvert.DeserializeObject<Sadad>(JsonConvert.SerializeObject(dict));
             }
 
         }

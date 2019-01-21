@@ -151,13 +151,25 @@ namespace MoyasarTest
                 GetValidInvoiceInfo()
             };
             
-            ServicesMockHelper.MockInvoiceListResponse(infoList);
-            var invoices = Invoice.List();
-            Assert.Equal(2, invoices.Count);
+            ServicesMockHelper.MockInvoiceListResponse(infoList, nextPage: 2, totalPages: 2, totalCount: 4);
+            var pagination = Invoice.List();
             
-            Assert.Equal(infoList[0].Amount, invoices[0].Amount);
-            Assert.Equal(infoList[0].Currency, invoices[0].Currency);
-            Assert.Equal(infoList[0].ExpiredAt, invoices[0].ExpiredAt);
+            Assert.Equal(2, pagination.Items.Count);
+            
+            Assert.Equal(infoList[0].Amount, pagination.Items[0].Amount);
+            Assert.Equal(infoList[0].Currency, pagination.Items[0].Currency);
+            Assert.Equal(infoList[0].ExpiredAt, pagination.Items[0].ExpiredAt);
+            
+            Assert.Equal(1, pagination.CurrentPage);
+            Assert.Equal(2, pagination.NextPage);
+            Assert.Equal(2, pagination.TotalPages);
+            Assert.Equal(4, pagination.TotalCount);
+            
+            ServicesMockHelper.MockInvoiceListResponse(infoList, 2, prevPage: 1, totalPages: 2, totalCount: 4);
+            pagination = pagination.GetNextPage();
+            
+            Assert.Equal(2, pagination.CurrentPage);
+            Assert.Equal(1, pagination.PreviousPage);
         }
         
         internal static InvoiceInfo GetValidInvoiceInfo()

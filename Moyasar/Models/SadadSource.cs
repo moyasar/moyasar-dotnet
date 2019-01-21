@@ -6,7 +6,7 @@ using Moyasar.Exceptions;
 
 namespace Moyasar.Models
 {
-    public class SadadAccountSource : IPaymentSource
+    public class SadadSource : IPaymentSource
     {
         public const string TypeFieldName = "type";
         public const string UserNameFieldName = "username";

@@ -116,6 +116,24 @@ namespace MoyasarTest
             Assert.IsType<CreditCard>(payment.Source);
             Assert.Equal(((CreditCardSource)paymentInfo.Source).Name, ((CreditCard)payment.Source).Name);
         }
+        
+        [Fact]
+        public void TestCreatePayment2()
+        {
+            var paymentInfo = GetValidPaymentInfoSadadAccount();
+            const string sadadMessage = "Paid Successfully";
+            ServicesMockHelper.MockPaymentResponse(paymentInfo, sadadMessage: sadadMessage);
+            
+            var payment = Payment.Create(paymentInfo);
+            Assert.Equal(paymentInfo.Amount, payment.Amount);
+            Assert.Equal(paymentInfo.Currency, payment.Currency);
+            Assert.Equal(paymentInfo.Description, payment.Description);
+            Assert.Equal(paymentInfo.CallbackUrl, payment.CallbackUrl);
+            
+            Assert.IsType<Sadad>(payment.Source);
+            Assert.Equal(((SadadSource) paymentInfo.Source).UserName, ((Sadad) payment.Source).UserName);
+            Assert.Equal(sadadMessage, ((Sadad) payment.Source).Message);
+        }
 
         [Fact]
         public void TestRefundPayment()
@@ -145,17 +163,28 @@ namespace MoyasarTest
         [Fact]
         public void TestPaymentListing()
         {
-            var infoList = new List<PaymentInfo>()
+            var infoList = new List<PaymentInfo>
             {
                 GetValidPaymentInfoVisa(),
                 GetValidPaymentInfoSadadAccount()
             };
             
-            ServicesMockHelper.MockPaymentListResponse(infoList);
-            var payments = Payment.List();
+            ServicesMockHelper.MockPaymentListResponse(infoList, nextPage: 2, totalPages: 2, totalCount: 4);
+            var pagination = Payment.List();
 
-            Assert.IsType<CreditCard>(payments[0].Source);
-            Assert.IsType<SadadAccount>(payments[1].Source);
+            Assert.IsType<CreditCard>(pagination.Items[0].Source);
+            Assert.IsType<Sadad>(pagination.Items[1].Source);
+            
+            Assert.Equal(1, pagination.CurrentPage);
+            Assert.Equal(2, pagination.NextPage);
+            Assert.Equal(2, pagination.TotalPages);
+            Assert.Equal(4, pagination.TotalCount);
+            
+            ServicesMockHelper.MockPaymentListResponse(infoList, 2, prevPage: 1, totalPages: 2, totalCount: 4);
+            pagination = pagination.GetNextPage();
+            
+            Assert.Equal(2, pagination.CurrentPage);
+            Assert.Equal(1, pagination.PreviousPage);
         }
         
         internal static PaymentInfo GetValidPaymentInfoVisa()
@@ -194,9 +223,9 @@ namespace MoyasarTest
             };
         }
 
-        internal static SadadAccountSource GetValidSadadSource()
+        internal static SadadSource GetValidSadadSource()
         {
-            return new SadadAccountSource()
+            return new SadadSource()
             {
                 UserName = "johndoe123"
             };

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moyasar.Abstraction;
+using Moyasar.Extensions;
 using Moyasar.Models;
 using Newtonsoft.Json;
 
@@ -124,38 +125,47 @@ namespace Moyasar.Services
 
         public static PaginationResult<Payment> List(SearchQuery query = null)
         {
-            var result = MoyasarService.SendRequest(
+            var responseJson = MoyasarService.SendRequest(
                 "GET",
                 GetListUrl(),
                 query?.ToDictionary()
             );
 
-            dynamic response = MoyasarService.Serializer.Deserialize<object>(result);
-            var metaDict = 
-                MoyasarService.Serializer.Deserialize<Dictionary<string, object>>(
-                    MoyasarService.Serializer.Serialize((object)response.meta));
-            
+            dynamic response = MoyasarService.Serializer.Deserialize<object>(responseJson);
+
+            string metaJson = null;
+            try
+            {
+                metaJson = MoyasarService.Serializer.Serialize((object)response.meta);
+            }
+            catch
+            {
+                // ignored
+            }
+
             var paymentObjects =
                 MoyasarService.Serializer.Deserialize<List<object>>(
                     MoyasarService.Serializer.Serialize((object)response.payments));
             var paymentsList = paymentObjects
                 .Select(po => DeserializePayment(MoyasarService.Serializer.Serialize(po))).ToList();
 
-            return new PaginationResult<Payment>
+            var pagination = new PaginationResult<Payment>
             {
-                CurrentPage = 0,
-                NextPage = 0,
-                PreviousPage = 0,
-                TotalCount = 0,
-                TotalPages = 0,
                 Paginator = page =>
                 {
-                    var q = query.Clone();
-                    q.Page = page;
+                    var q = query?.Clone();
+                    if (q != null) q.Page = page;
                     return List(q);
                 },
                 Items = paymentsList
             };
+            
+            if (metaJson != null)
+            {
+                MoyasarService.Serializer.PopulateObject(metaJson, pagination);
+            }
+            
+            return pagination;
         }
 
         internal static Payment DeserializePayment(string json, Payment obj = null)
