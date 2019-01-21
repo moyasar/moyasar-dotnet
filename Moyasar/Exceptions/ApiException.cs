@@ -23,13 +23,16 @@ namespace Moyasar.Exceptions
             builder.Append($"Status Code: {HttpStatusCode.ToString()}\n");
             builder.Append($"Error Type: {Type}\n");
             builder.Append($"Message: {Message}\n");
-            
-            foreach (var error in ErrorsDictionary)
+
+            if (ErrorsDictionary != null)
             {
-                builder.Append($"Error [{error.Key}]:\n");
-                foreach (var s in error.Value)
+                foreach (var error in ErrorsDictionary)
                 {
-                    builder.Append($"\t- {s}\n");
+                    builder.Append($"Error [{error.Key}]:\n");
+                    foreach (var s in error.Value)
+                    {
+                        builder.Append($"\t- {s}\n");
+                    }
                 }
             }
             

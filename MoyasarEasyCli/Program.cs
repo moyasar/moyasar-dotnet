@@ -37,7 +37,7 @@ namespace MoyasarEasyCli
             Console.WriteLine();
             Console.Write("Please choose an option: ");
 
-            var option = Console.ReadKey().KeyChar.ToString()?.Trim().ToLower();
+            var option = Console.ReadLine();
             try
             {
                 if (option != null) return ProcessMainMenuOption(option);
@@ -72,7 +72,7 @@ namespace MoyasarEasyCli
                     SetApiKey();
                     break;
                 case "2":
-                    PaymentProcessor.PrintOutPaymentMenu();
+                    PaymentProcessor.InitiatePaymentProcessor();
                     break;
                 case "3":
                     InvoiceProcessor.PrintOutInvoiceMenu();

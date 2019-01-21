@@ -25,7 +25,7 @@ namespace MoyasarEasyCli
             Console.WriteLine();
             Console.Write("Please choose an option: ");
 
-            var option = Console.ReadKey().KeyChar.ToString()?.Trim().ToLower();
+            var option = Console.ReadLine();
             try
             {
                 if (option != null) return ProcessPaymentMenuOption(option);
@@ -175,7 +175,7 @@ namespace MoyasarEasyCli
                 }
                 catch
                 {
-                    Console.WriteLine("Invalid Value!");
+                    Console.WriteLine("Invalid value!");
                 }
             }
 
@@ -398,6 +398,10 @@ namespace MoyasarEasyCli
                     break;
                 case Sadad sadad:
                     Console.WriteLine($"\t- UserName: {sadad.UserName}");
+                    Console.WriteLine($"\t- Error Code: {sadad.ErrorCode ?? "None"}");
+                    Console.WriteLine($"\t- Message: {sadad.Message ?? "None"}");
+                    Console.WriteLine($"\t- Transaction Id: {sadad.TransactionId ?? "None"}");
+                    Console.WriteLine($"\t- Transaction Url: {sadad.TransactionUrl ?? "None"}");
                     break;
             }
         }
