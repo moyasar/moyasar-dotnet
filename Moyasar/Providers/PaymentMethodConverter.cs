@@ -6,14 +6,14 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Providers
 {
-    public class PaymentMethodConverter : JsonConverter<PaymentMethod>
+    public class PaymentMethodConverter : JsonConverter<IPaymentMethod>
     {
-        public override void WriteJson(JsonWriter writer, PaymentMethod value, Newtonsoft.Json.JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, IPaymentMethod value, Newtonsoft.Json.JsonSerializer serializer)
         {
             serializer.Serialize(writer, value);
         }
 
-        public override PaymentMethod ReadJson(JsonReader reader, Type objectType, PaymentMethod existingValue, bool hasExistingValue,
+        public override IPaymentMethod ReadJson(JsonReader reader, Type objectType, IPaymentMethod existingValue, bool hasExistingValue,
             Newtonsoft.Json.JsonSerializer serializer)
         {
             var dict = serializer.Deserialize<Dictionary<string, object>>(reader);

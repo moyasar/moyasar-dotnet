@@ -75,7 +75,7 @@ namespace Moyasar.Services
         public DateTime? UpdatedAt { get; private set; }
         
         [JsonProperty(SourceField)]
-        public PaymentMethod Source { get; private set; }
+        public IPaymentMethod Source { get; private set; }
         
         [JsonProperty(DescriptionField)]
         public string Description { get; set; }

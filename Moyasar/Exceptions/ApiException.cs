@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Moyasar.Exceptions
 {
+    /// <summary>
+    /// Represents a server side error (400 - 599)
+    /// </summary>
     public class ApiException : Exception
     {
         public int HttpStatusCode { get; set; }

@@ -405,7 +405,7 @@ namespace MoyasarEasyCli
             Console.ReadKey();
         }
 
-        private static void ShowPaymentMethod(PaymentMethod paymentMethod)
+        private static void ShowPaymentMethod(IPaymentMethod paymentMethod)
         {
             switch (paymentMethod)
             {

@@ -5,7 +5,11 @@ using Moyasar.Services;
 
 namespace Moyasar.Abstraction
 {
-    public class Resource<TResource>
+    /// <summary>
+    /// Represents an abstract resource that other Moyasar's resources are built on 
+    /// </summary>
+    /// <typeparam name="TResource">Resource type that inherents this class</typeparam>
+    public abstract class Resource<TResource>
     {
         protected static string Name => typeof(TResource).Name.ToLower();
         protected static string PluralName => $"{Name}s";

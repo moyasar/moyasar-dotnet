@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
-    public class CreditCard : PaymentMethod
+    public class CreditCard : IPaymentMethod
     {
         private const string CompanyFieldName = "company";
         private const string NameFieldName = "name";

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
-    public class Sadad : PaymentMethod
+    public class Sadad : IPaymentMethod
     {
         private const string UserNameField = "username";
         private const string ErrorCodeField = "error_code";

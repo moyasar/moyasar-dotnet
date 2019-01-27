@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Moyasar.Exceptions
 {
+    /// <summary>
+    /// Thrown when supplied information are incorrect
+    /// </summary>
     public class ValidationException : Exception
     {
         public List<FieldError> FieldErrors { get; set; }
