@@ -153,8 +153,8 @@ namespace Moyasar.Services
             {
                 Paginator = page =>
                 {
-                    var q = query?.Clone();
-                    if (q != null) q.Page = page;
+                    var q = query?.Clone() ?? new SearchQuery();
+                    q.Page = page;
                     return List(q);
                 },
                 Items = paymentsList

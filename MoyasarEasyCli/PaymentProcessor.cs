@@ -120,21 +120,33 @@ namespace MoyasarEasyCli
                     Program.ClearPrintOutWelcomeDetails();
                     Console.WriteLine();
 
+                    Console.WriteLine($"Page {payments.CurrentPage.ToString()} of {payments.TotalPages.ToString()}");
+                    
                     for (int i = 0; i < payments.Items.Count; ++i)
                     {
                         Console.WriteLine($"[{i + 1}] {payments.Items[i].Id}");
                     }
                     
                     Console.WriteLine("[0] Go Back");
+                    
+                    if (payments.NextPage.HasValue)
+                    {
+                        Console.WriteLine("[>] Next Page");
+                    }
+                    
+                    if (payments.PreviousPage.HasValue)
+                    {
+                        Console.WriteLine("[<] Previous Page");
+                    }
 
-                    var choice = 0;
+                    var choice = "0";
                     while (true)
                     {
                         Console.WriteLine();
                         Console.Write("Please choose an option: ");
                         try
                         {
-                            choice = int.Parse(Console.ReadLine());
+                            choice = Console.ReadLine();
                             break;
                         }
                         catch
@@ -143,8 +155,16 @@ namespace MoyasarEasyCli
                         }
                     }
 
-                    if (choice == 0) break;
-                    if (choice < 0 || choice > payments.Items.Count)
+                    if (choice == "0") break;
+                    if (choice == ">" && payments.NextPage.HasValue)
+                    {
+                        payments = payments.GetNextPage();
+                    }
+                    else if(choice == "<" && payments.PreviousPage.HasValue)
+                    {
+                        payments = payments.GetPreviousPage();
+                    }
+                    else if (int.Parse(choice) < 0 || int.Parse(choice) > payments.Items.Count)
                     {
                         Console.WriteLine();
                         Console.WriteLine("Error: Invalid option");
@@ -153,7 +173,7 @@ namespace MoyasarEasyCli
                     }
                     else
                     {
-                        PrintOutPayment(payments.Items[choice - 1]);
+                        PrintOutPayment(payments.Items[int.Parse(choice) - 1]);
                     }
                 }
             }
@@ -330,7 +350,7 @@ namespace MoyasarEasyCli
             }
         }
         
-        private static void PrintOutPayment(Payment payment)
+        public static void PrintOutPayment(Payment payment)
         {
             Program.ClearPrintOutWelcomeDetails();
             Console.WriteLine();

@@ -108,11 +108,6 @@ namespace Moyasar
                 StringBuilder p = new StringBuilder();
                 foreach (var parameter in parameters)
                 {
-                    if (parameter.Value.GetType() != typeof(string))
-                    {
-                        throw new Exception("GET parameters must have string values");
-                    }
-
                     p.Append($"&{parameter.Key.ToLower()}={parameter.Value}");
                 }
 
