@@ -18,7 +18,7 @@ namespace Moyasar.Models
         public const string CallbackFieldName = "callback_url";
         
         public int Amount { get; set; }
-        public string Currency { get; set; }
+        public string Currency { get; set; } = "SAR";
         public string Description { get; set; }
         public IPaymentSource Source { get; set; }
         public string CallbackUrl { get; set; }
