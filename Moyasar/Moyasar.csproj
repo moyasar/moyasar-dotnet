@@ -8,7 +8,7 @@
         <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
         <PackageProjectUrl>https://moyasar.com/</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/moyasar/moyasar-dotnet/blob/master/LICENSE</PackageLicenseUrl>
-        <PackageTags>Moyasar, API, Payment, CreditCard, Sadad, Mada</PackageTags>
+        <PackageTags>Moyasar;API;Payment;CreditCard;Sadad;Mada</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
