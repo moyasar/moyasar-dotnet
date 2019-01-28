@@ -8,6 +8,9 @@ using Moyasar.Helpers;
 
 namespace Moyasar.Models
 {
+    /// <summary>
+    /// Model that contains credit card information needed to create a new payment
+    /// </summary>
     [DataContract]
     public class CreditCardSource : IPaymentSource
     {

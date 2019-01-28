@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Providers
 {
+    /// <summary>
+    /// Provides service to serliaze and deserialize json strings
+    /// </summary>
     public class JsonSerializer : ISerializer
     {
         private JsonSerializerSettings settings = new JsonSerializerSettings()

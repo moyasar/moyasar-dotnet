@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Services
 {
+    /// <summary>
+    /// Represents a Moyasar Invoice
+    /// </summary>
     public class Invoice : Resource<Invoice>
     {
         private const string IdField = "id";
@@ -67,6 +70,16 @@ namespace Moyasar.Services
         
         internal Invoice() { }
         
+        /// <summary>
+        /// Updates the following fields
+        /// <list type="bullet">
+        /// <item><term>Amount</term></item>
+        /// <item><term>Currency</term></item>
+        /// <item><term>Description</term></item>
+        /// </list>
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public void Update()
         {
             Validate();
@@ -85,12 +98,21 @@ namespace Moyasar.Services
             DeserializeInvoice(response, this);
         }
 
+        /// <summary>
+        /// Changes invoice state to canceled
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public void Cancel()
         {
             var response = MoyasarService.SendRequest("PUT", GetCancelUrl(Id), null);
             DeserializeInvoice(response, this);
         }
         
+        /// <summary>
+        /// Throws a <code>ValidationException</code> when one or more fields are invalid
+        /// </summary>
+        /// <exception cref="ValidationException"></exception>
         public void Validate()
         {
             var errors = new List<FieldError>();
@@ -147,6 +169,13 @@ namespace Moyasar.Services
             }
         }
 
+        /// <summary>
+        /// Creates a new invoice at Moyasar and returns an <code>Invoice</code> instance for it
+        /// </summary>
+        /// <param name="info">Information needed to create a new invoice</param>
+        /// <returns><code>Invoice</code> instance representing an invoice created at Moyasar</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public static Invoice Create(InvoiceInfo info)
         {
             info.Validate();
@@ -155,11 +184,25 @@ namespace Moyasar.Services
             return DeserializeInvoice(response);
         }
 
+        /// <summary>
+        /// Get an invoice from Moyasar by Id
+        /// </summary>
+        /// <param name="id">Invoice Id</param>
+        /// <returns><code>Invoice</code> instance representing an invoice created at Moyasar</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public static Invoice Fetch(string id)
         {
             return DeserializeInvoice(MoyasarService.SendRequest("GET", GetFetchUrl(id), null));
         }
 
+        /// <summary>
+        /// Retrieve provisioned invoices at Moyasar
+        /// </summary>
+        /// <param name="query">Used to filter results</param>
+        /// <returns>A list of invoices</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public static PaginationResult<Invoice> List(SearchQuery query = null)
         {
             var responseJson = MoyasarService.SendRequest

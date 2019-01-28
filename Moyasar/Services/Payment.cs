@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moyasar.Abstraction;
-using Moyasar.Extensions;
+using Moyasar.Exceptions;
 using Moyasar.Models;
 using Newtonsoft.Json;
 
@@ -84,6 +84,14 @@ namespace Moyasar.Services
         
         protected static string GetRefundUrl(string id) => $"{ResourceUrl}/{id}/refund";
 
+        /// <summary>
+        /// Updates the following fields
+        /// <list type="bullet">
+        /// <item><term>Description</term></item>
+        /// </list>
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public void Update()
         {
             MoyasarService.SendRequest("PUT", GetUpdateUrl(Id), new Dictionary<string, object>()
@@ -92,8 +100,20 @@ namespace Moyasar.Services
             });           
         }
 
+        /// <summary>
+        /// Refunds the current payment
+        /// </summary>
+        /// <param name="amount">Optional amount to refund, should be equal to or less than current amount</param>
+        /// <returns>An updated <code>Payment</code> instance</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public Payment Refund(int? amount = null)
         {
+            if (amount > this.Amount)
+            {
+                throw new ValidationException("Payment must be equal to or less than current amount");
+            }
+            
             var reqParams = amount != null ? new Dictionary<string, Object>()
             {
                 { AmountField, amount.Value }
@@ -106,6 +126,13 @@ namespace Moyasar.Services
             );
         }
         
+        /// <summary>
+        /// Creates a new payment at Moyasar and returns a <code>Payment</code> instance for it
+        /// </summary>
+        /// <param name="info">Information needed to create a new invoice</param>
+        /// <returns><code>Invoice</code> instance representing an invoice created at Moyasar</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public static Payment Create(PaymentInfo info)
         {
             info.Validate();
@@ -114,6 +141,13 @@ namespace Moyasar.Services
             return DeserializePayment(response);
         }
 
+        /// <summary>
+        /// Get an payment from Moyasar by Id
+        /// </summary>
+        /// <param name="id">Payment Id</param>
+        /// <returns><code>Payment</code> instance representing an payment created at Moyasar</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public static Payment Fetch(string id)
         {
             return DeserializePayment(MoyasarService.SendRequest(
@@ -123,6 +157,13 @@ namespace Moyasar.Services
             ));
         }
 
+        /// <summary>
+        /// Retrieve provisioned payments at Moyasar
+        /// </summary>
+        /// <param name="query">Used to filter results</param>
+        /// <returns>A list of payments</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public static PaginationResult<Payment> List(SearchQuery query = null)
         {
             var responseJson = MoyasarService.SendRequest(

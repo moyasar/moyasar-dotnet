@@ -6,6 +6,9 @@ using Moyasar.Exceptions;
 
 namespace Moyasar.Models
 {
+    /// <summary>
+    /// Model that contains Sadad account information needed to create a new payment
+    /// </summary>
     public class SadadSource : IPaymentSource
     {
         public const string TypeFieldName = "type";

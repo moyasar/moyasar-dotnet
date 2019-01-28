@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Moyasar.Models
 {
+    /// <summary>
+    /// Contains search parametes used when searching a resource
+    /// </summary>
     public class SearchQuery
     {
         private const string IdField = "id";
@@ -19,6 +22,10 @@ namespace Moyasar.Models
         public DateTime? CreatedAfter { get; set; }
         public DateTime? CreatedBefore { get; set; }
 
+        /// <summary>
+        /// Used to convert a <code>Search Query</code> object to an easy to serialze dictionary
+        /// </summary>
+        /// <returns>returns String, Object dictionary</returns>
         public Dictionary<string, object> ToDictionary()
         {
             var dict = new Dictionary<string, object>();

@@ -4,6 +4,9 @@ using Moyasar.Exceptions;
 
 namespace Moyasar.Models
 {
+    /// <summary>
+    /// Model that contains information needed to create a new invoice
+    /// </summary>
     public class InvoiceInfo
     {
         private const string AmountField = "amount";

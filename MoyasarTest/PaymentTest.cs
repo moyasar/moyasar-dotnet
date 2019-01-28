@@ -159,6 +159,30 @@ namespace MoyasarTest
             Assert.Equal("refunded", payment.Status);
             Assert.Equal(amount, payment.RefundedAmount);
         }
+        
+        [Fact]
+        public async void RefundHigherAmountMustThrowException()
+        {
+            var paymentInfo = GetValidPaymentInfoVisa();
+            ServicesMockHelper.MockPaymentResponse(paymentInfo);
+            
+            var payment = Payment.Create(paymentInfo);
+            var id = payment.Id;
+            var amount = payment.Amount;
+            
+            ServicesMockHelper.MockPaymentResponse
+            (
+                paymentInfo, 
+                id: id,
+                status: "refunded",
+                refunded: amount
+            );
+
+            await Assert.ThrowsAsync<ValidationException>
+            (
+                async () => await Task.Run(() => payment.Refund(amount + 1))
+            );
+        }
 
         [Fact]
         public void TestPaymentListing()

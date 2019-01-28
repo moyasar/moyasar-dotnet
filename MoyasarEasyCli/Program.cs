@@ -7,20 +7,17 @@ namespace MoyasarEasyCli
     {
         static void Main(string[] args)
         {
-            MoyasarService.ApiKey = "sk_test_xNXaMTEADmd8n4WjfFuXHKtKY8ogogzRfnhSg2pG";
-            
-            var exit = false;
-            while (!exit)
-            {   
+            ClearPrintOutWelcomeDetails();
+            while (!PrintOutMainMenu())
+            {
                 ClearPrintOutWelcomeDetails();
-                exit = PrintOutMainMenu();
             }
         }
 
         public static void ClearPrintOutWelcomeDetails()
         {
             Console.Clear();
-            Console.WriteLine("Welcome to Moyasar Easy Cli!");
+            Console.WriteLine("Welcome to Moyasar Easy CLI!");
             Console.WriteLine("This tool was written to show examples on how to use the library.");
             Console.WriteLine("By Ali Alhoshaiyan (alim.sa) 2019");
             

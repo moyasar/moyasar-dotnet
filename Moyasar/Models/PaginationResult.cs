@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Moyasar.Abstraction;
 using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
-    public class PaginationResult<TModel>
+    /// <summary>
+    /// Contains meta-data that help with resources pagination 
+    /// </summary>
+    /// <typeparam name="TModel">Resource Type</typeparam>
+    public class PaginationResult<TModel> where TModel : Resource<TModel>
     {
         private const string CurrentPageField = "current_page";
         private const string NextPageField = "next_page";

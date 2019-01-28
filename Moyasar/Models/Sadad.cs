@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
+    /// <summary>
+    /// Represents Sadad payment method for a payment
+    /// </summary>
     public class Sadad : IPaymentMethod
     {
         private const string UserNameField = "username";

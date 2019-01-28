@@ -6,6 +6,10 @@ using Newtonsoft.Json;
 
 namespace Moyasar.Providers
 {
+    /// <summary>
+    /// Converter used by Newtonsoft's json library to deserialize a json payment
+    /// type object into an <code>IPaymentMethod</code>
+    /// </summary>
     public class PaymentMethodConverter : JsonConverter<IPaymentMethod>
     {
         public override void WriteJson(JsonWriter writer, IPaymentMethod value, Newtonsoft.Json.JsonSerializer serializer)
