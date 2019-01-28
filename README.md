@@ -70,13 +70,13 @@ try
         CallbackUrl = "http://www.example.com/payment_succeeded/"
     });
 }
-catch (ValidationException e)
+catch (ValidationException)
 {
 }
 catch (NetworkException)
 {
 }
-catch (ApiException e)
+catch (ApiException)
 {
 }
 ```
