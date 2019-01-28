@@ -2,6 +2,13 @@
 
     <PropertyGroup>
         <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+        <PackageVersion>2.0.0</PackageVersion>
+        <Title>Moyasar API's .NET Wrapper</Title>
+        <Authors>Ali Alhoshaiyan, Moyasar Dev Team</Authors>
+        <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
+        <PackageProjectUrl>https://moyasar.com/</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/moyasar/moyasar-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageTags>Moyasar, API, Payment, CreditCard, Sadad, Mada</PackageTags>
     </PropertyGroup>
 
     <ItemGroup>
