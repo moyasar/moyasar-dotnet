@@ -9,6 +9,10 @@
         <PackageProjectUrl>https://moyasar.com/</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/moyasar/moyasar-dotnet/blob/master/LICENSE</PackageLicenseUrl>
         <PackageTags>Moyasar;API;Payment;CreditCard;Sadad;Mada</PackageTags>
+        <PackageIconUrl>https://moyasar.com/assets/img/moyasar-en-w.png</PackageIconUrl>
+        <RepositoryUrl>https://github.com/moyasar/moyasar-dotnet.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
