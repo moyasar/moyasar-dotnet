@@ -25,7 +25,13 @@ namespace Moyasar
         static MoyasarService()
         {
             Serializer = new JsonSerializer();
-            HttpWebRequestFactory = WebRequest.CreateHttp;
+            HttpWebRequestFactory = CreateHttpWebRequest;
+        }
+
+        public static HttpWebRequest CreateHttpWebRequest(string url)
+        {
+            // Use Create instead of CreateHttp for compatibility with .Net Framework 4.0
+            return WebRequest.Create(url) as HttpWebRequest;
         }
 
         /// <summary>
@@ -45,7 +51,8 @@ namespace Moyasar
             {
                 url = AppendUrlParameters(url, parameters);
             }
-            
+
+            ConfigureTls();
             var webRequest = HttpWebRequestFactory(url);
             webRequest.Method = httpMethod;
             webRequest.Credentials = new NetworkCredential(ApiKey, "");
@@ -110,7 +117,12 @@ namespace Moyasar
                 throw new NetworkException("Could not connect to Moyasar service", ex);
             }
         }
-        
+
+        private static void ConfigureTls()
+        {
+            ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072; // TLS 1.2
+        }
+
         public static string AppendUrlParameters(string url, Dictionary<string, object> parameters)
         {
             if (parameters != null)
