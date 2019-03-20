@@ -1,0 +1,8 @@
+{{
+  "type": "creditcard",
+  "company": "{0}",
+  "name": "{1}",
+  "number": "XXXX-XXXX-XXXX-1111",
+  "message": null,
+  "transaction_url": "https://api.moyasar.com/v1/transaction_auths/a9a6c4c9-b065-48c6-952a-184266ec4b4a/form?token=auth_n7FoPBZo2cYriecyZvzmXrXTP13E7og9HC3jGFDYqzF"
+}}

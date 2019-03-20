@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
+        <PackageVersion>2.0.0</PackageVersion>
+        <Title>Moyasar API's .NET Wrapper</Title>
+        <Authors>Ali Alhoshaiyan, Moyasar Dev Team</Authors>
+        <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
+        <PackageProjectUrl>https://moyasar.com/</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/moyasar/moyasar-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageTags>Moyasar;API;Payment;CreditCard;Sadad;Mada</PackageTags>
+        <PackageIconUrl>https://moyasar.com/assets/img/moyasar-en-w.png</PackageIconUrl>
+        <RepositoryUrl>https://github.com/moyasar/moyasar-dotnet.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net40'" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+      <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    </ItemGroup>
+
+</Project>
