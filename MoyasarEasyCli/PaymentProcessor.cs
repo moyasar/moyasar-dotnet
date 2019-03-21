@@ -215,7 +215,7 @@ namespace MoyasarEasyCli
             Payment payment;
             try
             {
-                payment = Payment.Create(new PaymentInfo
+                payment = Payment.Create(new PaymentInfo()
                 {
                     Amount = amount,
                     Currency = currency,
