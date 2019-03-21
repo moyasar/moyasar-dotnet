@@ -49,7 +49,13 @@ MoyasarService.ApiKey = "YouKeyHere";
 
 ### Payment
 
-`Make sure you always try to catch the exceptions above`
+Make sure you always try to catch the following exceptions:
+
+`ValidationException`
+
+`NetworkException`
+
+`ApiException`
 
 To fetch a payment from Moyasar, use the following:
 
