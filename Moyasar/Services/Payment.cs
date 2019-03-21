@@ -125,21 +125,6 @@ namespace Moyasar.Services
                 this
             );
         }
-        
-        /// <summary>
-        /// Creates a new payment at Moyasar and returns a <code>Payment</code> instance for it
-        /// </summary>
-        /// <param name="info">Information needed to create a new invoice</param>
-        /// <returns><code>Invoice</code> instance representing an invoice created at Moyasar</returns>
-        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
-        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
-        public static Payment Create(PaymentInfo info)
-        {
-            info.Validate();
-            var requestParams = info.ToDictionary();
-            var response = MoyasarService.SendRequest("POST", GetCreateUrl(), requestParams);
-            return DeserializePayment(response);
-        }
 
         /// <summary>
         /// Get an payment from Moyasar by Id
