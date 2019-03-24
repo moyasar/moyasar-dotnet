@@ -49,47 +49,13 @@ MoyasarService.ApiKey = "YouKeyHere";
 
 ### Payment
 
-To create a new Payment use the following:
+Make sure you always try to catch the following exceptions:
 
-```csharp
-try
-{
-    var payment = Payment.Create(new PaymentInfo
-    {
-        Amount = 200,
-        Currency = "SAR",
-        Description = "Colombia, Narino Sandona, Medium Roast",
-        Source = new CreditCardSource()
-        {
-            Name = "John Doe",
-            Number = "4111111111111111",
-            Cvc = 141,
-            Month = 3,
-            Year = 2021,
-        },
-        CallbackUrl = "http://www.example.com/payment_succeeded/"
-    });
-}
-catch (ValidationException)
-{
-}
-catch (NetworkException)
-{
-}
-catch (ApiException)
-{
-}
-```
+`ValidationException`
 
-To create a payment for Sadad, use the following for `Source`:
-```csharp
-new SadadSource()
-{
-    UserName = "johndoe123"
-};
-```
+`NetworkException`
 
-`Make sure you always try to catch the exceptions above`
+`ApiException`
 
 To fetch a payment from Moyasar, use the following:
 
@@ -121,7 +87,7 @@ var result = Payment.List();
 or
 
 ```csharp
-var result = Payment.List(new SearchQuery
+var result = Payment.List(new SearchQuery()
 {
     Id = "SomeId",
     Source = "creditcard OR sadad",
@@ -142,7 +108,7 @@ for the following:
 To create an invoice for example:
 
 ```csharp
-var invoice = Invoice.Create(new InvoiceInfo
+var invoice = Invoice.Create(new InvoiceInfo()
 {
     Amount = 7000,
     Currency = "SAR",

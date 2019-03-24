@@ -21,9 +21,9 @@ namespace MoyasarEasyCli
             Console.WriteLine("This tool was written to show examples on how to use the library.");
             Console.WriteLine("By Ali Alhoshaiyan (alim.sa) 2019");
             
-            if (Moyasar.MoyasarService.ApiKey != null)
+            if (MoyasarService.ApiKey != null)
             {
-                Console.WriteLine($"Moyasar API Key: {Moyasar.MoyasarService.ApiKey}");
+                Console.WriteLine($"Moyasar API Key: {MoyasarService.ApiKey}");
             }
         }
 
@@ -90,7 +90,7 @@ namespace MoyasarEasyCli
             var key = Console.ReadLine()?.Trim();
             if (String.IsNullOrEmpty(key)) key = null;
 
-            Moyasar.MoyasarService.ApiKey = key;
+            MoyasarService.ApiKey = key;
         }
     }
 }

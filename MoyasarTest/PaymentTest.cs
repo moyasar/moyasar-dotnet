@@ -102,46 +102,12 @@ namespace MoyasarTest
         }
 
         [Fact]
-        public void TestCreatePayment()
-        {
-            var paymentInfo = GetValidPaymentInfoVisa();
-            ServicesMockHelper.MockPaymentResponse(paymentInfo);
-            
-            var payment = Payment.Create(paymentInfo);
-            Assert.Equal(paymentInfo.Amount, payment.Amount);
-            Assert.Equal(paymentInfo.Currency, payment.Currency);
-            Assert.Equal(paymentInfo.Description, payment.Description);
-            Assert.Equal(paymentInfo.CallbackUrl, payment.CallbackUrl);
-            
-            Assert.IsType<CreditCard>(payment.Source);
-            Assert.Equal(((CreditCardSource)paymentInfo.Source).Name, ((CreditCard)payment.Source).Name);
-        }
-        
-        [Fact]
-        public void TestCreatePayment2()
-        {
-            var paymentInfo = GetValidPaymentInfoSadadAccount();
-            const string sadadMessage = "Paid Successfully";
-            ServicesMockHelper.MockPaymentResponse(paymentInfo, sadadMessage: sadadMessage);
-            
-            var payment = Payment.Create(paymentInfo);
-            Assert.Equal(paymentInfo.Amount, payment.Amount);
-            Assert.Equal(paymentInfo.Currency, payment.Currency);
-            Assert.Equal(paymentInfo.Description, payment.Description);
-            Assert.Equal(paymentInfo.CallbackUrl, payment.CallbackUrl);
-            
-            Assert.IsType<Sadad>(payment.Source);
-            Assert.Equal(((SadadSource) paymentInfo.Source).UserName, ((Sadad) payment.Source).UserName);
-            Assert.Equal(sadadMessage, ((Sadad) payment.Source).Message);
-        }
-
-        [Fact]
         public void TestRefundPayment()
         {
             var paymentInfo = GetValidPaymentInfoVisa();
             ServicesMockHelper.MockPaymentResponse(paymentInfo);
             
-            var payment = Payment.Create(paymentInfo);
+            var payment = Payment.Fetch("some-id");
             var id = payment.Id;
             var amount = payment.Amount;
             
@@ -166,7 +132,7 @@ namespace MoyasarTest
             var paymentInfo = GetValidPaymentInfoVisa();
             ServicesMockHelper.MockPaymentResponse(paymentInfo);
             
-            var payment = Payment.Create(paymentInfo);
+            var payment = Payment.Fetch("some-id");
             var id = payment.Id;
             var amount = payment.Amount;
             
