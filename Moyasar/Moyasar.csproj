@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net40;netstandard2.0</TargetFrameworks>
-        <PackageVersion>2.0.0</PackageVersion>
+        <PackageVersion>2.0.1</PackageVersion>
         <Title>Moyasar API's .NET Wrapper</Title>
         <Authors>Ali Alhoshaiyan, Moyasar Dev Team</Authors>
         <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     </ItemGroup>
 
 </Project>
