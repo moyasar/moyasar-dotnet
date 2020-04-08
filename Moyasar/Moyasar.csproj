@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFrameworks>net40;net45;net451;net452;net46;net461;netstandard2.0</TargetFrameworks>
-        <PackageVersion>2.0.2</PackageVersion>
+        <PackageVersion>2.0.3</PackageVersion>
         <Title>Moyasar API's .NET Wrapper</Title>
         <Authors>Ali Alhoshaiyan, Moyasar Dev Team</Authors>
         <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
