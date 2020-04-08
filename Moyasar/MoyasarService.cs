@@ -89,6 +89,15 @@ namespace Moyasar
                         result = sr.ReadToEnd();
                     }
                     
+                    if ((int) response.StatusCode == 429)
+                    {
+                        throw new TooManyRequestsException("Too Many Requests")
+                        {
+                            HttpStatusCode = (int)response.StatusCode,
+                            ResponsePayload = result
+                        };
+                    }
+                    
                     if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 600)
                     {
                         dynamic resObj = Serializer.Deserialize<object>(result);
