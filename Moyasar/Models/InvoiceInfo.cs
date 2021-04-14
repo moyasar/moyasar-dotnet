@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Moyasar.Exceptions;
+using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
@@ -9,32 +10,23 @@ namespace Moyasar.Models
     /// </summary>
     public class InvoiceInfo
     {
-        private const string AmountField = "amount";
-        private const string CurrencyField = "currency";
-        private const string DescriptionField = "description";
-        private const string CallbackUrlField = "callback_url";
-        private const string ExpiredAtField = "expired_at";
-
+        [JsonProperty("amount")]
         public int Amount { get; set; }
+        
+        [JsonProperty("currency")]
         public string Currency { get; set; } = "SAR";
+        
+        [JsonProperty("description")]
         public string Description { get; set; }
+        
+        [JsonProperty("callback_url", NullValueHandling = NullValueHandling.Ignore)]
         public string CallbackUrl { get; set; }
+        
+        [JsonProperty("expired_at", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? ExpiredAt { get; set; }
-
-        public Dictionary<string, object> ToDictionary()
-        {
-            var dict = new Dictionary<string, object>
-            {
-                { AmountField, Amount },
-                { CurrencyField, Currency },
-                { DescriptionField, Description }
-            };
-            
-            if(CallbackUrl != null) dict.Add(CallbackUrlField, CallbackUrl);
-            if(ExpiredAt != null) dict.Add(ExpiredAtField, ExpiredAt.Value.ToString("O"));
-
-            return dict;
-        }
+        
+        [JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<string, string> Metadata { get; set; }
 
         public void Validate()
         {

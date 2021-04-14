@@ -1,0 +1,9 @@
+{
+  "type": "stcpay",
+  "mobile": "0555555555",
+  "reference_number": "xxxxxxxxxxxxx",
+  "branch": "1",
+  "cashier": "1",
+  "transaction_url": "https://apimig.moyasar.com/v1/stc_pays/35360576-dec6-44bf-a342-0e36ef72de25/proceed?otp_token=KJHKH87989g78huh",
+  "message": "Paid"
+}

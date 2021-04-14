@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Moyasar.Abstraction;
@@ -13,61 +14,52 @@ namespace Moyasar.Services
     /// </summary>
     public class Invoice : Resource<Invoice>
     {
-        private const string IdField = "id";
-        private const string StatusField = "status";
-        private const string AmountField = "amount";
-        private const string CurrencyField = "currency";
-        private const string DescriptionField = "description";
-        private const string ExpiredAtField = "expired_at";
-        private const string LogoUrlField = "logo_url";
-        private const string AmountFormatField = "amount_format";
-        private const string UrlField = "url";
-        private const string CreatedAtField = "created_at";
-        private const string UpdatedAtField = "updated_at";
-        private const string PaymentsField = "payments";
-        private const string CallbackUrlField = "callback_url";
-
-        [JsonProperty(IdField)]
+        [JsonProperty("id")]
         public string Id { get; private set; }
         
-        [JsonProperty(StatusField)]
+        [JsonProperty("status")]
         public string Status { get; private set; }
         
-        [JsonProperty(AmountField)]
+        [JsonProperty("amount")]
         public int Amount { get; set; }
         
-        [JsonProperty(CurrencyField)]
+        [JsonProperty("currency")]
         public string Currency { get; set; }
         
-        [JsonProperty(DescriptionField)]
+        [JsonProperty("description")]
         public string Description { get; set; }
         
-        [JsonProperty(ExpiredAtField)]
+        [JsonProperty("expired_at")]
         public DateTime? ExpiredAt { get; set; }
         
-        [JsonProperty(LogoUrlField)]
+        [JsonProperty("logo_url")]
         public string LogoUrl { get; private set; }
         
-        [JsonProperty(AmountFormatField)]
+        [JsonProperty("amount_format")]
         public string FormattedAmount { get; private set; }
         
-        [JsonProperty(UrlField)]
+        [JsonProperty("url")]
         public string Url { get; private set; }
         
-        [JsonProperty(CreatedAtField)]
+        [JsonProperty("created_at")]
         public DateTime? CreatedAt { get; private set; }
         
-        [JsonProperty(UpdatedAtField)]
+        [JsonProperty("updated_at")]
         public DateTime? UpdatedAt { get; private set; }
         
-        [JsonProperty(PaymentsField)]
+        [JsonProperty("payments")]
         public List<Payment> Payments { get; private set; }
         
-        [JsonProperty(CallbackUrlField)]
+        [JsonProperty("callback_url")]
         public string CallbackUrl { get; set; }
+        
+        [JsonProperty("metadata")]
+        public Dictionary<string, string> Metadata { get; private set; }
 
         private static string GetCancelUrl(string id) => $"{ResourceUrl}/{id}/cancel";
+        private static string GetCreateBulkUrl() => $"{ResourceUrl}/bulk";
         
+        [JsonConstructor]
         internal Invoice() { }
         
         /// <summary>
@@ -82,17 +74,29 @@ namespace Moyasar.Services
         /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
         public void Update()
         {
-            Validate();
+            Validate(true);
             
             var requestParams = new Dictionary<string, object>()
             {
-                { AmountField, Amount },
-                { CurrencyField, Currency },
-                { DescriptionField, Description }
+                { "amount", Amount },
+                { "currency", Currency },
+                { "description", Description }
             };
-            
-            if(CallbackUrl != null) requestParams.Add(CallbackUrlField, CallbackUrl);
-            if(ExpiredAt != null) requestParams.Add(ExpiredAtField, ExpiredAt);
+
+            if (CallbackUrl != null)
+            {
+                requestParams.Add("callback_url", CallbackUrl);
+            }
+
+            if (ExpiredAt != null)
+            {
+                requestParams.Add("expired_at", ExpiredAt);
+            }
+
+            if (Metadata != null)
+            {
+                requestParams.Add("metadata", Metadata);
+            }
             
             var response = MoyasarService.SendRequest("PUT", GetUpdateUrl(Id), requestParams);
             DeserializeInvoice(response, this);
@@ -113,7 +117,7 @@ namespace Moyasar.Services
         /// Throws a <code>ValidationException</code> when one or more fields are invalid
         /// </summary>
         /// <exception cref="ValidationException"></exception>
-        public void Validate()
+        public void Validate(bool isUpdating = false)
         {
             var errors = new List<FieldError>();
             
@@ -151,7 +155,7 @@ namespace Moyasar.Services
                 }
             }
 
-            if (ExpiredAt != null && ExpiredAt.Value <= DateTime.Now)
+            if (!isUpdating && ExpiredAt != null && ExpiredAt.Value <= DateTime.Now)
             {
                 errors.Add(new FieldError()
                 {
@@ -179,9 +183,38 @@ namespace Moyasar.Services
         public static Invoice Create(InvoiceInfo info)
         {
             info.Validate();
-            var requestParams = info.ToDictionary();
-            var response = MoyasarService.SendRequest("POST", GetCreateUrl(), requestParams);
+            var response = MoyasarService.SendRequest("POST", GetCreateUrl(), info);
+            
             return DeserializeInvoice(response);
+        }
+        
+        /// <summary>
+        /// Creates a new invoice at Moyasar and returns an <code>Invoice</code> instance for it
+        /// </summary>
+        /// <param name="info">Information needed to create a new invoice</param>
+        /// <returns><code>Invoice</code> instance representing an invoice created at Moyasar</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
+        public static List<Invoice> CreateBulk(List<InvoiceInfo> info)
+        {
+            if (info.Count == 0)
+            {
+                throw new ValidationException("At least one invoice is required.");
+            }
+            
+            if (info.Count > 50)
+            {
+                throw new ValidationException("No more than 50 invoices is allowed at once.");
+            }
+
+            var data = new Dictionary<string, List<InvoiceInfo>>
+            {
+                {"invoices", info}
+            };
+
+            var response = MoyasarService.SendRequest("POST", GetCreateBulkUrl(), data);
+            
+            return JsonConvert.DeserializeObject<Dictionary<string, List<Invoice>>>(response).First().Value;
         }
 
         /// <summary>
@@ -209,50 +242,16 @@ namespace Moyasar.Services
             (
                 "GET",
                 GetListUrl(),
-                query?.ToDictionary()
+                query
             );
-            
-            dynamic response = MoyasarService.Serializer.Deserialize<object>(responseJson);
 
-            string metaJson = null;
-            try
-            {
-                metaJson = MoyasarService.Serializer.Serialize((object)response.meta);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            var invoiceObjects =
-                MoyasarService.Serializer.Deserialize<List<object>>(
-                    MoyasarService.Serializer.Serialize((object)response.invoices));
-            var invoicesList = invoiceObjects
-                .Select(i => DeserializeInvoice(MoyasarService.Serializer.Serialize(i))).ToList();
-
-            var pagination = new PaginationResult<Invoice>
-            {
-                Paginator = page =>
-                {
-                    var q = query?.Clone() ?? new SearchQuery();
-                    q.Page = page;
-                    return List(q);
-                },
-                Items = invoicesList
-            };
-            
-            if (metaJson != null)
-            {
-                MoyasarService.Serializer.PopulateObject(metaJson, pagination);
-            }
-            
-            return pagination;
+            return JsonConvert.DeserializeObject<PaginationResult<Invoice>>(responseJson);
         }
 
         internal static Invoice DeserializeInvoice(string json, Invoice obj = null)
         {
             var invoice = obj ?? new Invoice();
-            MoyasarService.Serializer.PopulateObject(json, invoice);
+            JsonConvert.PopulateObject(json, invoice);
             return invoice;
         }
     }

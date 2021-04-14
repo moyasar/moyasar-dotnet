@@ -1,10 +1,11 @@
-using System.Collections.Generic;
+using System;
 
 namespace Moyasar.Abstraction
 {
     public interface IPaymentSource
     {
-        Dictionary<string, object> ToDictionary();
+        string Type { get; }
+        
         void Validate();
     }
 }

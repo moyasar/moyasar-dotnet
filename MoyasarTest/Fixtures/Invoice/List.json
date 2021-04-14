@@ -1,0 +1,45 @@
+{
+  "meta": {
+    "current_page": 2,
+    "next_page": 3,
+    "prev_page": 1,
+    "total_pages": 3,
+    "total_count": 6
+  },
+  "invoices": [
+    {
+      "id": "f91065f7-d188-4ec8-8fc5-af97841ec14e",
+      "status": "initiated",
+      "amount": 7000,
+      "currency": "SAR",
+      "description": "A 70 SAR invoice just because",
+      "expired_at": "2016-04-07T06:45:18.866Z",
+      "logo_url": "https://s3-eu-west-1.amazonaws.com/moyasar.api.assets.prod/entities/logos/default.png",
+      "amount_format": "70.00 SAR",
+      "url": "https://dashboard.moyasar.com/invoices/37a54bed-7d54-444c-a151-c287106da514?lang=en",
+      "callback_url": "http://www.example.com/invoice_callback",
+      "created_at": "2016-04-06T06:45:18.866Z",
+      "updated_at": "2016-04-06T06:45:18.866Z",
+      "payments": [],
+      "metadata": {
+        "order_id": "9e5c7df4-b796-4c83-9a61-e304c9c8fa51"
+      }
+    },
+    {
+      "id": "d23ac387-aee5-42db-a396-499e7f37de57",
+      "status": "expired",
+      "amount": 8000,
+      "currency": "SAR",
+      "description": "A 80 SAR invoice just because",
+      "expired_at": "2016-04-08T06:45:18.866Z",
+      "logo_url": "https://s3-eu-west-1.amazonaws.com/moyasar.api.assets.prod/entities/logos/default.png",
+      "amount_format": "80.00 SAR",
+      "url": "https://dashboard.moyasar.com/invoices/d23ac387-aee5-42db-a396-499e7f37de57?lang=en",
+      "callback_url": "http://www.example.com/invoice_callback",
+      "created_at": "2016-04-05T06:45:18.866Z",
+      "updated_at": "2016-04-05T06:45:18.866Z",
+      "payments": [],
+      "metadata": {}
+    }
+  ]
+}

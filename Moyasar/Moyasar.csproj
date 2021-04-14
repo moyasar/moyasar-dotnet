@@ -2,16 +2,20 @@
 
     <PropertyGroup>
         <TargetFrameworks>net40;net45;net451;net452;net46;net461;netstandard2.0</TargetFrameworks>
-        <PackageVersion>2.0.3</PackageVersion>
+        <PackageVersion>2.2.0</PackageVersion>
         <Title>Moyasar API's .NET Wrapper</Title>
         <Authors>Ali Alhoshaiyan, Moyasar Dev Team</Authors>
         <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
         <PackageProjectUrl>https://moyasar.com/</PackageProjectUrl>
         <PackageTags>Moyasar;API;Payment;CreditCard;Sadad;Mada</PackageTags>
-        <PackageIconUrl>https://moyasar.com/assets/img/moyasar-en-w.png</PackageIconUrl>
+        <PackageIcon>package-icon.png</PackageIcon>
         <RepositoryUrl>https://github.com/moyasar/moyasar-dotnet.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <LangVersion>8</LangVersion>
+        <AssemblyVersion>2.2.0</AssemblyVersion>
+        <FileVersion>2.2.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -30,13 +34,10 @@
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     </ItemGroup>
-
-    <PropertyGroup>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    </PropertyGroup>
     
     <ItemGroup>
         <None Include="..\LICENSE" Pack="true" PackagePath="" />
+        <None Include="package-icon.png" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

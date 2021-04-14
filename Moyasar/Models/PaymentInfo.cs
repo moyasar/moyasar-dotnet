@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moyasar.Abstraction;
 using Moyasar.Exceptions;
+using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
@@ -11,35 +12,23 @@ namespace Moyasar.Models
     /// </summary>
     public class PaymentInfo
     {
-        public const string AmountFieldName = "amount";
-        public const string CurrencyFieldName = "currency";
-        public const string DescriptionFieldName = "description";
-        public const string SourceFieldName = "source";
-        public const string CallbackFieldName = "callback_url";
-        
+        [JsonProperty("amount")]
         public int Amount { get; set; }
+        
+        [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
         public string Currency { get; set; } = "SAR";
+        
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
         public string Description { get; set; }
+        
+        [JsonProperty("source")]
         public IPaymentSource Source { get; set; }
+        
+        [JsonProperty("callback_url")]
         public string CallbackUrl { get; set; }
-
-        public Dictionary<string, object> ToDictionary()
-        {
-            var dict = new Dictionary<string, object>()
-            {
-                { AmountFieldName, Amount },
-                { CurrencyFieldName, Currency },
-                { SourceFieldName, Source.ToDictionary() },
-                { CallbackFieldName, CallbackUrl }
-            };
-
-            if (!string.IsNullOrEmpty(Description))
-            {
-                dict.Add(DescriptionFieldName, Description);
-            }
-            
-            return dict;
-        }
+        
+        [JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<string, string> Metadata { get; set; }
 
         public void Validate()
         {

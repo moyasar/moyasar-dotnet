@@ -1,5 +1,8 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
+using Moyasar.Providers;
+using Newtonsoft.Json;
+using BasicStringDict = System.Collections.Generic.Dictionary<string, string>;
 
 namespace Moyasar.Models
 {
@@ -8,46 +11,37 @@ namespace Moyasar.Models
     /// </summary>
     public class SearchQuery
     {
-        private const string IdField = "id";
-        private const string SourceField = "source";
-        private const string StatusField = "status";
-        private const string PageField = "page";
-        private const string CreatedAfterField = "created[gt]";
-        private const string CreatedBeforeField = "created[lt]";
-        
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public string Id { get; set; }
+        
+        [JsonProperty("source", NullValueHandling = NullValueHandling.Ignore)]
         public string Source { get; set; }
+        
+        [JsonProperty("status", NullValueHandling = NullValueHandling.Ignore)]
         public string Status { get; set; }
+        
+        [JsonProperty("page", NullValueHandling = NullValueHandling.Ignore)]
         public int? Page { get; set; }
+        
+        [JsonProperty("created[gt]", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? CreatedAfter { get; set; }
+        
+        [JsonProperty("created[lt]", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? CreatedBefore { get; set; }
 
-        /// <summary>
-        /// Used to convert a <code>Search Query</code> object to an easy to serialze dictionary
-        /// </summary>
-        /// <returns>returns String, Object dictionary</returns>
-        public Dictionary<string, object> ToDictionary()
-        {
-            var dict = new Dictionary<string, object>();
-            
-            if(!string.IsNullOrEmpty(Id)) dict.Add(IdField, Id);
-            if(!string.IsNullOrEmpty(Source)) dict.Add(SourceField, Source);
-            if(!string.IsNullOrEmpty(Status)) dict.Add(StatusField, Status);
-            if(Page.HasValue) dict.Add(PageField, Page.Value);
-            if(CreatedAfter.HasValue) dict.Add(CreatedAfterField, CreatedAfter?.ToString("O"));
-            if(CreatedBefore.HasValue) dict.Add(CreatedBeforeField, CreatedBefore?.ToString("O"));
-            
-            return dict.Count > 0 ? dict : null;
-        }
-        
-        public SearchQuery Clone() => new SearchQuery()
+        [JsonProperty("metadata", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonConverter(typeof(MetadataSerializer))]
+        public BasicStringDict Metadata { get; set; }
+
+        public SearchQuery Clone() => new SearchQuery
         {
             Id = Id,
             Source = Source,
             Status = Status,
             Page = Page,
             CreatedAfter = CreatedAfter,
-            CreatedBefore = CreatedBefore
+            CreatedBefore = CreatedBefore,
+            Metadata = Metadata.ToDictionary(p => p.Key, p => p.Value)
         };
     }
 }

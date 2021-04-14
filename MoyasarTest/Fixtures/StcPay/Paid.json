@@ -1,0 +1,31 @@
+{
+  "id": "50559d3b-e67f-4b3a-8df8-509dde19fe38",
+  "status": "paid",
+  "amount": 1000,
+  "fee": 0,
+  "currency": "SAR",
+  "refunded": 0,
+  "refunded_at": null,
+  "description": "Test Payment",
+  "amount_format": "10.00 SAR",
+  "fee_format": "0.00 SAR",
+  "refunded_format": "0.00 SAR",
+  "invoice_id": null,
+  "ip": null,
+  "callback_url": null,
+  "created_at": "2019-01-02T10:14:14.414Z",
+  "updated_at": "2019-01-02T10:14:14.414Z",
+  "source": {
+    "type": "stcpay",
+    "mobile": "0555555555",
+    "reference_number": "xxxxxxxxxxxxx",
+    "branch": "1",
+    "cashier": "1",
+    "transaction_url": "https://apimig.moyasar.com/v1/stc_pays/35360576-dec6-44bf-a342-0e36ef72de25/proceed?otp_token=KJHKH87989g78huh",
+    "message": "Paid"
+  },
+  "metadata": {
+    "order_id": "e573e01a-38a7-4a59-8ced-f6fd2b0b4b2f",
+    "tax": "150"
+  }
+}

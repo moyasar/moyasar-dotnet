@@ -1,6 +1,6 @@
 {
   "id": "a4a144ba-adc3-43bd-98e8-c80f2925fdc4",
-  "status": "initiated",
+  "status": "paid",
   "amount": 1000,
   "fee": 0,
   "currency": "SAR",
@@ -12,9 +12,18 @@
   "refunded_format": "0.00 SAR",
   "invoice_id": null,
   "ip": null,
-  "callback_url": "{9}",
+  "callback_url": null,
   "created_at": "2019-01-02T10:14:14.414Z",
   "updated_at": "2019-01-02T10:14:14.414Z",
-  "source": {},
-  "metadata": {}
+  "source": {
+    "type": "applepay",
+    "company": "visa",
+    "name": null,
+    "number": "XXXX-XXXX-XXXX-1111",
+    "message": "APPROVED"
+  },
+  "metadata": {
+    "order_id": "a2620c7d-658e-4c27-aa78-bc6532549cec",
+    "tax": "150"
+  }
 }

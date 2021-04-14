@@ -1,29 +1,27 @@
+using System;
 using Moyasar.Abstraction;
 using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
     /// <summary>
-    /// Represents credit card payment method for a payment
+    /// Represents an Apple Pay payment method. Used for new payments
     /// </summary>
-    public class CreditCard : IPaymentMethod
+    public class ApplePayMethod : IPaymentMethod
     {
         [JsonProperty("type")]
-        public string Type { get; }
-        
+        public string Type { get; } = "applepay";
+
         [JsonProperty("company")]
         public string Company { get; set; }
-        
+
         [JsonProperty("name")]
         public string Name { get; set; }
-        
+
         [JsonProperty("number")]
         public string Number { get; set; }
-        
+
         [JsonProperty("message")]
         public string Message { get; set; }
-        
-        [JsonProperty("transaction_url")]
-        public string TransactionUrl { get; set; }        
     }
 }

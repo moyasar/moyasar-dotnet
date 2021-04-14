@@ -3,7 +3,9 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Moyasar.Exceptions;
+using Moyasar.Models;
 using MoyasarTest.Helpers;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace MoyasarTest
@@ -50,10 +52,12 @@ namespace MoyasarTest
         public void TestUrlParamsBuilder()
         {
             var url = "https://api.moyasar.com/v1/payments";
-            var urlParams = new Dictionary<string, object>()
+            
+            var urlParams = new Dictionary<string, string>
             {
                 { "id", "81c0fc10-9424-476d-b2c3-67e7aae1088a" },
-                { "created[gt]", "13/12/2017" }
+                { "created[gt]", "13/12/2017" },
+                { "metadata", null }
             };
             
             Assert.Equal(

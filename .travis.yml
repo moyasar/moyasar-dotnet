@@ -1,8 +1,8 @@
 language: csharp
 solution: MoyasarDotNet.sln
 mono: none
-dotnet: 2.1.502
+dotnet: 3.1.14
 install:
   - dotnet restore
 script:
-  - dotnet test -f "netcoreapp2.1"
+  - dotnet test -f "netcoreapp3.1"

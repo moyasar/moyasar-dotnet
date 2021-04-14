@@ -16,10 +16,10 @@ namespace MoyasarTest
         {
             var info = GetValidInvoiceInfo();
             info.Validate();
-
+        
             info.Amount = 0;
             await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => info.Validate()));
-
+        
             info = GetValidInvoiceInfo();
             info.Currency = "";
             await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => info.Validate()));
@@ -36,140 +36,88 @@ namespace MoyasarTest
             info.CallbackUrl = "not a valid url";
             await Assert.ThrowsAsync<ValidationException>(async () => await Task.Run(() => info.Validate()));
         }
-
+        
         [Fact]
         public void TestCreateInvoice()
         {
-            var info = GetValidInvoiceInfo();
-            var payInfo = PaymentTest.GetValidPaymentInfoVisa();
-            ServicesMockHelper.MockInvoiceResponse(info, new List<PaymentInfo>
-            {
-                payInfo,
-                payInfo
-            });
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/Initiated.json");
 
-            var invoice = Invoice.Create(info);
+            var invoice = Invoice.Create(GetValidInvoiceInfo());
+            Assert.IsType<Invoice>(invoice);
             
-            Assert.Equal(info.Amount, invoice.Amount);
-            Assert.Equal(info.Currency, invoice.Currency);
-            Assert.Equal(info.Description, invoice.Description);
-            Assert.Equal(info.ExpiredAt, invoice.ExpiredAt);
-            Assert.Equal(info.CallbackUrl, invoice.CallbackUrl);
-            
-            Assert.Equal(2, invoice.Payments.Count);
-            
-            Assert.Equal(payInfo.Amount, invoice.Payments[0].Amount);
-            Assert.Equal(payInfo.Currency, invoice.Payments[0].Currency);
-            Assert.Equal(payInfo.Description, invoice.Payments[0].Description);
+            Assert.Equal(7000, invoice.Amount);
+            Assert.Equal("SAR", invoice.Currency);
+            Assert.Equal("A 70 SAR invoice just because", invoice.Description);
+            Assert.Equal(DateTime.Parse("2016-04-07T06:45:18.866Z").ToUniversalTime(), invoice.ExpiredAt);
+            Assert.Equal("http://www.example.com/invoice_callback", invoice.CallbackUrl);
         }
-
+        
         [Fact]
         public void TestFetchInvoice()
         {
-            var info = GetValidInvoiceInfo();
-            var payInfo = PaymentTest.GetValidPaymentInfoVisa();
-            ServicesMockHelper.MockInvoiceResponse(info, new List<PaymentInfo>
-            {
-                payInfo,
-                payInfo
-            });
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/Paid.json");
 
-            var invoice = Invoice.Fetch("some-random-id");
+            var invoice = Invoice.Fetch("f91065f7-d188-4ec8-8fc5-af97841ec14e");
             
-            Assert.Equal(info.Amount, invoice.Amount);
-            Assert.Equal(info.Currency, invoice.Currency);
-            Assert.Equal(info.Description, invoice.Description);
-            Assert.Equal(info.ExpiredAt, invoice.ExpiredAt);
-            Assert.Equal(info.CallbackUrl, invoice.CallbackUrl);
+            Assert.Equal("f91065f7-d188-4ec8-8fc5-af97841ec14e", invoice.Id);
+            Assert.Equal(7000, invoice.Amount);
+            Assert.Equal("SAR", invoice.Currency);
+            Assert.Equal("A 70 SAR invoice just because", invoice.Description);
+            Assert.Equal(DateTime.Parse("2021-04-07T06:45:18.866Z").ToUniversalTime(), invoice.ExpiredAt);
+            Assert.Equal("http://www.example.com/invoice_callback", invoice.CallbackUrl);
+            Assert.Equal("de92988a-34bd-43a5-963f-b757cf02de7b", invoice.Metadata["order_id"]);
             
-            Assert.Equal(2, invoice.Payments.Count);
+            Assert.Single(invoice.Payments);
             
-            Assert.Equal(payInfo.Amount, invoice.Payments[0].Amount);
-            Assert.Equal(payInfo.Currency, invoice.Payments[0].Currency);
-            Assert.Equal(payInfo.Description, invoice.Payments[0].Description);
+            Assert.Equal("a4a144ba-adc3-43bd-98e8-c80f2925fdc4", invoice.Payments[0].Id);
+            Assert.Equal(7000, invoice.Payments[0].Amount);
+            Assert.Equal("SAR", invoice.Payments[0].Currency);
+            Assert.Equal("A 70 SAR invoice just because", invoice.Payments[0].Description);
         }
-
+        
         [Fact]
         public void TestUpdateInvoice()
         {
-            var info = GetValidInvoiceInfo();
-            var payInfo = PaymentTest.GetValidPaymentInfoVisa();
-            ServicesMockHelper.MockInvoiceResponse(info, new List<PaymentInfo>
-            {
-                payInfo,
-                payInfo
-            });
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/Initiated.json");
+            var invoice = Invoice.Fetch("f91065f7-d188-4ec8-8fc5-af97841ec14e");
 
-            var invoice = Invoice.Fetch("some-random-id");
-
-            info.Amount = 1;
-            info.Currency = "USD";
-            info.Description = "NEW";
-            ServicesMockHelper.MockInvoiceResponse(info, new List<PaymentInfo>
-            {
-                payInfo,
-                payInfo
-            });
-            
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/Updated.json");
             invoice.Update();
             
-            Assert.Equal(info.Amount, invoice.Amount);
-            Assert.Equal(info.Currency, invoice.Currency);
-            Assert.Equal(info.Description, invoice.Description);
+            Assert.Equal(8000, invoice.Amount);
+            Assert.Equal("USD", invoice.Currency);
+            Assert.Equal("An 80 USD invoice just because", invoice.Description);
         }
         
         [Fact]
         public void TestCancelInvoice()
         {
-            var info = GetValidInvoiceInfo();
-            var payInfo = PaymentTest.GetValidPaymentInfoVisa();
-            ServicesMockHelper.MockInvoiceResponse(info, new List<PaymentInfo>
-            {
-                payInfo,
-                payInfo
-            });
-
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/Initiated.json");
             var invoice = Invoice.Fetch("some-random-id");
-
-            info.Amount = 1;
-            ServicesMockHelper.MockInvoiceResponse(info, new List<PaymentInfo>
-            {
-                payInfo,
-                payInfo
-            });
             
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/Canceled.json");
             invoice.Cancel();
-            Assert.Equal(info.Amount, invoice.Amount);
+            Assert.Equal(7000, invoice.Amount);
+            Assert.Equal("canceled", invoice.Status);
         }
-
+        
         [Fact]
         public void TestInvoiceListing()
         {
-            var infoList = new List<InvoiceInfo>
-            {
-                GetValidInvoiceInfo(),
-                GetValidInvoiceInfo()
-            };
-            
-            ServicesMockHelper.MockInvoiceListResponse(infoList, nextPage: 2, totalPages: 2, totalCount: 4);
+            ServiceMockHelper.MockJsonResponse("Fixtures/Invoice/List.json");
             var pagination = Invoice.List();
             
             Assert.Equal(2, pagination.Items.Count);
             
-            Assert.Equal(infoList[0].Amount, pagination.Items[0].Amount);
-            Assert.Equal(infoList[0].Currency, pagination.Items[0].Currency);
-            Assert.Equal(infoList[0].ExpiredAt, pagination.Items[0].ExpiredAt);
-            
-            Assert.Equal(1, pagination.CurrentPage);
-            Assert.Equal(2, pagination.NextPage);
-            Assert.Equal(2, pagination.TotalPages);
-            Assert.Equal(4, pagination.TotalCount);
-            
-            ServicesMockHelper.MockInvoiceListResponse(infoList, 2, prevPage: 1, totalPages: 2, totalCount: 4);
-            pagination = pagination.GetNextPage();
+            Assert.Equal(7000, pagination.Items[0].Amount);
+            Assert.Equal("SAR", pagination.Items[0].Currency);
+            Assert.Equal(DateTime.Parse("2016-04-07T06:45:18.866Z").ToUniversalTime(), pagination.Items[0].ExpiredAt);
+            Assert.Equal("9e5c7df4-b796-4c83-9a61-e304c9c8fa51", pagination.Items[0].Metadata["order_id"]);
             
             Assert.Equal(2, pagination.CurrentPage);
+            Assert.Equal(3, pagination.NextPage);
             Assert.Equal(1, pagination.PreviousPage);
+            Assert.Equal(3, pagination.TotalPages);
         }
         
         internal static InvoiceInfo GetValidInvoiceInfo()
