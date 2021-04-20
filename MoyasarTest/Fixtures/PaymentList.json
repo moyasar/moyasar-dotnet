@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "current_page": 2,
+    "next_page": 3,
+    "prev_page": 1,
+    "total_pages": 3,
+    "total_count": 9
+  },
+  "payments": [
+    {
+      "id": "b6c01c90-a091-45a4-9358-71668ecbf7ea",
+      "status": "paid",
+      "amount": 1000,
+      "fee": 0,
+      "currency": "SAR",
+      "refunded": 0,
+      "refunded_at": null,
+      "description": "Test Payment",
+      "amount_format": "10.00 SAR",
+      "fee_format": "0.00 SAR",
+      "refunded_format": "0.00 SAR",
+      "invoice_id": null,
+      "ip": null,
+      "callback_url": "https://mystore.com/order/redirect-back",
+      "created_at": "2019-01-02T10:14:14.414Z",
+      "updated_at": "2019-01-02T10:14:14.414Z",
+      "source": {
+        "type": "creditcard",
+        "company": "visa",
+        "name": "Long John",
+        "number": "XXXX-XXXX-XXXX-1111",
+        "message": "APPROVED",
+        "transaction_url": "https://api.moyasar.com/v1/transaction_auths/a9a6c4c9-b065-48c6-952a-184266ec4b4a/form?token=auth_n7FoPBZo2cYriecyZvzmXrXTP13E7og9HC3jGFDYqzF"
+      },
+      "metadata": {
+        "order_id": "5c02ba44-7fd1-444c-b82b-d3993b87d4b0",
+        "tax": "50"
+      }
+    },
+    {
+      "id": "a4a144ba-adc3-43bd-98e8-c80f2925fdc4",
+      "status": "paid",
+      "amount": 1000,
+      "fee": 0,
+      "currency": "SAR",
+      "refunded": 0,
+      "refunded_at": null,
+      "description": "Test Payment",
+      "amount_format": "10.00 SAR",
+      "fee_format": "0.00 SAR",
+      "refunded_format": "0.00 SAR",
+      "invoice_id": null,
+      "ip": null,
+      "callback_url": null,
+      "created_at": "2019-01-02T10:14:14.414Z",
+      "updated_at": "2019-01-02T10:14:14.414Z",
+      "source": {
+        "type": "applepay",
+        "company": "visa",
+        "name": null,
+        "number": "XXXX-XXXX-XXXX-1111",
+        "message": "APPROVED"
+      },
+      "metadata": {
+        "order_id": "a2620c7d-658e-4c27-aa78-bc6532549cec",
+        "tax": "150"
+      }
+    },
+    {
+      "id": "50559d3b-e67f-4b3a-8df8-509dde19fe38",
+      "status": "paid",
+      "amount": 1000,
+      "fee": 0,
+      "currency": "SAR",
+      "refunded": 0,
+      "refunded_at": null,
+      "description": "Test Payment",
+      "amount_format": "10.00 SAR",
+      "fee_format": "0.00 SAR",
+      "refunded_format": "0.00 SAR",
+      "invoice_id": null,
+      "ip": null,
+      "callback_url": null,
+      "created_at": "2019-01-02T10:14:14.414Z",
+      "updated_at": "2019-01-02T10:14:14.414Z",
+      "source": {
+        "type": "stcpay",
+        "mobile": "0555555555",
+        "reference_number": "xxxxxxxxxxxxx",
+        "branch": "1",
+        "cashier": "1",
+        "transaction_url": "https://apimig.moyasar.com/v1/stc_pays/35360576-dec6-44bf-a342-0e36ef72de25/proceed?otp_token=KJHKH87989g78huh",
+        "message": "Paid"
+      },
+      "metadata": {
+        "order_id": "e573e01a-38a7-4a59-8ced-f6fd2b0b4b2f",
+        "tax": "150"
+      }
+    }
+  ]
+}

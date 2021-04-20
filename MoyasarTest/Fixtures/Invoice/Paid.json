@@ -1,0 +1,44 @@
+{
+  "id": "f91065f7-d188-4ec8-8fc5-af97841ec14e",
+  "status": "paid",
+  "amount": 7000,
+  "currency": "SAR",
+  "description": "A 70 SAR invoice just because",
+  "expired_at": "2021-04-07T06:45:18.866Z",
+  "logo_url": "https://s3-eu-west-1.amazonaws.com/moyasar.api.assets.prod/entities/logos/default.png",
+  "amount_format": "70.00 SAR",
+  "url": "https://dashboard.moyasar.com/invoices/37a54bed-7d54-444c-a151-c287106da514?lang=en",
+  "callback_url": "http://www.example.com/invoice_callback",
+  "created_at": "2019-01-01T10:14:14.414Z",
+  "updated_at": "2019-01-01T10:14:14.414Z",
+  "payments": [
+    {
+      "id": "a4a144ba-adc3-43bd-98e8-c80f2925fdc4",
+      "status": "paid",
+      "amount": 7000,
+      "fee": 0,
+      "currency": "SAR",
+      "refunded": 0,
+      "refunded_at": null,
+      "description": "A 70 SAR invoice just because",
+      "amount_format": "70.00 SAR",
+      "fee_format": "0.00 SAR",
+      "refunded_format": "0.00 SAR",
+      "invoice_id": null,
+      "ip": null,
+      "callback_url": null,
+      "created_at": "2019-01-02T10:14:14.414Z",
+      "updated_at": "2019-01-02T10:14:14.414Z",
+      "source": {
+        "type": "applepay",
+        "company": "visa",
+        "name": null,
+        "number": "XXXX-XXXX-XXXX-1111",
+        "message": "APPROVED"
+      }
+    }
+  ],
+  "metadata": {
+    "order_id": "de92988a-34bd-43a5-963f-b757cf02de7b"
+  }
+}

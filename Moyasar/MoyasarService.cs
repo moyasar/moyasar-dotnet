@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
-using Moyasar.Abstraction;
 using Moyasar.Exceptions;
-using Moyasar.Providers;
+using Moyasar.Models;
+using Newtonsoft.Json;
+using BasicStringDict = System.Collections.Generic.Dictionary<string, string>;
 
 namespace Moyasar
 {
@@ -19,12 +20,10 @@ namespace Moyasar
         /// Moyasar's API key that is used to authenticate all outbound requests
         /// </summary>
         public static string ApiKey { get; set; }
-        public static ISerializer Serializer { get; set; }
         public static Func<string, HttpWebRequest> HttpWebRequestFactory { get; set; }
 
         static MoyasarService()
         {
-            Serializer = new JsonSerializer();
             HttpWebRequestFactory = CreateHttpWebRequest;
         }
 
@@ -43,13 +42,14 @@ namespace Moyasar
         /// <returns>Response string</returns>
         /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
         /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
-        public static string SendRequest(string httpMethod, string url, Dictionary<string, object> parameters)
+        public static string SendRequest(string httpMethod, string url, object parameters)
         {
             httpMethod = httpMethod.ToUpper();
 
-            if (httpMethod == "GET")
+            if (httpMethod == "GET" && parameters != null)
             {
-                url = AppendUrlParameters(url, parameters);
+                var dict = JsonConvert.DeserializeObject<BasicStringDict>(JsonConvert.SerializeObject(parameters));
+                url = AppendUrlParameters(url, dict);
             }
 
             ConfigureTls();
@@ -62,7 +62,7 @@ namespace Moyasar
                 webRequest.ContentType = "application/json";
                 using (var sw = new StreamWriter(webRequest.GetRequestStream()))
                 {
-                    sw.Write(Serializer.Serialize(parameters));
+                    sw.Write(JsonConvert.SerializeObject(parameters));
                     sw.Flush();
                 }
             }
@@ -100,7 +100,7 @@ namespace Moyasar
                     
                     if ((int)response.StatusCode >= 400 && (int)response.StatusCode < 600)
                     {
-                        dynamic resObj = Serializer.Deserialize<object>(result);
+                        dynamic resObj = JsonConvert.DeserializeObject<object>(result);
 
                         var msg = "";
                         try { msg = resObj.message; } catch {}
@@ -116,7 +116,7 @@ namespace Moyasar
                         try
                         {
                             exception.ErrorsDictionary = 
-                                Serializer.Deserialize<Dictionary<string, List<string>>>(resObj.errors.ToString());
+                                JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(resObj.errors.ToString());
                         } catch {}
 
                         throw exception;
@@ -132,20 +132,27 @@ namespace Moyasar
             ServicePointManager.SecurityProtocol |= (SecurityProtocolType)3072; // TLS 1.2
         }
 
-        public static string AppendUrlParameters(string url, Dictionary<string, object> parameters)
+        public static string AppendUrlParameters(string url, BasicStringDict parameters)
         {
-            if (parameters != null)
+            if (parameters == null)
             {
-                StringBuilder p = new StringBuilder();
-                foreach (var parameter in parameters)
+                return url;
+            }
+            
+            var p = new StringBuilder();
+            foreach (var parameter in parameters)
+            {
+                if (string.IsNullOrEmpty(parameter.Value))
                 {
-                    p.Append($"&{parameter.Key.ToLower()}={parameter.Value}");
+                    continue;
                 }
+                    
+                p.Append($"&{parameter.Key.ToLower()}={parameter.Value}");
+            }
 
-                if (p.Length > 0)
-                {
-                    return $"{url}?{p.ToString().Substring(1)}";
-                }
+            if (p.Length > 0)
+            {
+                return $"{url}?{p.ToString().Substring(1)}";
             }
 
             return url;

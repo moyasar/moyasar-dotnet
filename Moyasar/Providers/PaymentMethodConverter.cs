@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Moyasar.Abstraction;
 using Moyasar.Models;
 using Newtonsoft.Json;
@@ -12,25 +11,33 @@ namespace Moyasar.Providers
     /// </summary>
     public class PaymentMethodConverter : JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, object value, Newtonsoft.Json.JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             serializer.Serialize(writer, value);
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var dict = serializer.Deserialize<Dictionary<string, object>>(reader);
-
-            if (!dict.ContainsKey("type")) return null;
+            dynamic dict = serializer.Deserialize(reader);
+            string json = JsonConvert.SerializeObject(dict);
             
-            if (dict["type"].ToString().Equals("creditcard", StringComparison.InvariantCultureIgnoreCase))
+            string type;
+            try
             {
-                return JsonConvert.DeserializeObject<CreditCard>(JsonConvert.SerializeObject(dict));
+                type = dict.type;
             }
-            else
+            catch
             {
-                return JsonConvert.DeserializeObject<Sadad>(JsonConvert.SerializeObject(dict));
+                return null;
             }
+
+            return type.ToLower() switch
+            {
+                "creditcard" => JsonConvert.DeserializeObject<CreditCard>(json),
+                "applepay" => JsonConvert.DeserializeObject<ApplePayMethod>(json),
+                "stcpay" => JsonConvert.DeserializeObject<StcPayMethod>(json),
+                _ => null
+            };
         }
 
         public override bool CanConvert(Type objectType)

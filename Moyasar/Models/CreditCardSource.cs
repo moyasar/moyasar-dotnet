@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using Moyasar.Abstraction;
 using Moyasar.Exceptions;
 using Moyasar.Helpers;
+using Newtonsoft.Json;
 
 namespace Moyasar.Models
 {
@@ -14,37 +15,31 @@ namespace Moyasar.Models
     [DataContract]
     public class CreditCardSource : IPaymentSource
     {
-        public const string TypeFieldName = "type";
-        public const string NameFieldName = "name";
-        public const string NumberFieldName = "number";
-        public const string CvcFieldName = "cvc";
-        public const string MonthFieldName = "month";
-        public const string YearFieldName = "year";
-        public const string _3DsFieldName = "3ds";
+        [JsonProperty("type")]
+        public string Type { get; } = "creditcard";
         
+        [JsonProperty("name")]
         public string Name { get; set; }
-        public string Number { get; set; }        
+        
+        [JsonProperty("number")]
+        public string Number { get; set; }
+        
+        [JsonProperty("cvc")]
         public int Cvc { get; set; }
+        
+        [JsonProperty("month")]
         public int Month { get; set; }
+        
+        [JsonProperty("year")]
         public int Year { get; set; }
         
         // By default TRUE according to documentation
+        [JsonProperty("3ds", NullValueHandling = NullValueHandling.Ignore)]
         public bool _3Ds { get; set; } = true;
 
-        public Dictionary<string, object> ToDictionary()
-        {
-            return new Dictionary<string, object>()
-            {
-                { TypeFieldName, "creditcard" },
-                { NameFieldName, Name },
-                { NumberFieldName, Number },
-                { CvcFieldName, Cvc },
-                { MonthFieldName, Month },
-                { YearFieldName, Year },
-                { _3DsFieldName, _3Ds }
-            };
-        }
-        
+        [JsonProperty("manual", NullValueHandling = NullValueHandling.Ignore)]
+        public bool Manual { get; set; } = false;
+
         public void Validate()
         {
             var errors = new List<FieldError>();

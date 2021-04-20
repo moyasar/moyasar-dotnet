@@ -1,88 +1,87 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Moyasar.Abstraction;
 using Moyasar.Exceptions;
 using Moyasar.Models;
+using Moyasar.Providers;
 using Newtonsoft.Json;
 
 namespace Moyasar.Services
 {
     public class Payment : Resource<Payment>
     {
-        // Field Names
-        private const string IdField = "id";
-        private const string StatusField = "status";
-        private const string AmountField = "amount";
-        private const string FeeField = "fee";
-        private const string RefundedAmountField = "refunded";
-        private const string RefundedAtField = "refunded_at";
-        private const string FormattedAmountField = "amount_format";
-        private const string FormattedFeeField = "fee_format";
-        private const string FormattedRefundedAmountField = "refunded_format";
-        private const string CurrencyField = "currency";
-        private const string InvoiceIdField = "invoice_id";
-        private const string IpField = "ip";
-        private const string CallbackUrlField = "callback_url";
-        private const string CreatedAtField = "created_at";
-        private const string UpdatedAtField = "updated_at";
-        private const string SourceField = "source";
-        private const string DescriptionField = "description";
-        
-        [JsonProperty(IdField)]
+        [JsonProperty("id")]
         public string Id { get; private set; }
         
-        [JsonProperty(StatusField)]
+        [JsonProperty("status")]
         public string Status { get; private set; }
         
-        [JsonProperty(AmountField)]
+        [JsonProperty("amount")]
         public int Amount { get; private set; }
         
-        [JsonProperty(FeeField)]
+        [JsonProperty("fee")]
         public int Fee { get; private set; }
         
-        [JsonProperty(RefundedAmountField)]
+        [JsonProperty("refunded")]
         public int RefundedAmount { get; private set; }
         
-        [JsonProperty(RefundedAtField)]
+        [JsonProperty("refunded_at")]
         public DateTime? RefundedAt { get; private set; }
         
-        [JsonProperty(FormattedAmountField)]
+        [JsonProperty("captured")]
+        public int CapturedAmount { get; private set; }
+        
+        [JsonProperty("captured_at")]
+        public DateTime? CapturedAt { get; private set; }
+        
+        [JsonProperty("voided_at")]
+        public DateTime? VoidedAt { get; private set; }
+        
+        [JsonProperty("amount_format")]
         public string FormattedAmount { get; private set; }
         
-        [JsonProperty(FormattedFeeField)]
+        [JsonProperty("fee_format")]
         public string FormattedFee { get; private set; }
         
-        [JsonProperty(FormattedRefundedAmountField)]
+        [JsonProperty("refunded_format")]
         public string FormattedRefundedAmount { get; private set; }
         
-        [JsonProperty(CurrencyField)]
+        [JsonProperty("captured_format")]
+        public string FormattedCapturedAmount { get; private set; }
+        
+        [JsonProperty("currency")]
         public string Currency { get; private set; }
         
-        [JsonProperty(InvoiceIdField)]
+        [JsonProperty("invoice_id")]
         public string InvoiceId { get; private set; }
         
-        [JsonProperty(IpField)]
+        [JsonProperty("ip")]
         public string Ip { get; private set; }
         
-        [JsonProperty(CallbackUrlField)]
+        [JsonProperty("callback_url")]
         public string CallbackUrl { get; private set; }
         
-        [JsonProperty(CreatedAtField)]
+        [JsonProperty("created_at")]
         public DateTime? CreatedAt { get; private set; }
         
-        [JsonProperty(UpdatedAtField)]
+        [JsonProperty("updated_at")]
         public DateTime? UpdatedAt { get; private set; }
+
+        [JsonProperty("metadata")]
+        public Dictionary<string, string> Metadata { get; private set; }
         
-        [JsonProperty(SourceField)]
+        [JsonProperty("source")]
+        [JsonConverter(typeof(PaymentMethodConverter))]
         public IPaymentMethod Source { get; private set; }
         
-        [JsonProperty(DescriptionField)]
+        [JsonProperty("description")]
         public string Description { get; set; }
         
         internal Payment() { }
         
         protected static string GetRefundUrl(string id) => $"{ResourceUrl}/{id}/refund";
+        protected static string GetCaptureUrl(string id) => $"{ResourceUrl}/{id}/capture";
+        protected static string GetVoidUrl(string id) => $"{ResourceUrl}/{id}/void";
 
         /// <summary>
         /// Updates the following fields
@@ -96,8 +95,8 @@ namespace Moyasar.Services
         {
             MoyasarService.SendRequest("PUT", GetUpdateUrl(Id), new Dictionary<string, object>()
             {
-                { DescriptionField, Description }
-            });           
+                { "description", Description }
+            });
         }
 
         /// <summary>
@@ -111,17 +110,68 @@ namespace Moyasar.Services
         {
             if (amount > this.Amount)
             {
-                throw new ValidationException("Payment must be equal to or less than current amount");
+                throw new ValidationException("Amount to be refunded must be equal to or less than current amount");
             }
             
-            var reqParams = amount != null ? new Dictionary<string, Object>()
+            var reqParams = amount != null ? new Dictionary<string, object>
             {
-                { AmountField, amount.Value }
+                { "amount", amount.Value }
             } : null;
 
             return DeserializePayment
             (
                 MoyasarService.SendRequest("POST", GetRefundUrl(Id), reqParams), 
+                this
+            );
+        }
+        
+        /// <summary>
+        /// Captures the current authorized payment
+        /// </summary>
+        /// <param name="amount">Optional amount to capture, should be equal to or less than current amount</param>
+        /// <returns>An updated <code>Payment</code> instance</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
+        public Payment Capture(int? amount = null)
+        {
+            if (amount > this.Amount)
+            {
+                throw new ValidationException("Amount to be refunded must be equal to or less than current amount");
+            }
+
+            if (Status != "authorized")
+            {
+                throw new ValidationException("Payment is not in authorized status.");
+            }
+            
+            var reqParams = amount != null ? new Dictionary<string, object>
+            {
+                { "amount", amount.Value }
+            } : null;
+
+            return DeserializePayment
+            (
+                MoyasarService.SendRequest("POST", GetCaptureUrl(Id), reqParams), 
+                this
+            );
+        }
+        
+        /// <summary>
+        /// Voids the current authorized payment
+        /// </summary>
+        /// <returns>An updated <code>Payment</code> instance</returns>
+        /// <exception cref="ApiException">Thrown when an exception occurs at server</exception>
+        /// <exception cref="NetworkException">Thrown when server is unreachable</exception>
+        public Payment Void()
+        {
+            if (Status != "authorized")
+            {
+                throw new ValidationException("Payment is not in authorized status.");
+            }
+            
+            return DeserializePayment
+            (
+                MoyasarService.SendRequest("POST", GetVoidUrl(Id), null), 
                 this
             );
         }
@@ -154,50 +204,16 @@ namespace Moyasar.Services
             var responseJson = MoyasarService.SendRequest(
                 "GET",
                 GetListUrl(),
-                query?.ToDictionary()
+                query
             );
 
-            dynamic response = MoyasarService.Serializer.Deserialize<object>(responseJson);
-
-            string metaJson = null;
-            try
-            {
-                metaJson = MoyasarService.Serializer.Serialize((object)response.meta);
-            }
-            catch
-            {
-                // ignored
-            }
-
-            var paymentObjects =
-                MoyasarService.Serializer.Deserialize<List<object>>(
-                    MoyasarService.Serializer.Serialize((object)response.payments));
-            var paymentsList = paymentObjects
-                .Select(po => DeserializePayment(MoyasarService.Serializer.Serialize(po))).ToList();
-
-            var pagination = new PaginationResult<Payment>
-            {
-                Paginator = page =>
-                {
-                    var q = query?.Clone() ?? new SearchQuery();
-                    q.Page = page;
-                    return List(q);
-                },
-                Items = paymentsList
-            };
-            
-            if (metaJson != null)
-            {
-                MoyasarService.Serializer.PopulateObject(metaJson, pagination);
-            }
-            
-            return pagination;
+            return JsonConvert.DeserializeObject<PaginationResult<Payment>>(responseJson);
         }
 
         internal static Payment DeserializePayment(string json, Payment obj = null)
         {
             var payment = obj ?? new Payment();
-            MoyasarService.Serializer.PopulateObject(json, payment);
+            JsonConvert.PopulateObject(json, payment);
             return payment;
         }
     }
