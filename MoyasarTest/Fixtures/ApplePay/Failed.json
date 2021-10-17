@@ -20,7 +20,9 @@
     "company": "visa",
     "name": null,
     "number": "XXXX-XXXX-XXXX-1111",
-    "message": "Expired token"
+    "message": "Expired token",
+    "gateway_id": "moyasar_ap_je1iUidxhrh74257S891wvW",
+    "reference_number": "125478454231"
   },
   "metadata": {
     "order_id": "5ccfc0a4-b43b-437b-ab44-0ffdcf5755d8",

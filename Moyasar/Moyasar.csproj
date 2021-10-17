@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net40;net45;net451;net452;net46;net461;netstandard2.0</TargetFrameworks>
-        <PackageVersion>2.2.0</PackageVersion>
+        <TargetFrameworks>net40;net45;net451;net452;net46;net461;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <PackageVersion>2.3.0</PackageVersion>
         <Title>Moyasar API's .NET Wrapper</Title>
         <Authors>Ali Alhoshaiyan, Moyasar Dev Team</Authors>
-        <Copyright>Copyright © 2019 Moyasar. All rights reserved</Copyright>
+        <Copyright>Copyright © 2021 Moyasar. All rights reserved</Copyright>
         <PackageProjectUrl>https://moyasar.com/</PackageProjectUrl>
         <PackageTags>Moyasar;API;Payment;CreditCard;Sadad;Mada</PackageTags>
         <PackageIcon>package-icon.png</PackageIcon>
@@ -14,27 +14,18 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <LangVersion>8</LangVersion>
-        <AssemblyVersion>2.2.0</AssemblyVersion>
-        <FileVersion>2.2.0</FileVersion>
+        <AssemblyVersion>2.3.0</AssemblyVersion>
+        <FileVersion>2.3.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net40'" />
-      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net45'" />
-      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net451'" />
-      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net452'" />
-      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net46'" />
-      <Reference Include="Microsoft.CSharp" Condition="'$(TargetFramework)' == 'net461'" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-      <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+      <Reference Include="Microsoft.CSharp" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <None Include="..\LICENSE" Pack="true" PackagePath="" />
         <None Include="package-icon.png" Pack="true" PackagePath="" />

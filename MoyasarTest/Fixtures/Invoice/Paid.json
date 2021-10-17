@@ -34,7 +34,9 @@
         "company": "visa",
         "name": null,
         "number": "XXXX-XXXX-XXXX-1111",
-        "message": "APPROVED"
+        "message": "APPROVED",
+        "gateway_id": "moyasar_ap_je1iUidxhrh74257S891wvW",
+        "reference_number": "125478454231",
       }
     }
   ],
