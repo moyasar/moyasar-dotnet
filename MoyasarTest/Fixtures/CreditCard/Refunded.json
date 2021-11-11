@@ -21,7 +21,9 @@
     "name": "Long John",
     "number": "XXXX-XXXX-XXXX-1111",
     "message": "APPROVED",
-    "transaction_url": "https://api.moyasar.com/v1/transaction_auths/a9a6c4c9-b065-48c6-952a-184266ec4b4a/form?token=auth_n7FoPBZo2cYriecyZvzmXrXTP13E7og9HC3jGFDYqzF"
+    "transaction_url": "https://api.moyasar.com/v1/transaction_auths/a9a6c4c9-b065-48c6-952a-184266ec4b4a/form?token=auth_n7FoPBZo2cYriecyZvzmXrXTP13E7og9HC3jGFDYqzF",
+    "gateway_id": "moyasar_ap_je1iUidxhrh74257S891wvW",
+    "reference_number": "125478454231"
   },
   "metadata": {
     "order_id": "5c02ba44-7fd1-444c-b82b-d3993b87d4b0",

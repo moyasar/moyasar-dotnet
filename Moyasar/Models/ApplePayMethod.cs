@@ -23,5 +23,11 @@ namespace Moyasar.Models
 
         [JsonProperty("message")]
         public string Message { get; set; }
+
+        [JsonProperty("gateway_id")]
+        public string GatewayId { get; set; }
+
+        [JsonProperty("reference_number")]
+        public string ReferenceNumber { get; set; }
     }
 }
