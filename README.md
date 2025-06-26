@@ -1,3 +1,5 @@
+# This project has been archived and is no longer maintained.
+
 # Moyasar.Net
 
 [![Build Status](https://travis-ci.org/aliio/moyasar-dotnet.svg?branch=master)](https://travis-ci.org/aliio/moyasar-dotnet)
